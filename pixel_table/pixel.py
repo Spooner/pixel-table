@@ -16,3 +16,10 @@ class Pixel(Widget):
 
             self.color = app.root.current_color.color
             #app.root.current_color.color = self.color
+
+    def on_touch_down(self, touch):
+        if self.collide_point(*touch.pos):
+            app = App.get_running_app()
+
+            self.color = app.root.current_color.color
+            #app.root.current_color.color = self.color
