@@ -12,14 +12,8 @@ class Pixel(Widget):
 
     def on_touch_move(self, touch):
         if self.collide_point(*touch.pos):
-            app = App.get_running_app()
-
-            self.color = app.root.current_color.color
-            #app.root.current_color.color = self.color
+            App.get_running_app().root.on_pixel(self)
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-            app = App.get_running_app()
-
-            self.color = app.root.current_color.color
-            #app.root.current_color.color = self.color
+            App.get_running_app().root.on_pixel(self)

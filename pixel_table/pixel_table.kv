@@ -20,41 +20,12 @@
             size: self.size
 
 
-<Tools>:
-    cols: 4
-    spacing: 4
-    height: 40
-    ToggleButton:
-        text: 'Pencil'
-        group: 'tools'
-        state: 'down'
-    ToggleButton:
-        text: 'Eraser'
-        group: 'tools'
-    ToggleButton:
-        text: 'Dropper'
-        group: 'tools'
 
-
-#<ColorDialog>:
-#    color_picker: color_picker
-#    ColorPicker:
-#        id: color_picker
-
-
-<CurrentColor>:
-    height: 50
-    canvas:
-        Color:
-            rgb: self.color
-        Rectangle:
-            pos: self.pos
-            size: self.size
 
 
 <PixelTable>:
     grid: grid
-    current_color: current_color
+    mode: paint
 
     canvas.before:
         Color:
@@ -69,13 +40,51 @@
         PixelGrid:
             id: grid
             size_hint_x: None
+        Paint:
+            id: paint
 
-        BoxLayout:
-            orientation: 'vertical'
 
-            CurrentColor:
-                id: current_color
-                size_hint_y: None
+#<ColorDialog>:
+#    color_picker: color_picker
+#    ColorPicker:
+#        id: color_picker
 
-            Tools:
-                size_hint_y: None
+<PaintColor>:
+    height: 50
+    canvas:
+        Color:
+            rgb: self.color
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
+<PaintTools>:
+    cols: 4
+    spacing: 4
+    height: 40
+    ToggleButton:
+        text: 'Pencil'
+        group: 'paint_tools'
+        state: 'down'
+        on_touch_down: self.parent.pick_tool(args[1], "pencil")
+    ToggleButton:
+        text: 'Eraser'
+        group: 'paint_tools'
+        on_touch_down: self.parent.pick_tool(args[1], 'eraser')
+    ToggleButton:
+        text: 'Dropper'
+        group: 'paint_tools'
+        on_touch_down: self.parent.pick_tool(args[1], 'dropper')
+
+<Paint>:
+    current_color: current_color
+
+    BoxLayout:
+        orientation: 'vertical'
+
+        PaintColor:
+            id: current_color
+            size_hint_y: None
+
+        PaintTools:
+            size_hint_y: None
