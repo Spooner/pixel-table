@@ -12,6 +12,7 @@ cython==0.25.2
 docutils==0.14
 idna==2.6                 # via requests
 kivy-garden==0.1.4
+numpy==1.13.1
 olefile==0.44             # via pillow
 pexpect==4.2.1            # via buildozer
 pillow==4.2.1

@@ -13,6 +13,14 @@ class Paint(Mode):
     current_color = ObjectProperty(None)
     current_tool = StringProperty(PENCIL)
 
+    def on_activated(self):
+        self.pixels_rgb[5][5] = (255, 0, 0)
+        self.pixels_rgb[0][0] = (255, 255, 0)
+        self.pixels_rgb[15][15] = (0, 255, 0)
+
+    def on_deactivated(self):
+        pass
+
     def on_pixel_down(self, pixel):
         self._on_pixel(pixel)
 
