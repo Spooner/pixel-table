@@ -1,7 +1,6 @@
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
 from kivy.properties import ObjectProperty, ColorProperty, StringProperty
-from kivy.graphics import Color
 
 from .mode import Mode
 

@@ -59,6 +59,7 @@
             size: self.size
 
 <PaintTools>:
+    id: paint_tools
     cols: 4
     spacing: 4
     height: 40
@@ -66,15 +67,15 @@
         text: 'Pencil'
         group: 'paint_tools'
         state: 'down'
-        on_touch_down: self.parent.pick_tool(args[1], "pencil")
+        on_touch_down: paint_tools.pick_tool(args[1], "pencil")
     ToggleButton:
         text: 'Eraser'
         group: 'paint_tools'
-        on_touch_down: self.parent.pick_tool(args[1], 'eraser')
+        on_touch_down: paint_tools.pick_tool(args[1], 'eraser')
     ToggleButton:
         text: 'Dropper'
         group: 'paint_tools'
-        on_touch_down: self.parent.pick_tool(args[1], 'dropper')
+        on_touch_down: paint_tools.pick_tool(args[1], 'dropper')
 
 <Paint>:
     current_color: current_color
