@@ -12,8 +12,12 @@ class Pixel(Widget):
 
     def on_touch_move(self, touch):
         if self.collide_point(*touch.pos):
-            App.get_running_app().root.on_pixel(self)
+            App.get_running_app().root.on_pixel_move(self)
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-            App.get_running_app().root.on_pixel(self)
+            App.get_running_app().root.on_pixel_down(self)
+
+    def on_touch_up(self, touch):
+        if self.collide_point(*touch.pos):
+            App.get_running_app().root.on_pixel_up(self)

@@ -12,5 +12,11 @@ class PixelTable(Widget):
     def update(self, dt):
         self.mode.update(dt)
 
-    def on_pixel(self, pixel):
-        self.mode.on_pixel(pixel)
+    def on_pixel_down(self, pixel):
+        self.mode.on_pixel_down(pixel)
+
+    def on_pixel_move(self, pixel):
+        self.mode.on_pixel_move(pixel)
+
+    def on_pixel_up(self, pixel):
+        self.mode.on_pixel_up(pixel)

@@ -10,17 +10,14 @@
 <PixelGrid>:
     size: root.height, root.height
     spacing: 2, 2
-    padding: 4
+    padding: 8
 
     canvas.before:
         Color:
-            rgb: 0, 0, 0
+            rgb: 0.1, 0.1, 0.1
         Rectangle:
             pos: self.pos
             size: self.size
-
-
-
 
 
 <PixelTable>:
@@ -37,11 +34,21 @@
     BoxLayout:
         orientation: 'horizontal'
         size: root.size
+
         PixelGrid:
             id: grid
             size_hint_x: None
-        Paint:
-            id: paint
+
+        BoxLayout:
+            orientation: 'vertical'
+
+            Label:
+                text: 'Paint'
+                height: 40
+                size_hint_y: None
+
+            Paint:
+                id: paint
 
 
 #<ColorDialog>:
@@ -50,7 +57,7 @@
 #        id: color_picker
 
 <PaintColor>:
-    height: 50
+    height: 32
     canvas:
         Color:
             rgb: self.color
@@ -60,9 +67,10 @@
 
 <PaintTools>:
     id: paint_tools
-    cols: 4
+    cols: 2
     spacing: 4
-    height: 40
+    row_default_height: 32
+    row_force_default: True
     ToggleButton:
         text: 'Pencil'
         group: 'paint_tools'
@@ -88,4 +96,3 @@
             size_hint_y: None
 
         PaintTools:
-            size_hint_y: None

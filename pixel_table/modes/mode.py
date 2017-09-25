@@ -1,10 +1,16 @@
-from kivy.uix.widget import Widget
+from kivy.uix.boxlayout import BoxLayout
 
 
-class Mode(Widget):
+class Mode(BoxLayout):
     """Abstract base for Mode widgets"""
 
-    def on_pixel(self, pixel):
+    def on_pixel_down(self, pixel):
+        pass
+
+    def on_pixel_move(self, pixel):
+        pass
+
+    def on_pixel_up(self, pixel):
         pass
 
     def update(self, dt):

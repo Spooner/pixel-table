@@ -13,7 +13,13 @@ class Paint(Mode):
     current_color = ObjectProperty(None)
     current_tool = StringProperty(PENCIL)
 
-    def on_pixel(self, pixel):
+    def on_pixel_down(self, pixel):
+        self._on_pixel(pixel)
+
+    def on_pixel_move(self, pixel):
+        self._on_pixel(pixel)
+
+    def _on_pixel(self, pixel):
         if self.current_tool == self.PENCIL:
             pixel.color = self.current_color.color
         elif self.current_tool == self.DROPPER:
