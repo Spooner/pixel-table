@@ -3,5 +3,5 @@ buildozer
 kivy
 pillow
 pysdl2
--e git+git@github.com:kivy/kivy.git@356be41b744275ac62441ae3546d140c2f8b6981#egg=Kivy
+-e git+https://github.com/kivy/kivy.git@master#egg=Kivy
 numpy
