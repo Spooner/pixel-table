@@ -1,6 +1,7 @@
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.uix.button import Button
+from kivy.clock import Clock
 
 from .pixel_grid import PixelGrid
 
