@@ -41,7 +41,7 @@ class MatrixRain(Mode):
 
     def on_activated(self):
         self.grid.clear()
-        for i in range(int(self.num_drops.value)):
+        for i in range(self.num_drops.value):
             self.add_drop()
 
     def add_drop(self):
@@ -51,7 +51,6 @@ class MatrixRain(Mode):
         self._drops.clear()
 
     def update_num_drops(self, value):
-        value = int(value)
         for i in range(len(self._drops), value):
             self.add_drop()
         self._drops = self._drops[:value]
