@@ -14,8 +14,7 @@ VERSION = '0.0.1'
 class PixelTableApp(App):
     def build(self):
         game = PixelTable()
-        #game.change_mode(Paint())
-        game.change_mode(MatrixRain())
+        game.init_modes([Paint, MatrixRain], Paint)
 
         Clock.schedule_interval(game.update, 1 / 60)
         return game

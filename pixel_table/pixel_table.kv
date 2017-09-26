@@ -23,7 +23,8 @@
 <PixelTable>:
     grid: grid
     mode_container: mode_container
-    mode_title: mode_title
+    mode_dropdown: mode_dropdown
+    mode_button: mode_button
 
     canvas.before:
         Color:
@@ -43,11 +44,15 @@
         BoxLayout:
             orientation: 'vertical'
 
-            Label:
-                id: mode_title
+            Button:
+                id: mode_button
                 text: '...mode...'
+                on_release: mode_dropdown.open(self)
                 height: 40
                 size_hint_y: None
+
+            DropDown:
+                id: mode_dropdown
 
             BoxLayout:
                 id: mode_container
