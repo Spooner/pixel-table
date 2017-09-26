@@ -1,6 +1,8 @@
 import random
 import math
 
+from kivy.properties import BoundedNumericProperty, ObjectProperty
+
 from .mode import Mode
 
 
@@ -15,9 +17,9 @@ class Drop:
         if self._y < - self._length - 5:
             self.reset()
 
-    def reset(self):
+    def reset(self, initial=True):
         self._x = random.randrange(0, 16)
-        self._y = random.randrange(15, 25)
+        self._y = random.randrange(15, 35 if initial else 20)
         self._length = random.randrange(5, 12)
         self._speed = random.randrange(4, 7)
 
@@ -34,18 +36,25 @@ class Drop:
 class MatrixRain(Mode):
     NAME = "Matrix Rain"
 
-    drops = []
+    num_drops = ObjectProperty(None)
+    _drops = []
 
     def on_activated(self):
         self.grid.clear()
-        for i in range(12):
+        for i in range(self.num_drops.value):
             self.add_drop()
 
     def add_drop(self):
-        self.drops.append(Drop())
+        self._drops.append(Drop())
 
     def on_deactivated(self):
-        self.drops.clear()
+        self._drops.clear()
+
+    def update_num_drops(self, value):
+        value = int(value)
+        for i in range(len(self._drops), value):
+            self.add_drop()
+        self._drops = self._drops[:value]
 
     def update(self, dt):
         if dt > 0.2:  # Ignore long initial dt.
@@ -57,7 +66,7 @@ class MatrixRain(Mode):
             pixel.color = (0, color[1] - (0.2 * dt), 0)
 
         # Move drops down a bit & restart any that have fallen off..
-        for drop in self.drops:
+        for drop in self._drops:
             drop.update(dt)
 
             for x, y, color in drop.tail():

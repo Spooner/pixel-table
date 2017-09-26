@@ -103,3 +103,15 @@
             size_hint_y: None
 
         PaintTools:
+
+
+<MatrixRain>:
+    num_drops: num_drops
+
+    Slider:
+        id: num_drops
+        orientation: 'vertical'
+        min: 1
+        max: 50
+        value: 12
+        on_value: root.update_num_drops(args[1])
