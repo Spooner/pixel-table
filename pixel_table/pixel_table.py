@@ -12,22 +12,22 @@ class PixelTable(Widget):
     mode_dropdown = ObjectProperty(None)
     mode_button = ObjectProperty(None)
 
-    def init_modes(self, mode_classes, initial_mode_class):
-        for mode_class in mode_classes:
-            self._add_mode(mode_class)
+    def init_modes(self, modes):
+        for mode in modes:
+            self._add_mode(mode)
 
-        self.change_mode(initial_mode_class)
+        self.change_mode(modes[0])
 
     def _add_mode(self, mode):
         button = Button(text=mode.NAME, size_hint_y=None, height=40)
         button.bind(on_release=lambda btn: self.change_mode(mode))
         self.mode_dropdown.add_widget(button)
 
-    def change_mode(self, mode_class):
+    def change_mode(self, mode):
         if self.mode is not None:
             self.mode.on_deactivated()
 
-        self.mode = mode_class()
+        self.mode = mode
         self.mode_button.text = self.mode.NAME
         self.mode_dropdown.dismiss()
         self.mode_container.clear_widgets()
