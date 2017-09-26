@@ -22,7 +22,8 @@
 
 <PixelTable>:
     grid: grid
-    mode: paint
+    mode_container: mode_container
+    mode_title: mode_title
 
     canvas.before:
         Color:
@@ -43,12 +44,13 @@
             orientation: 'vertical'
 
             Label:
-                text: 'Paint'
+                id: mode_title
+                text: '...mode...'
                 height: 40
                 size_hint_y: None
 
-            Paint:
-                id: paint
+            BoxLayout:
+                id: mode_container
 
 
 #<ColorDialog>:

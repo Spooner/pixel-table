@@ -5,6 +5,8 @@ from kivy.clock import Clock
 from kivy.lang.builder import Builder
 
 from pixel_table.pixel_table import PixelTable
+from pixel_table.modes.paint import Paint
+from pixel_table.modes.matrix_rain import MatrixRain
 
 VERSION = '0.0.1'
 
@@ -12,6 +14,9 @@ VERSION = '0.0.1'
 class PixelTableApp(App):
     def build(self):
         game = PixelTable()
+        #game.change_mode(Paint())
+        game.change_mode(MatrixRain())
+
         Clock.schedule_interval(game.update, 1 / 60)
         return game
 

@@ -6,17 +6,22 @@ from .mode import Mode
 
 
 class Paint(Mode):
-    PENCIL = "pencil"
-    ERASER = "eraser"
-    DROPPER = "dropper"
+    class Tools:
+        PENCIL = "pencil"
+        ERASER = "eraser"
+        DROPPER = "dropper"
+
+    NAME = "Paint"
 
     current_color = ObjectProperty(None)
-    current_tool = StringProperty(PENCIL)
+    current_tool = StringProperty(Tools.PENCIL)
+    grid = ObjectProperty(None)
 
     def on_activated(self):
-        self.pixels_rgb[5][5] = (255, 0, 0)
-        self.pixels_rgb[0][0] = (255, 255, 0)
-        self.pixels_rgb[15][15] = (0, 255, 0)
+        self.grid.clear()
+        self.grid.children[0].color = (255, 255, 0)
+        self.grid.children[12].color = (0, 255, 0)
+        self.grid.children[39].color = (255, 0, 0)
 
     def on_deactivated(self):
         pass
@@ -28,11 +33,11 @@ class Paint(Mode):
         self._on_pixel(pixel)
 
     def _on_pixel(self, pixel):
-        if self.current_tool == self.PENCIL:
+        if self.current_tool == self.Tools.PENCIL:
             pixel.color = self.current_color.color
-        elif self.current_tool == self.DROPPER:
+        elif self.current_tool == self.Tools.DROPPER:
             self.current_color.color = pixel.color
-        elif self.current_tool == self.ERASER:
+        elif self.current_tool == self.Tools.ERASER:
             pixel.color = (0, 0, 0)
         else:
             raise ValueError(self.current_tool)

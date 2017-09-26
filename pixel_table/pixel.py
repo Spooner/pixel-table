@@ -8,8 +8,8 @@ class Pixel(Widget):
     grid_y = NumericProperty(0)
     grid_pos = ReferenceListProperty(grid_x, grid_y)
 
-    color = ColorProperty((0, 0, 0))
-    pixels_rgb = ObjectProperty(None)
+    color = ColorProperty((1, 0, 0))
+    pixels_rgb = ObjectProperty(None, force_dispatch=True)
 
     def __init__(self, **kwargs):
         super(Pixel, self).__init__(**kwargs)
