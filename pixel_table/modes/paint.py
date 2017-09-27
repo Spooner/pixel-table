@@ -1,20 +1,48 @@
 from kivy.uix.widget import Widget
 from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
 from kivy.properties import ObjectProperty, ColorProperty, StringProperty
 
 from .mode import Mode
 
+class Tool(Button):
+    def on_pixel_down(self, pixel):
+        pass
+        
+    def on_pixel_move(self, pixel):
+        pass
+        
+    def on_pixel_up(self, pixel):
+        pass
+    
+    def on_pixel_hover(self, pixel):
+        pass
+            
+    @property
+    def name(self):
+        return type(self).__name__
+    
+    
+class Pencil(Tool):
+    def on_pixel_hover(self, pixel):
+        pixel.color = self.root.color.color
+
+        
+class Eraser(Tool):
+    def on_pixel_hover(self, pixel):
+        pixel.color = 0, 0, 0
+    
+    
+class Dropper(Tool):
+    def on_pixel_hover(self, pixel):
+        self.root.color.color = pixel.color
+    
 
 class Paint(Mode):
-    class Tools:
-        PENCIL = "pencil"
-        ERASER = "eraser"
-        DROPPER = "dropper"
-
     NAME = "Paint"
 
-    current_color = ObjectProperty(None)
-    current_tool = StringProperty(Tools.PENCIL)
+    color = ObjectProperty(None)
+    tool = ObjectProperty(None)
     grid = ObjectProperty(None)
 
     def on_activated(self):
@@ -27,21 +55,16 @@ class Paint(Mode):
         pass
 
     def on_pixel_down(self, pixel):
-        self._on_pixel(pixel)
+        self.tool.on_pixel_down(pixel)
+        self.tool.on_pixel_hover(pixel)
 
     def on_pixel_move(self, pixel):
-        self._on_pixel(pixel)
-
-    def _on_pixel(self, pixel):
-        if self.current_tool == self.Tools.PENCIL:
-            pixel.color = self.current_color.color
-        elif self.current_tool == self.Tools.DROPPER:
-            self.current_color.color = pixel.color
-        elif self.current_tool == self.Tools.ERASER:
-            pixel.color = (0, 0, 0)
-        else:
-            raise ValueError(self.current_tool)
-
+        self.tool.on_pixel_move(pixel)
+        self.tool.on_pixel_hover(pixel)
+        
+    def on_pixel_up(self, pixel):
+        self.tool.on_pixel_up(pixel)
+        
     def update(self, dt):
         pass
 
@@ -50,7 +73,3 @@ class PaintTools(GridLayout):
     def pick_tool(self, touch, name):
         if self.collide_point(*touch.pos):
             self.parent.parent.current_tool = name
-
-
-class PaintColor(Widget):
-    color = ColorProperty(None)
