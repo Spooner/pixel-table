@@ -115,4 +115,5 @@ class PixelGrid(Widget):
     def fade(self, amount):
         for pixel in self.pixels:
             r, g, b = pixel.color
-            pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
+            if r > 0 or g > 0 or b > 0:
+                pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
