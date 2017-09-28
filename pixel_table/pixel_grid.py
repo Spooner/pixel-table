@@ -32,7 +32,7 @@ class Pixel:
 class PixelGrid(Widget):
     WIDTH, HEIGHT = 16, 16
 
-    data = ObjectProperty(np.zeros([WIDTH, HEIGHT, 3], np.uint8), force_dispatch=True)
+    data = ObjectProperty(np.zeros([WIDTH, HEIGHT, 3]), force_dispatch=True)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -69,6 +69,7 @@ class PixelGrid(Widget):
 
     def import_data(self, data):
         self.data = data
+        self.update_canvas()
 
     def update_canvas(self, *args):
         self.canvas.clear()

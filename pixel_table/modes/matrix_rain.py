@@ -66,7 +66,7 @@ class MatrixRain(Mode):
             return
 
         # Fade all.
-        self.pixel_grid.fade(0.2 * dt)
+        self.pixel_grid.fade((0, 0.2 * dt, 0))
 
         # Move drops down a bit & restart any that have fallen off..
         for drop in self._drops:

@@ -53,13 +53,11 @@ class Paint(Mode):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self._data = np.zeros([16, 16, 3], np.uint8)
-        self._data[5][2] = (255, 255, 0)
-        self._data[8][5] = (0, 255, 0)
-        self._data[0][5] = (255, 0, 0)
+        self._data = None
 
     def on_activated(self):
-        self.pixel_grid.import_data(self._data)
+        if self._data is not None:
+            self.pixel_grid.import_data(self._data)
 
     def on_deactivated(self):
         self._data = self.pixel_grid.export_data()
