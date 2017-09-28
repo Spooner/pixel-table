@@ -75,5 +75,3 @@ class MatrixRain(Mode):
             for x, y, color in drop.tail():
                 pixel = self.pixel_grid.pixel(x, y)
                 pixel.color = color
-
-        self.pixel_grid.update_canvas()

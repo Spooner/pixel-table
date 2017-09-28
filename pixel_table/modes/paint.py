@@ -30,12 +30,12 @@ class Tool(ToggleButton):
     
 class Pencil(Tool):
     def on_pixel_held(self, pixel):
-        pixel.set_color_with_update(self.root.color.color)
+        pixel.color = self.root.color.color
 
         
 class Eraser(Tool):
     def on_pixel_held(self, pixel):
-        pixel.set_color_with_update((0, 0, 0))
+        pixel.color = 0, 0, 0
     
     
 class Dropper(Tool):
