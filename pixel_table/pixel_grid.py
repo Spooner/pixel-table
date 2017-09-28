@@ -107,9 +107,6 @@ class PixelGrid(Widget):
         return self.data[x][y]
 
     def set_color(self, x, y, color):
-        if tuple(self.data[x][y]) == color:
-            return
-
         self.data[x][y] = color
 
     def fade(self, amount):
