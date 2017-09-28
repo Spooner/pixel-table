@@ -4,6 +4,9 @@ from kivy.uix.boxlayout import BoxLayout
 class Mode(BoxLayout):
     """Abstract base for Mode widgets"""
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
     def on_activated(self):
         pass
 

@@ -7,22 +7,24 @@ from kivy.clock import Clock
 from kivy.lang.builder import Builder
 
 from pixel_table.pixel_table import PixelTable
-from pixel_table.modes.paint import Paint
-from pixel_table.modes.matrix_rain import MatrixRain
 
 VERSION = '0.0.1'
 
-if os.environ.get("PIXEL_TABLE_DEBUG"):
+if os.environ.get("KIVY_DISABLE_VSYNC") == "1":
     from kivy.config import Config
-    Config.set('modules', 'monitor', '')
+    print("Running with VSync disabled!")
+    Config.set('graphics', 'vsync', '0')
+    Config.set('graphics', 'maxfps', '0')
+    TICK = 1 / 1000
+else:
+    TICK = 1 / 60
 
 
 class PixelTableApp(App):
     def build(self):
         game = PixelTable()
-        game.init_modes([Paint(), MatrixRain()])
-
-        Clock.schedule_interval(game.update, 1 / 60)
+        game.setup()
+        Clock.schedule_interval(game.update, TICK)
         return game
 
 

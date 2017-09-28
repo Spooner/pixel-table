@@ -12,23 +12,29 @@ class Drop:
         self.reset()
 
     def update(self, dt):
-        self._y -= self._speed * dt
+        self._y += self._speed * dt
 
-        if self._y < - self._length - 5:
+        if self._y > 16 + self._length:
             self.reset()
 
     def reset(self, initial=True):
         self._x = random.randrange(0, 16)
-        self._y = random.randrange(15, 35 if initial else 20)
+        self._y = random.randrange(-20 if initial else -10, 0)
         self._length = random.randrange(5, 12)
         self._speed = random.randrange(4, 7)
 
     def tail(self):
         head_y = math.floor(self._y)
 
-        for i, y in enumerate(range(head_y, head_y + self._length)):
-            r = b = (max(2 - i, 0)) * 0.25
+        for i in range(self._length):
+            if i == 0:
+                r = b = 0.5
+            elif i == 1:
+                r = b = 0.25
+            else:
+                r = b = 0
 
+            y = head_y - i
             if 0 <= y <= 15:
                 yield self._x, y, (r, 0.5, b)
 
@@ -40,7 +46,7 @@ class MatrixRain(Mode):
     _drops = []
 
     def on_activated(self):
-        self.grid.clear()
+        self.pixel_grid.clear()
         for i in range(self.num_drops.value):
             self.add_drop()
 
@@ -60,14 +66,14 @@ class MatrixRain(Mode):
             return
 
         # Fade all.
-        for pixel in self.grid.children:
-            color = pixel.color
-            pixel.color = (0, color[1] - (0.2 * dt), 0)
+        self.pixel_grid.fade(0.2 * dt)
 
         # Move drops down a bit & restart any that have fallen off..
         for drop in self._drops:
             drop.update(dt)
 
             for x, y, color in drop.tail():
-                pixel = self.grid.pixel(x, y)
+                pixel = self.pixel_grid.pixel(x, y)
                 pixel.color = color
+
+        self.pixel_grid.update_canvas()

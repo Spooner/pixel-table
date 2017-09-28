@@ -1,11 +1,17 @@
-from kivy.uix.widget import Widget
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
-from kivy.properties import ObjectProperty, ColorProperty, StringProperty
+from kivy.uix.togglebutton import ToggleButton
+from kivy.properties import ObjectProperty
+import numpy as np
 
 from .mode import Mode
 
-class Tool(Button):
+
+class Tool(ToggleButton):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.group = "paint_tools"
+        self.text = type(self).__name__
+        self.allow_no_selection = False
+
     def on_pixel_down(self, pixel):
         pass
         
@@ -15,26 +21,25 @@ class Tool(Button):
     def on_pixel_up(self, pixel):
         pass
     
-    def on_pixel_hover(self, pixel):
+    def on_pixel_held(self, pixel):
         pass
-            
-    @property
-    def name(self):
-        return type(self).__name__
+
+    def on_touch_up(self, touch):
+        self.root.tool = self
     
     
 class Pencil(Tool):
-    def on_pixel_hover(self, pixel):
-        pixel.color = self.root.color.color
+    def on_pixel_held(self, pixel):
+        pixel.set_color_with_update(self.root.color.color)
 
         
 class Eraser(Tool):
-    def on_pixel_hover(self, pixel):
-        pixel.color = 0, 0, 0
+    def on_pixel_held(self, pixel):
+        pixel.set_color_with_update((0, 0, 0))
     
     
 class Dropper(Tool):
-    def on_pixel_hover(self, pixel):
+    def on_pixel_held(self, pixel):
         self.root.color.color = pixel.color
     
 
@@ -43,33 +48,29 @@ class Paint(Mode):
 
     color = ObjectProperty(None)
     tool = ObjectProperty(None)
-    grid = ObjectProperty(None)
+    pixel_grid = ObjectProperty(None)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+        self._data = np.zeros([16, 16, 3], np.uint8)
+        self._data[5][2] = (255, 255, 0)
+        self._data[8][5] = (0, 255, 0)
+        self._data[0][5] = (255, 0, 0)
 
     def on_activated(self):
-        self.grid.clear()
-        self.grid.children[0].color = (255, 255, 0)
-        self.grid.children[12].color = (0, 255, 0)
-        self.grid.children[39].color = (255, 0, 0)
+        self.pixel_grid.import_data(self._data)
 
     def on_deactivated(self):
-        pass
+        self._data = self.pixel_grid.export_data()
 
     def on_pixel_down(self, pixel):
         self.tool.on_pixel_down(pixel)
-        self.tool.on_pixel_hover(pixel)
+        self.tool.on_pixel_held(pixel)
 
     def on_pixel_move(self, pixel):
         self.tool.on_pixel_move(pixel)
-        self.tool.on_pixel_hover(pixel)
+        self.tool.on_pixel_held(pixel)
         
     def on_pixel_up(self, pixel):
         self.tool.on_pixel_up(pixel)
-        
-    def update(self, dt):
-        pass
-
-
-class PaintTools(GridLayout):
-    def pick_tool(self, touch, name):
-        if self.collide_point(*touch.pos):
-            self.parent.parent.current_tool = name
