@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import os
-
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.lang.builder import Builder
@@ -15,7 +13,7 @@ class PixelTableApp(App):
     def build(self):
         game = PixelTable()
         game.setup()
-        Clock.schedule_interval(game.update, 1 / 30)
+        Clock.schedule_interval(game.update, 1 / 60)
         return game
 
 
