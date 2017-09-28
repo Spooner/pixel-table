@@ -80,7 +80,9 @@ class PixelGrid(Widget):
                 Rectangle(pos=(self.x + x * self._cell_width, self.y + y * self._cell_width), size=draw_size)
 
     def pixel_at(self, position):
-        return self._pixels[math.floor(position[0] / self._cell_width), math.floor(position[1] / self._cell_width)]
+        x = min(max(math.floor(position[0] / self._cell_width), 0), self.WIDTH - 1)
+        y = min(max(math.floor(position[1] / self._cell_width), 0), self.HEIGHT - 1)
+        return self._pixels[x, y]
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
