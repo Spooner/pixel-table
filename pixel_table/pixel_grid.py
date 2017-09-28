@@ -113,4 +113,6 @@ class PixelGrid(Widget):
         self.data[x][y] = color
 
     def fade(self, amount):
-        self.data = np.clip(self.data - amount, 0, 1)
+        for pixel in self.pixels:
+            r, g, b = pixel.color
+            pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
