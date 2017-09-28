@@ -32,7 +32,7 @@ class Pixel:
 class PixelGrid(Widget):
     WIDTH, HEIGHT = 16, 16
 
-    data = ObjectProperty(np.zeros([WIDTH, HEIGHT, 3], np.uint8))
+    data = ObjectProperty(np.zeros([WIDTH, HEIGHT, 3], np.uint8), force_dispatch=True)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -114,4 +114,4 @@ class PixelGrid(Widget):
         self.data[x][y] = color
 
     def fade(self, amount):
-        self.data = self.data - amount
+        self.data = np.clip(self.data - amount, 0, 1)
