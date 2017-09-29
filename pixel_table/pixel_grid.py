@@ -32,6 +32,7 @@ class Pixel:
 
 
 class PixelGrid(Widget):
+    ARDUINO_SERIAL_BUFFER_SIZE = 64
     WIDTH, HEIGHT = 16, 16
 
     data = ObjectProperty(np.zeros([WIDTH, HEIGHT, 3]), force_dispatch=True)
@@ -142,8 +143,10 @@ class PixelGrid(Widget):
 
     def write_pixels_to_serial(self):
         try:
-            for row in self.data:
-                self._serial.write((row * 255).astype(np.uint8).tobytes())
-                sleep(0.001)
+            # Spit out 12 x 64 byte chunks, so arduino buffer doesn't overflow.
+            data = (self.data * 255).astype(np.uint8).tobytes()
+            for offset in range(0, len(data), self.ARDUINO_SERIAL_BUFFER_SIZE):
+                self._serial.write(data[offset:offset + self.ARDUINO_SERIAL_BUFFER_SIZE])
+                sleep(0.01)
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
