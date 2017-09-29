@@ -22,7 +22,6 @@ class ArduinoSerial:
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, 115200, timeout=1)
-                self._serial.read()
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
