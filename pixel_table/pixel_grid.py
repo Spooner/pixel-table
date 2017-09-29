@@ -12,6 +12,41 @@ from serial import Serial
 from serial.serialutil import SerialException
 
 
+class ArduinoSerial:
+    def __init__(self):
+        self._serial = None
+        self._open()
+
+    def _open(self):
+        for device in glob.glob("/dev/ttyUSB*"):
+            print("Trying to connect to %s" % device)
+            try:
+                self._serial = Serial(device, 115200, timeout=1)
+                self._serial.reset_input_buffer()
+                self._serial.reset_output_buffer()
+                print("Connected to serial port %s" % device)
+                return
+            except SerialException:
+                pass
+
+        print("Failed to connect to a serial port.")
+
+    def write_pixels(self, data):
+        if self._serial is None:
+            return
+
+        try:
+            # Spit out 16*3=48 byte chunks that the arduino can cope with (it has a 64-byte buffer).
+            print("Serial: ", end='', file=sys.stderr)
+            for row in data:
+                self._serial.write((row * 255).astype(np.uint8).tobytes())
+                assert self._serial.read() == b"X"
+                print(".", end='', file=sys.stderr)  # Wait for ACK before sending more.
+            print(file=sys.stderr)
+        except (SerialException, AttributeError):
+            print("Failed to send serial data.")
+
+
 class Pixel:
     def __init__(self, x, y, pixel_grid):
         self._x, self._y = x, y
@@ -46,8 +81,7 @@ class PixelGrid(Widget):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        self._serial = None
-        self._open_serial()
+        self._serial = ArduinoSerial()
 
         self.update_canvas()
 
@@ -57,23 +91,6 @@ class PixelGrid(Widget):
         self.register_event_type("on_pixel_down")
         self.register_event_type("on_pixel_move")
         self.register_event_type("on_pixel_up")
-
-    def _open_serial(self):
-        if self._serial is not None:
-            self._serial.close()
-
-        self._serial = None
-
-        for device in glob.glob("/dev/ttyUSB*"):
-            print("Trying to connect to %s" % device)
-            try:
-                self._serial = Serial(device, 115200, timeout=1)
-                print("Connected to serial port %s" % device)
-                return
-            except SerialException:
-                pass
-
-        print("Failed to connect to a serial port.")
 
     @property
     def pixels(self):
@@ -140,15 +157,5 @@ class PixelGrid(Widget):
             r, g, b = pixel.color
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
 
-    def write_pixels_to_serial(self):
-        try:
-            # Spit out 16*3=48 byte chunks that the arduino can cope with (it has a 64-byte buffer).
-            print("Serial: ", end='', file=sys.stderr)
-            for row in self.data:
-                self._serial.write((row * 255).astype(np.uint8).tobytes())
-                while self._serial.read() != "X":
-                    pass
-                print(".", end='', file=sys.stderr)  # Wait for ACK before sending more.
-            print(file=sys.stderr)
-        except (SerialException, AttributeError):
-            print("Failed to send serial data.")
+    def update(self):
+        self._serial.write_pixels(self.data)
