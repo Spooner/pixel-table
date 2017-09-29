@@ -31,6 +31,5 @@ void loop() {
   }
   FastLED.show();
   Serial.println("END");
-  delay(1000);
 }
 
