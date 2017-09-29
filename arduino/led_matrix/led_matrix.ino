@@ -19,9 +19,9 @@ void setup() {
 }
 
 void loop() {
-  for (y = 0; y < NUM_LEDS; y++) {
-    for (x = 0; x < NUM_LEDS; x++) {
-      while (Serial.available() < NUM_LEDS * 3);
+  for (y = 0; y < HEIGHT; y++) {
+    for (x = 0; x < WIDTH; x++) {
+      while (Serial.available() < 3);
       b = Serial.read();
       g = Serial.read();
       r = Serial.read();
