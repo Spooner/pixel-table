@@ -44,6 +44,8 @@ class PixelGrid(Widget):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
+        self._serial = Serial("/dev/ttyUSB0", 115200)
+
         self.update_canvas()
 
         self.bind(size=self.update_canvas)
@@ -120,7 +122,6 @@ class PixelGrid(Widget):
 
     def write_pixels_to_serial(self):
         try:
-            serial = Serial("/dev/ttyUSB0", 115200)
-            serial.write(self.data.astype(np.uint8).tobytes())
+            self._serial.write(self.data.astype(np.uint8).tobytes())
         except SerialException:
             print("Failed to send serial data.")
