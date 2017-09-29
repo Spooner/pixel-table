@@ -1,6 +1,7 @@
 
 from collections import OrderedDict
 import math
+import glob
 
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
@@ -62,8 +63,7 @@ class PixelGrid(Widget):
 
         self._serial = None
 
-        for i in range(1, 10):
-            device = "/dev/ttyUSB%d" % i
+        for device in glob.glob("/dev/ttyUSB*"):
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, 115200)
