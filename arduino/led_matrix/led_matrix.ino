@@ -1,7 +1,9 @@
 
 #include <FastLED.h>
 
-#define NUM_LEDS 16
+#define WIDTH 16
+#define HEIGHT 16
+#define NUM_LEDS (WIDTH * HEIGHT)
 #define PIN 6
 #define BRIGHTNESS 64
 
@@ -23,7 +25,7 @@ void loop() {
       b = Serial.read();
       g = Serial.read();
       r = Serial.read();
-      leds[x] = CRGB(r, g, b);
+      leds[x + y * WIDTH] = CRGB(r, g, b);
     }
     Serial.print('X');
   }
