@@ -145,6 +145,6 @@ class PixelGrid(Widget):
             # Spit out 16*3=48 byte chunks that the arduino can cope with (it has a 64-byte buffer).
             for row in self.data:
                 self._serial.write((row * 255).astype(np.uint8).tobytes())
-                assert self._serial.read() == "X"  # Wait for ACK before sending more.
+                self._serial.read() # Wait for ACK before sending more.
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
