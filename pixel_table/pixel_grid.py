@@ -67,7 +67,7 @@ class PixelGrid(Widget):
         for device in glob.glob("/dev/ttyUSB*"):
             print("Trying to connect to %s" % device)
             try:
-                self._serial = Serial(device, 115200, timeout=0.1)
+                self._serial = Serial(device, 115200, timeout=1)
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
@@ -146,7 +146,9 @@ class PixelGrid(Widget):
             print("Serial: ", end='', file=sys.stderr)
             for row in self.data:
                 self._serial.write((row * 255).astype(np.uint8).tobytes())
-                print(str(self._serial.read()), end='', file=sys.stderr)  # Wait for ACK before sending more.
+                while self._serial.read() != "X":
+                    pass
+                print(".", end='', file=sys.stderr)  # Wait for ACK before sending more.
             print(file=sys.stderr)
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
