@@ -64,6 +64,7 @@ class PixelGrid(Widget):
 
         for i in range(1, 10):
             device = "/dev/ttyUSB%d" % i
+            print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, 115200)
                 print("Connected to serial port %s" % device)
@@ -72,7 +73,6 @@ class PixelGrid(Widget):
                 pass
 
         print("Failed to connect to a serial port.")
-
 
     @property
     def pixels(self):
