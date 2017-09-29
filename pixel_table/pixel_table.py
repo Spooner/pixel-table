@@ -48,6 +48,7 @@ class PixelTable(Widget):
 
     def update(self, dt):
         self.mode.update(dt)
+        self.pixel_grid.write_pixels_to_serial()
 
     def on_pixel_down(self, sender, pixel):
         self.mode.on_pixel_down(pixel)

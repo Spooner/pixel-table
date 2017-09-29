@@ -18,7 +18,7 @@ pexpect==4.2.1            # via buildozer
 pillow==4.2.1
 ptyprocess==0.5.2         # via pexpect
 pygments==2.2.0
-pysdl2==0.9.5
+pyserial==3.4
 requests==2.18.4          # via kivy-garden
 urllib3==1.22             # via requests
 virtualenv==15.1.0        # via buildozer

@@ -6,6 +6,8 @@ from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.graphics import Color, Rectangle
 import numpy as np
+from serial import Serial
+from serial.serialutil import SerialException
 
 
 class Pixel:
@@ -115,3 +117,10 @@ class PixelGrid(Widget):
         for pixel in self.pixels:
             r, g, b = pixel.color
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
+
+    def write_pixels_to_serial(self):
+        try:
+            serial = Serial("/dev/tty.usbserial", 115200)
+            serial.write(self.data.astype(np.uint8).tobytes())
+        except SerialException:
+            print("Failed to send serial data.")
