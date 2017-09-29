@@ -2,7 +2,7 @@
 from collections import OrderedDict
 import math
 import glob
-from time import sleep
+import sys
 
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
@@ -145,6 +145,6 @@ class PixelGrid(Widget):
             # Spit out 16*3=48 byte chunks that the arduino can cope with (it has a 64-byte buffer).
             for row in self.data:
                 self._serial.write((row * 255).astype(np.uint8).tobytes())
-                print("Serial:", self._serial.read())  # Wait for ACK before sending more.
+                print(self._serial.read(), end="", file=sys.stderr)  # Wait for ACK before sending more.
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
