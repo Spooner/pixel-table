@@ -40,7 +40,8 @@ class ArduinoSerial:
             print("Serial: ", end='', file=sys.stderr)
             for row in data:
                 self._serial.write((row * 255).astype(np.uint8).tobytes())
-                assert self._serial.read() == b"X"
+                while self._serial.read() != b"X":
+                    pass
                 print(".", end='', file=sys.stderr)  # Wait for ACK before sending more.
             print(file=sys.stderr)
         except (SerialException, AttributeError):
