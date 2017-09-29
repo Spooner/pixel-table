@@ -25,7 +25,7 @@ void loop() {
       b = Serial.read();
       leds[x] = CRGB(r, g, b);
     }
-    Serial.print('X')
+    Serial.print('X');
   }
   FastLED.show();
 }
