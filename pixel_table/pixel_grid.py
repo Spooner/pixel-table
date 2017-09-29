@@ -2,6 +2,7 @@
 from collections import OrderedDict
 import math
 import glob
+from time import sleep
 
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
@@ -141,6 +142,8 @@ class PixelGrid(Widget):
 
     def write_pixels_to_serial(self):
         try:
-            self._serial.write((self.data * 255).astype(np.uint8).tobytes())
+            for row in self.data:
+                self._serial.write((row * 255).astype(np.uint8).tobytes())
+                sleep(0.001)
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
