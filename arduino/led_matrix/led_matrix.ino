@@ -31,7 +31,7 @@ void loop() {
       } else {
         xx = WIDTH - x - 1;
       }
-      leds[x + yy * WIDTH] = CRGB(r, g, b);
+      leds[xx + y * WIDTH] = CRGB(r, g, b);
     }
     Serial.print('X');
   }
