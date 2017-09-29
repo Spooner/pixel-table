@@ -44,11 +44,7 @@ class PixelGrid(Widget):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        try:
-            self._serial = Serial("/dev/ttyUSB0", 115200)
-        except SerialException:
-            self._serial = None
-            print("Failed to connect to serial port")
+        self._open_serial()
 
         self.update_canvas()
 
@@ -58,6 +54,21 @@ class PixelGrid(Widget):
         self.register_event_type("on_pixel_down")
         self.register_event_type("on_pixel_move")
         self.register_event_type("on_pixel_up")
+
+    def _open_serial(self):
+        self._serial = None
+        device = 0
+        for i in range(1, 10):
+            device = "/dev/ttyUSB%d" % i
+            try:
+                self._serial = Serial(device, 115200)
+            except SerialException:
+                pass
+
+        if self._serial is None:
+            print("Failed to connect to a serial port.")
+        else:
+            print("Connected to serial port %s" % device)
 
     @property
     def pixels(self):
@@ -126,6 +137,7 @@ class PixelGrid(Widget):
 
     def write_pixels_to_serial(self):
         try:
-            self._serial.write((self.data * 255).astype(np.uint8).tobytes())
+            for row in self.data:
+                self._serial.write((row * 255).astype(np.uint8).tobytes())
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
