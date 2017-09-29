@@ -20,9 +20,9 @@ void loop() {
   for (y = 0; y < NUM_LEDS; y++) {
     for (x = 0; x < NUM_LEDS; x++) {
       while (Serial.available() < NUM_LEDS * 3);
-      r = Serial.read();
-      g = Serial.read();
       b = Serial.read();
+      g = Serial.read();
+      r = Serial.read();
       leds[x] = CRGB(r, g, b);
     }
     Serial.print('X');
