@@ -2,6 +2,6 @@ cython==0.25.2
 buildozer
 kivy
 pillow
--e git+https://github.com/kivy/kivy.git@master#egg=Kivy
+kivy
 numpy
 pyserial
