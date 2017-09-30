@@ -59,7 +59,7 @@ class ArduinoSerial:
         column = (column * 255).astype(np.uint8).tobytes()
         try:
             self._serial.write(column)
-            print(self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
+            print(self._serial.read().decode(), end='', file=sys.stderr)  # Wait for ACK before sending more.
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
 
