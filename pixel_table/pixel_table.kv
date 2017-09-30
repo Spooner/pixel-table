@@ -38,13 +38,7 @@
             BoxLayout:
                 id: mode_container
 
-
-#<ColorDialog>:
-#    color_picker: color_picker
-#    ColorPicker:
-#        id: color_picker
-
-<PaintColor@Widget>:
+<PaintColor@Button>:
     color: 1, 1, 1
     height: 32
     canvas:
@@ -64,6 +58,7 @@
         PaintColor:
             id: color
             size_hint_y: None
+            on_release: root.open_color_dialog()
 
         GridLayout:
             cols: 2
@@ -79,6 +74,32 @@
             Dropper:
                 root: root
 
+<PaintColorPicker>:
+    color_picker: color_picker
+
+    size_hint: None, None
+    size: 600, 400
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            text: 'Pick a color'
+            size_hint_y: None
+            height: 32
+
+        ColorPicker:
+            id: color_picker
+
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint_y: None
+            height: 32
+            Button:
+                text: "OK"
+                on_release: root.pick()
+            Button:
+                text: "Cancel"
+                on_release: root.dismiss()
 
 <MatrixRain>:
     num_drops: num_drops

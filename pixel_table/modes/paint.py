@@ -1,6 +1,6 @@
 from kivy.uix.togglebutton import ToggleButton
 from kivy.properties import ObjectProperty
-import numpy as np
+from kivy.uix.modalview import ModalView
 
 from .mode import Mode
 
@@ -55,6 +55,9 @@ class Paint(Mode):
 
         self._data = None
 
+    def open_color_dialog(self, *args):
+        PaintColorPicker(self).open()
+
     def on_activated(self):
         if self._data is not None:
             self.pixel_grid.import_data(self._data)
@@ -72,3 +75,15 @@ class Paint(Mode):
         
     def on_pixel_up(self, pixel):
         self.tool.on_pixel_up(pixel)
+
+
+class PaintColorPicker(ModalView):
+    color_picker = ObjectProperty(None)
+
+    def __init__(self, paint, **kwargs):
+        super().__init__(**kwargs)
+        self._paint = paint
+
+    def pick(self):
+        self._paint.color.color = self.color_picker.color[:3]
+        self.dismiss()
