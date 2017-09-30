@@ -50,14 +50,16 @@ class ArduinoSerial:
         # Spit out 16*3=48 byte chunks (columns, left to right) that the Arduino can cope with (has a 64-byte buffer).
         while True:
             data = self._queue.get()
+            print("Writing to serial: ", end="", file=sys.stderr)
             for column in data:
                 self._write_column(column)
+            print(file=sys.stderr)
 
     def _write_column(self, column):
         column = (column * 255).astype(np.uint8).tobytes()
         try:
             self._serial.write(column)
-            print("%s" % self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
+            print(self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
 
