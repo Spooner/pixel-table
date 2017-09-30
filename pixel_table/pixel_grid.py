@@ -14,6 +14,8 @@ from serial.serialutil import SerialException
 
 
 class ArduinoSerial:
+    INITIAL_DELAY = 4
+
     def __init__(self):
         self._serial = None
         self._connected_at = None
@@ -35,7 +37,7 @@ class ArduinoSerial:
         print("Failed to connect to a serial port.")
 
     def write_pixels(self, data):
-        if self._serial is None or time() < self._connected_at + 2:
+        if self._serial is None or time() < self._connected_at + self.INITIAL_DELAY:
             return
 
         try:
