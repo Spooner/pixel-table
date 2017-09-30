@@ -4,20 +4,20 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
--e git+https://github.com/kivy/kivy.git@master#egg=Kivy
 buildozer==0.33
 certifi==2017.7.27.1      # via requests
 chardet==3.0.4            # via requests
 cython==0.25.2
-docutils==0.14
+docutils==0.14            # via kivy
 idna==2.6                 # via requests
-kivy-garden==0.1.4
+kivy-garden==0.1.4        # via kivy
+kivy==1.10.0
 numpy==1.13.1
 olefile==0.44             # via pillow
 pexpect==4.2.1            # via buildozer
 pillow==4.2.1
 ptyprocess==0.5.2         # via pexpect
-pygments==2.2.0
+pygments==2.2.0           # via kivy
 pyserial==3.4
 requests==2.18.4          # via kivy-garden
 urllib3==1.22             # via requests
