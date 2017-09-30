@@ -1,86 +1,13 @@
-
 from collections import OrderedDict
 import math
-import glob
-import sys
-from time import time
-from multiprocessing import Process, Queue
 
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
 from kivy.graphics import Color, Rectangle
 import numpy as np
-from serial import Serial
-from serial.serialutil import SerialException
 
-
-class ArduinoSerial:
-    INITIAL_DELAY = 4
-
-    def __init__(self):
-        self._queue = Queue()
-        self._serial = None
-        self._connected_at = None
-        self._open()
-        self._process = Process(target=self._process)
-        self._process.start()
-
-    def _open(self):
-        for device in glob.glob("/dev/ttyUSB*"):
-            print("Trying to connect to %s" % device)
-            try:
-                self._serial = Serial(device, 115200)
-                self._serial.reset_output_buffer()
-                self._serial.reset_input_buffer()
-                self._connected_at = time()
-                print("Connected to serial port %s" % device)
-                return
-            except SerialException:
-                pass
-
-        print("Failed to connect to a serial port.")
-
-    def write_pixels(self, data):
-        if self._serial is None or time() < self._connected_at + self.INITIAL_DELAY:
-            return
-
-        self._queue.put(data)
-
-    def _process(self):
-        # Spit out 16*3=48 byte chunks (columns, left to right) that the Arduino can cope with (has a 64-byte buffer).
-        while True:
-            data = self._queue.get()
-            print("Writing to serial: ", end="", file=sys.stderr)
-            for column in data:
-                self._write_column(column)
-            print(file=sys.stderr)
-
-    def _write_column(self, column):
-        column = (column * 255).astype(np.uint8).tobytes()
-        try:
-            self._serial.write(column)
-            print(self._serial.read().decode(), end='', file=sys.stderr)  # Wait for ACK before sending more.
-        except (SerialException, AttributeError):
-            print("Failed to send serial data.")
-
-
-class Pixel:
-    def __init__(self, x, y, pixel_grid):
-        self._x, self._y = x, y
-        self._pixel_grid = pixel_grid
-        self.color_on_canvas = None
-
-    @property
-    def color(self):
-        return self._pixel_grid.get_color(self._x, self._y)
-
-    @color.setter
-    def color(self, color):
-        self._pixel_grid.set_color(self._x, self._y, color)
-        self.color_on_canvas.rgb = color
-
-    def __str__(self):
-        return "<Pixel ({}, {}) {}>".format(self._x, self._y, self.color)
+from .arduino_process import ArduinoProcess
+from .pixel import Pixel
 
 
 class PixelGrid(Widget):
@@ -98,7 +25,8 @@ class PixelGrid(Widget):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        self._serial = ArduinoSerial()
+        self._remote = ArduinoProcess()
+        self._remote.start()
 
         self.bind(size=self.update_canvas)
 
@@ -172,4 +100,4 @@ class PixelGrid(Widget):
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
 
     def update(self):
-        self._serial.write_pixels(self.data)
+        self._remote.write_pixels(self.data)
