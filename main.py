@@ -13,7 +13,7 @@ class PixelTableApp(App):
     def build(self):
         game = PixelTable()
         game.setup()
-        Clock.schedule_interval(game.update, 1 / 60)
+        Clock.schedule_interval(game.update, 1 / 30)
         return game
 
 
