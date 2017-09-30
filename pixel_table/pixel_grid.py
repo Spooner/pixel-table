@@ -3,7 +3,7 @@ from collections import OrderedDict
 import math
 import glob
 import sys
-from time import sleep
+from time import time
 
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
@@ -16,6 +16,7 @@ from serial.serialutil import SerialException
 class ArduinoSerial:
     def __init__(self):
         self._serial = None
+        self._connected_at = None
         self._open()
 
     def _open(self):
@@ -25,7 +26,7 @@ class ArduinoSerial:
                 self._serial = Serial(device, 115200)
                 self._serial.reset_output_buffer()
                 self._serial.reset_input_buffer()
-                sleep(1)
+                self._connected_at = time()
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
@@ -34,7 +35,7 @@ class ArduinoSerial:
         print("Failed to connect to a serial port.")
 
     def write_pixels(self, data):
-        if self._serial is None:
+        if self._serial is None or time() < self._connected_at + 2:
             return
 
         try:
@@ -43,7 +44,7 @@ class ArduinoSerial:
             for row in data:
                 self._serial.write((row * 255).astype(np.uint8).tobytes())
 
-                print("%s" % self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
+                print("%c" % self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
             print(file=sys.stderr)
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
