@@ -9,7 +9,7 @@
 
 CRGB leds[NUM_LEDS];  
 int r, g, b;
-int x, y, xx;
+int x, y, yy;
 
 void setup() {
   FastLED.addLeds<WS2812B, PIN>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
@@ -19,18 +19,18 @@ void setup() {
 }
 
 void loop() {
-  for (y = 0; y < HEIGHT; y++) {
-    for (x = 0; x < WIDTH; x++) {
+  for (x = 0; x < WIDTH; x++) {
+    for (y = 0; y < HEIGHT; y++) {
       while (Serial.available() < 3);
       g = Serial.read();
       r = Serial.read();
       b = Serial.read();
-      if (y % 2 == 0) {
-        xx = x;
+      if (x % 2 == 0) {
+        yy = y;
       } else {
-        xx = WIDTH - x - 1;
+        yy = HEIGHT - y - 1;
       }
-      leds[xx + y * WIDTH] = CRGB(r, g, b);
+      leds[yy + x * HEIGHT] = CRGB(r, g, b);
     }
     Serial.print('X');
   }
