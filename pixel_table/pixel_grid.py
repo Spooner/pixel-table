@@ -78,7 +78,7 @@ class PixelGrid(Widget):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        self._cell_width = self.width / self.WIDTH
+        self._cell_width = None
 
         self._pixels = OrderedDict()
         for y in range(self.HEIGHT):
@@ -87,10 +87,7 @@ class PixelGrid(Widget):
 
         self._serial = ArduinoSerial()
 
-        self.update_canvas()
-
         self.bind(size=self.update_canvas)
-        self.bind(pos=self.update_canvas)
 
         self.register_event_type("on_pixel_down")
         self.register_event_type("on_pixel_move")
@@ -121,7 +118,7 @@ class PixelGrid(Widget):
 
         with self.canvas:
             for (x, y), pixel in self._pixels.items():
-                pixel.color_on_canvas = Color(*pixel.color)
+                pixel.color_on_canvas = Color(*pixel.color, mode='rgb')
                 Rectangle(pos=(self.x + x * self._cell_width, self.y + y * self._cell_width), size=draw_size)
 
     def pixel_at(self, position):
