@@ -15,11 +15,14 @@ void setup() {
   FastLED.addLeds<WS2812B, PIN>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(115200);
-  FastLED.show();
-  leds[0] = CRGB(0.5, 0.5, 0.5);
-  delay(250);
-  leds[0] = CRGB(0, 0, 0);
-  FastLED.show();
+
+  for (x = 0; x < 3; x++) {
+    leds[0] = CRGB(0.5, 0.5, 0.5);
+    FastLED.show();
+    delay(200);
+    leds[0] = CRGB(0, 0, 0);
+    FastLED.show();
+  }
 }
 
 void loop() {
