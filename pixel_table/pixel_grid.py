@@ -3,6 +3,7 @@ from collections import OrderedDict
 import math
 import glob
 import sys
+from time import sleep
 
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
@@ -21,9 +22,10 @@ class ArduinoSerial:
         for device in glob.glob("/dev/ttyUSB*"):
             print("Trying to connect to %s" % device)
             try:
-                self._serial = Serial(device, 115200, timeout=1)
+                self._serial = Serial(device, 115200)
                 self._serial.reset_output_buffer()
                 self._serial.reset_input_buffer()
+                sleep(1)
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:

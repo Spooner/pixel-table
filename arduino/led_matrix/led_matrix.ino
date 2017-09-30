@@ -23,9 +23,9 @@ void loop() {
   for (y = 0; y < HEIGHT; y++) {
     for (x = 0; x < WIDTH; x++) {
       while (Serial.available() < 3);
-      b = Serial.read();
-      g = Serial.read();
       r = Serial.read();
+      g = Serial.read();
+      b = Serial.read();
       if (y % 2 == 0) {
         xx = x;
       } else {
