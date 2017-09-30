@@ -37,7 +37,7 @@ class ArduinoProcess(Process):
         # Spit out 16*3=48 byte chunks (columns, left to right) that the Arduino can cope with (has a 64-byte buffer).
         while True:
             data = self._queue.get()
-            if self._serial is not None or time() < self._connected_at + self.INITIAL_DELAY:
+            if self._serial is None or time() < self._connected_at + self.INITIAL_DELAY:
                 continue
 
             print("Writing to serial: ", end="", file=sys.stderr)
