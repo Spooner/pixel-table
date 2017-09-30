@@ -16,6 +16,10 @@ void setup() {
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(115200);
   FastLED.show();
+  leds[0] = CRGB(0.5, 0.5, 0.5);
+  delay(250);
+  leds[0] = CRGB(0, 0, 0);
+  FastLED.show();
 }
 
 void loop() {
