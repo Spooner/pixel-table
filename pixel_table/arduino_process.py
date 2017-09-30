@@ -38,7 +38,6 @@ class ArduinoProcess(Process):
         while True:
             data = self._queue.get()
             if self._serial is None or time() < self._connected_at + self.INITIAL_DELAY:
-                print("Ignoring data sent to Arduino (too early or broken connection)", file=sys.stderr)
                 continue
 
             print("Writing to serial: ", end="", file=sys.stderr)
@@ -52,7 +51,7 @@ class ArduinoProcess(Process):
             self._serial.write(column)
             print(self._serial.read().decode(), end='', file=sys.stderr)  # Wait for ACK before sending more.
         except (SerialException, AttributeError):
-            print("Failed to send serial data.")
+            print("Failed to send serial data.", file=sys.stderr)
 
     def write_pixels(self, data):
         self._queue.put(data)
