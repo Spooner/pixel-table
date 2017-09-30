@@ -39,10 +39,11 @@ class ArduinoSerial:
             return
 
         try:
-            # Spit out 16*3=48 byte chunks that the arduino can cope with (it has a 64-byte buffer).
+            # Spit out 16*3=48 byte chunks (columns, left to right)
+            # that the Arduino can cope with (it has a 64-byte buffer).
             print("Serial: ", end='', file=sys.stderr)
-            for row in data:
-                self._serial.write((row * 255).astype(np.uint8).tobytes())
+            for column in data:
+                self._serial.write((column * 255).astype(np.uint8).tobytes())
 
                 print("%s" % self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
             print(file=sys.stderr)
