@@ -4,6 +4,7 @@ import math
 import glob
 import sys
 from time import time
+from multiprocessing import Process, Queue
 
 from kivy.uix.widget import Widget
 from kivy.properties import ObjectProperty
@@ -17,9 +18,12 @@ class ArduinoSerial:
     INITIAL_DELAY = 4
 
     def __init__(self):
+        self._queue = Queue()
         self._serial = None
         self._connected_at = None
         self._open()
+        self._process = Process(target=self._process)
+        self._process.start()
 
     def _open(self):
         for device in glob.glob("/dev/ttyUSB*"):
@@ -40,15 +44,20 @@ class ArduinoSerial:
         if self._serial is None or time() < self._connected_at + self.INITIAL_DELAY:
             return
 
-        try:
-            # Spit out 16*3=48 byte chunks (columns, left to right)
-            # that the Arduino can cope with (it has a 64-byte buffer).
-            print("Serial: ", end='', file=sys.stderr)
-            for column in data:
-                self._serial.write((column * 255).astype(np.uint8).tobytes())
+        self._queue.put(data)
 
-                print("%s" % self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
-            print(file=sys.stderr)
+    def _process(self):
+        # Spit out 16*3=48 byte chunks (columns, left to right) that the Arduino can cope with (has a 64-byte buffer).
+        while True:
+            data = self._queue.get()
+            for column in data:
+                self._write_column(column)
+
+    def _write_column(self, column):
+        column = (column * 255).astype(np.uint8).tobytes()
+        try:
+            self._serial.write(column)
+            print("%s" % self._serial.read(), end='', file=sys.stderr)  # Wait for ACK before sending more.
         except (SerialException, AttributeError):
             print("Failed to send serial data.")
 
