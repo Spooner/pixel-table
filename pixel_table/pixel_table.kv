@@ -5,7 +5,6 @@
 <PixelTable>:
     pixel_grid: pixel_grid
     mode_container: mode_container
-    mode_dropdown: mode_dropdown
     mode_button: mode_button
 
     canvas.before:
@@ -28,15 +27,13 @@
 
             Button:
                 id: mode_button
-                on_release: mode_dropdown.open(self)
+                on_release: root.open_dropdown()
                 height: 40
                 size_hint_y: None
 
-            DropDown:
-                id: mode_dropdown
-
             BoxLayout:
                 id: mode_container
+
 
 <PaintColor@Button>:
     color: 1, 1, 1
@@ -78,7 +75,7 @@
     color_picker: color_picker
 
     size_hint: None, None
-    size: 600, 400
+    size: 700, 400
     BoxLayout:
         orientation: "vertical"
 
