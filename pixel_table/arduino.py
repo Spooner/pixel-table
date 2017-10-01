@@ -20,11 +20,11 @@ class DummySerial:
 
 
 class Arduino:
-    INITIAL_DELAY = 3
+    INITIAL_DELAY = 4
 
     def __init__(self):
         self._serial = None
-        self._brightness = 0.5
+        self._brightness = 0.25
 
     @property
     def brightness(self):
@@ -39,9 +39,8 @@ class Arduino:
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, 115200)
-                response = self._serial.read()
-                assert response == b"R", response
                 print("Connected to serial port %s" % device)
+                sleep(self.INITIAL_DELAY)
                 return
             except SerialException:
                 pass
