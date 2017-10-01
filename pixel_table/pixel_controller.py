@@ -17,6 +17,7 @@ class DummySerial:
 
 class PixelController:
     BAUD = 230400
+    READY_CHAR = b'R'
 
     def __init__(self):
         self._serial = None
@@ -44,6 +45,6 @@ class PixelController:
         print("Failed to connect to a serial port.")
 
     def write_pixels(self, data):
-        assert self._serial.read() == b'X'
+        assert self._serial.read() == self.READY_CHAR
         pixel_bytes = (data * int(255 * self._brightness)).astype(np.uint8).tobytes()
         self._serial.write(pixel_bytes)
