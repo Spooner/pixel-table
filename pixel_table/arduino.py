@@ -50,6 +50,5 @@ class Arduino:
         print("Failed to connect to a serial port.")
 
     def write_pixels(self, data):
-        print("Writing to serial...", end="", file=sys.stderr)
-        self._serial.write((data * int(255 * self._brightness)).astype(np.uint8).tobytes())
-        print("OK", file=sys.stderr)
+        pixel_bytes = (data * int(255 * self._brightness)).astype(np.uint8).tobytes()
+        self._serial.write(pixel_bytes)
