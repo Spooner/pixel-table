@@ -28,7 +28,6 @@ class ArduinoProcess(Process):
         self.daemon = True
         self._serial = self._connected_at = None
         self._queue = Queue()
-        self._open()
 
     def _open(self):
         self._connected_at = time()
@@ -46,6 +45,7 @@ class ArduinoProcess(Process):
         print("Failed to connect to a serial port.")
 
     def run(self):
+        self._open()
         # self._serial.reset_output_buffer()
         self._serial.reset_input_buffer()
 
