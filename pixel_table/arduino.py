@@ -38,10 +38,10 @@ class Arduino:
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, 115200)
-                print("Connected to serial port %s" % device)
-                sleep(self.INITIAL_DELAY)
                 self._serial.reset_input_buffer()
                 self._serial.reset_output_buffer()
+                print("Connected to serial port %s" % device)
+                sleep(self.INITIAL_DELAY)
                 return
             except SerialException:
                 pass
