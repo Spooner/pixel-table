@@ -14,7 +14,7 @@ int x, y, yy;
 void setup() {
   FastLED.addLeds<WS2812B, PIN>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
-  Serial.begin(115200);
+  Serial.begin(230400);
   FastLED.show();
 }
 

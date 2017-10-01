@@ -15,8 +15,8 @@ class DummySerial:
         return b'X'
 
 
-class Arduino:
-    INITIAL_DELAY = 4
+class PixelController:
+    BAUD = 230400
 
     def __init__(self):
         self._serial = None
@@ -30,11 +30,11 @@ class Arduino:
     def brightness(self, value):
         self._brightness = min(1, max(value, 0))
 
-    def start(self):
+    def open(self):
         for device in glob.glob("/dev/ttyUSB*"):
             print("Trying to connect to %s" % device)
             try:
-                self._serial = Serial(device, 115200)
+                self._serial = Serial(device, self.BAUD)
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
