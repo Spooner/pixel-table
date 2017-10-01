@@ -16,24 +16,27 @@ void setup() {
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(115200);
   FastLED.show();
-  Serial.print("R");
 }
 
 void loop() {
-  for (x = 0; x < WIDTH; x++) {
-    for (y = 0; y < HEIGHT; y++) {
-      while (Serial.available() < 3);
-      g = Serial.read();
-      r = Serial.read();
-      b = Serial.read();
-      if (x % 2 == 0) {
-        yy = y;
-      } else {
-        yy = HEIGHT - y - 1;
+  Serial.print("R");
+
+  while (1) {
+    for (x = 0; x < WIDTH; x++) {
+      for (y = 0; y < HEIGHT; y++) {
+        while (Serial.available() < 3);
+        g = Serial.read();
+        r = Serial.read();
+        b = Serial.read();
+        if (x % 2 == 0) {
+          yy = y;
+        } else {
+          yy = HEIGHT - y - 1;
+        }
+        leds[yy + x * HEIGHT] = CRGB(r, g, b);
       }
-      leds[yy + x * HEIGHT] = CRGB(r, g, b);
     }
+    FastLED.show();
   }
-  FastLED.show();
 }
 
