@@ -1,5 +1,4 @@
 import glob
-import sys
 from time import sleep
 
 import numpy as np
@@ -10,6 +9,10 @@ from serial.serialutil import SerialException
 class DummySerial:
     def write(self, data):
         sleep(0.01)
+
+    def read(self):
+        sleep(0.01)
+        return b'X'
 
 
 class Arduino:
