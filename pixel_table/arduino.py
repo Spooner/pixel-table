@@ -40,7 +40,7 @@ class Arduino:
             try:
                 self._serial = Serial(device, 115200)
                 response = self._serial.read()
-                assert response == "R", response
+                assert response == b"R", response
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
