@@ -16,14 +16,19 @@ class DummySerial:
         sleep(0.001)
         return b"X"
 
+    def reset_input_buffer(self):
+        pass
+
 
 class ArduinoProcess(Process):
     INITIAL_DELAY = 4
 
     def __init__(self):
         super().__init__()
+        self.daemon = True
         self._serial = self._connected_at = None
         self._queue = Queue()
+        self._open()
 
     def _open(self):
         self._connected_at = time()
@@ -41,23 +46,27 @@ class ArduinoProcess(Process):
         print("Failed to connect to a serial port.")
 
     def run(self):
-        self._open()
+        # self._serial.reset_output_buffer()
+        self._serial.reset_input_buffer()
 
         # Spit out 16*3=48 byte chunks (columns, left to right) that the Arduino can cope with (has a 64-byte buffer).
         while True:
             data = self._queue.get()
-            if time() < self._connected_at + self.INITIAL_DELAY:
-                continue
+            self._write_pixels(data)
 
-            print("Writing to serial: ", end="", file=sys.stderr)
-            for column in data:
-                self._write_column(column)
-            print(file=sys.stderr)
+    def _write_pixels(self, data):
+        if time() < self._connected_at + self.INITIAL_DELAY:
+            return
+
+        print("Writing to serial: ", end="", file=sys.stderr)
+        for column in data:
+            self._write_column(column)
+        print(file=sys.stderr)
 
     def _write_column(self, column):
         column = (column * 255).astype(np.uint8).tobytes()
         try:
-            print(".", end='', file=sys.stderr)
+            print("c", end='', file=sys.stderr)
             self._serial.write(column)
             print(self._serial.read().decode(), end='', file=sys.stderr)  # Wait for ACK before sending more.
         except (SerialException, AttributeError):
