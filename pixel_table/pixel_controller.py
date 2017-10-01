@@ -22,14 +22,6 @@ class PixelController:
     def __init__(self):
         self._serial = None
 
-    @property
-    def brightness(self):
-        return self._brightness
-
-    @brightness.setter
-    def brightness(self, value):
-        self._brightness = min(1, max(value, 0))
-
     def open(self):
         for device in glob.glob("/dev/ttyUSB*"):
             print("Trying to connect to %s" % device)
