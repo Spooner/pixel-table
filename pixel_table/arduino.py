@@ -11,11 +11,10 @@ class DummySerial:
     def write(self, data):
         sleep(0.01)
 
-    def read(self):
-        sleep(2)
-        return "R"
-
     def reset_input_buffer(self):
+        pass
+
+    def reset_output_buffer(self):
         pass
 
 
@@ -41,6 +40,8 @@ class Arduino:
                 self._serial = Serial(device, 115200)
                 print("Connected to serial port %s" % device)
                 sleep(self.INITIAL_DELAY)
+                self._serial.reset_input_buffer()
+                self._serial.reset_output_buffer()
                 return
             except SerialException:
                 pass
