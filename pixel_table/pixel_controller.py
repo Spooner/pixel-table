@@ -8,14 +8,11 @@ from serial.serialutil import SerialException
 
 class DummySerial:
     def write(self, data):
-        sleep(0.01)
+        sleep(0.02)
 
     def read(self):
-        sleep(0.01)
-        return b'X'
-
-    def reset_input_buffer(self):
-        pass
+        sleep(0.02)
+        return b'R'
 
 
 class PixelController:
@@ -39,7 +36,6 @@ class PixelController:
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, self.BAUD)
-                self._serial.reset_input_buffer()
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
