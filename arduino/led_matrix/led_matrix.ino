@@ -33,7 +33,7 @@ void loop() {
       } else {
         yy = HEIGHT - y - 1;
       }
-      leds[yy + x * HEIGHT] = CBRB(g, r, b);
+      leds[yy + x * HEIGHT] = CGRB(g, r, b);
     }
   }
   FastLED.show();
