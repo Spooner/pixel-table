@@ -11,12 +11,6 @@ class DummySerial:
     def write(self, data):
         sleep(0.01)
 
-    def reset_input_buffer(self):
-        pass
-
-    def reset_output_buffer(self):
-        pass
-
 
 class Arduino:
     INITIAL_DELAY = 4
@@ -38,10 +32,7 @@ class Arduino:
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, 115200)
-                self._serial.reset_input_buffer()
-                self._serial.reset_output_buffer()
                 print("Connected to serial port %s" % device)
-                sleep(self.INITIAL_DELAY)
                 return
             except SerialException:
                 pass
@@ -50,5 +41,6 @@ class Arduino:
         print("Failed to connect to a serial port.")
 
     def write_pixels(self, data):
+        assert self._serial.read() == b'X'
         pixel_bytes = (data * int(255 * self._brightness)).astype(np.uint8).tobytes()
         self._serial.write(pixel_bytes)

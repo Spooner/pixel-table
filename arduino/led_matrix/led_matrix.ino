@@ -19,6 +19,8 @@ void setup() {
 }
 
 void loop() {
+  Serial.write("X");
+
   for (x = 0; x < WIDTH; x++) {
     for (y = 0; y < HEIGHT; y++) {
       while (Serial.available() < 3);
