@@ -6,7 +6,7 @@ from kivy.properties import ObjectProperty
 from kivy.graphics import Color, Rectangle
 import numpy as np
 
-from .arduino import PixelController
+from .pixel_controller import PixelController
 from .pixel import Pixel
 
 
