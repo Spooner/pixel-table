@@ -8,7 +8,7 @@
 #define BAUD 115200
 #define BRIGHTNESS 64
 
-CGRB leds[NUM_LEDS];
+CRGB leds[NUM_LEDS];
 int r, g, b;
 int x, y, yy;
 
@@ -33,7 +33,7 @@ void loop() {
       } else {
         yy = HEIGHT - y - 1;
       }
-      leds[yy + x * HEIGHT] = CGRB(g, r, b);
+      leds[yy + x * HEIGHT] = CRGB(g, r, b);  // Seems to be running as GRB, not RGB
     }
   }
   FastLED.show();
