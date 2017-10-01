@@ -1,11 +1,20 @@
 import glob
 import sys
-from time import time
+from time import time, sleep
 from multiprocessing import Process, Queue
 
 import numpy as np
 from serial import Serial
 from serial.serialutil import SerialException
+
+
+class DummySerial:
+    def write(self, data):
+        pass
+
+    def read(self):
+        sleep(0.001)
+        return b"X"
 
 
 class ArduinoProcess(Process):
@@ -17,18 +26,18 @@ class ArduinoProcess(Process):
         self._queue = Queue()
 
     def _open(self):
+        self._connected_at = time()
+
         for device in glob.glob("/dev/ttyUSB*"):
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, 115200)
-                self._serial.reset_output_buffer()
-                self._serial.reset_input_buffer()
-                self._connected_at = time()
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
                 pass
 
+        self._serial = DummySerial()
         print("Failed to connect to a serial port.")
 
     def run(self):
@@ -37,7 +46,7 @@ class ArduinoProcess(Process):
         # Spit out 16*3=48 byte chunks (columns, left to right) that the Arduino can cope with (has a 64-byte buffer).
         while True:
             data = self._queue.get()
-            if self._serial is None or time() < self._connected_at + self.INITIAL_DELAY:
+            if time() < self._connected_at + self.INITIAL_DELAY:
                 continue
 
             print("Writing to serial: ", end="", file=sys.stderr)
@@ -48,6 +57,7 @@ class ArduinoProcess(Process):
     def _write_column(self, column):
         column = (column * 255).astype(np.uint8).tobytes()
         try:
+            print(".", end='', file=sys.stderr)
             self._serial.write(column)
             print(self._serial.read().decode(), end='', file=sys.stderr)  # Wait for ACK before sending more.
         except (SerialException, AttributeError):
