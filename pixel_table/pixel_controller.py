@@ -14,9 +14,12 @@ class DummySerial:
         sleep(0.01)
         return b'X'
 
+    def reset_input_buffer(self):
+        pass
+
 
 class PixelController:
-    BAUD = 230400
+    BAUD = 115200
     READY_CHAR = b'R'
 
     def __init__(self):
@@ -36,6 +39,7 @@ class PixelController:
             print("Trying to connect to %s" % device)
             try:
                 self._serial = Serial(device, self.BAUD)
+                self._serial.reset_input_buffer()
                 print("Connected to serial port %s" % device)
                 return
             except SerialException:
