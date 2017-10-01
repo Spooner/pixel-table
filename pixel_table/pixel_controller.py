@@ -21,7 +21,6 @@ class PixelController:
 
     def __init__(self):
         self._serial = None
-        self._brightness = 0.25
 
     @property
     def brightness(self):
@@ -46,5 +45,5 @@ class PixelController:
 
     def write_pixels(self, data):
         assert self._serial.read() == self.READY_CHAR
-        pixel_bytes = (data * int(255 * self._brightness)).astype(np.uint8).tobytes()
+        pixel_bytes = (data * 255).astype(np.uint8).tobytes()
         self._serial.write(pixel_bytes)
