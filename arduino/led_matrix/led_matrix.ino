@@ -6,6 +6,7 @@
 #define NUM_LEDS (WIDTH * HEIGHT)
 #define PIN 6
 #define BAUD 115200
+#define BRIGHTNESS 64
 
 CGRB leds[NUM_LEDS];
 int r, g, b;
@@ -13,6 +14,7 @@ int x, y, yy;
 
 void setup() {
   FastLED.addLeds<WS2812B, PIN>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(BAUD);
   FastLED.show();
 }
