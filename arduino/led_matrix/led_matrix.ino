@@ -7,7 +7,7 @@
 #define PIN 6
 #define BRIGHTNESS 32
 
-CRGB leds[NUM_LEDS];  
+CRGB leds[NUM_LEDS];
 int r, g, b;
 int x, y, yy;
 
@@ -16,6 +16,7 @@ void setup() {
   FastLED.setBrightness(BRIGHTNESS);
   Serial.begin(115200);
   FastLED.show();
+  Serial.print("R");
 }
 
 void loop() {
@@ -32,7 +33,6 @@ void loop() {
       }
       leds[yy + x * HEIGHT] = CRGB(r, g, b);
     }
-    Serial.print('X');
   }
   FastLED.show();
 }

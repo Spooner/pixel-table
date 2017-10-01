@@ -6,7 +6,7 @@ from kivy.properties import ObjectProperty
 from kivy.graphics import Color, Rectangle
 import numpy as np
 
-from .arduino_process import ArduinoProcess
+from .arduino import Arduino
 from .pixel import Pixel
 
 
@@ -25,7 +25,7 @@ class PixelGrid(Widget):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        self._remote = ArduinoProcess()
+        self._remote = Arduino()
         self._remote.start()
 
         self.bind(size=self.update_canvas)
