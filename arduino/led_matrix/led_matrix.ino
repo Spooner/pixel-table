@@ -6,7 +6,7 @@
 #define NUM_LEDS (WIDTH * HEIGHT)
 #define PIN 6
 #define BAUD 115200
-#define BRIGHTNESS 32
+#define BRIGHTNESS 8
 
 CRGB leds[NUM_LEDS];
 int r, g, b;
