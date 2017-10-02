@@ -35,6 +35,8 @@
                 id: mode_container
 
 
+# PAINT
+
 <PaintColor@Button>:
     color: 1, 1, 1
     height: 32
@@ -98,6 +100,7 @@
                 text: "Cancel"
                 on_release: root.dismiss()
 
+# Matrix Rain
 <MatrixRain>:
     num_drops: num_drops
 
@@ -118,3 +121,7 @@
             value: 12
             step: 1
             on_value: root.update_num_drops(args[1])
+
+
+# Pong
+<Pong>:

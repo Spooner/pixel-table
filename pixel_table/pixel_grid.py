@@ -60,11 +60,12 @@ class PixelGrid(Widget):
         with self.canvas:
             for (x, y), pixel in self._pixels.items():
                 pixel.color_on_canvas = Color(*pixel.color, mode='rgb')
-                Rectangle(pos=(self.x + x * self._cell_width, self.y + y * self._cell_width), size=draw_size)
+                Rectangle(pos=(self.x + x * self._cell_width, self.y + (self.HEIGHT - y - 1) * self._cell_width),
+                          size=draw_size)
 
     def pixel_at(self, position):
         x = min(max(math.floor(position[0] / self._cell_width), 0), self.WIDTH - 1)
-        y = min(max(math.floor(position[1] / self._cell_width), 0), self.HEIGHT - 1)
+        y = self.HEIGHT - min(max(math.floor(position[1] / self._cell_width), 0), self.HEIGHT - 1) - 1
         return self._pixels[x, y]
 
     def on_touch_down(self, touch):

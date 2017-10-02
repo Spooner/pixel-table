@@ -29,9 +29,9 @@ void loop() {
       g = Serial.read();
       b = Serial.read();
       if (x % 2 == 0) {
-        yy = y;
-      } else {
         yy = HEIGHT - y - 1;
+      } else {
+        yy = y;
       }
       leds[yy + x * HEIGHT] = CRGB(g, r, b);  // Seems to be running as GRB, not RGB
     }

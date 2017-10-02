@@ -6,6 +6,7 @@ from kivy.uix.dropdown import DropDown
 from .pixel_grid import PixelGrid
 from .modes.paint import Paint
 from .modes.matrix_rain import MatrixRain
+from .modes.pong import Pong
 
 
 class PixelTable(Widget):
@@ -26,6 +27,7 @@ class PixelTable(Widget):
         self._modes = [
             Paint(),
             MatrixRain(),
+            Pong(),
         ]
         self._mode_dropdown = ModeDropDown(self._modes, self.change_mode)
 
