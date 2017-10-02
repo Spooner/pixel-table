@@ -2,7 +2,7 @@ from .rectangle_sprite import RectangleSprite
 
 
 class Button(RectangleSprite):
-    POSITIONS = {  # (side, button #): (x, y)
+    POSITIONS = {
         "top": {
             "size": (2, 1),
             "positions": ((9, 0), (7, 0), (5, 0)),
