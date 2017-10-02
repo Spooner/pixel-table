@@ -72,10 +72,10 @@ class PongBall(RectangleSprite):
         # Hit sides.
         if x > 15:
             self._x = 15
-            self._bounce()
+            self._vel_x = -self._vel_x
         elif x < 0:
             self._x = 0
-            self._bounce()
+            self._vel_x = -self._vel_x
 
         # Hit a paddle.
         for player in self._players:
@@ -84,10 +84,8 @@ class PongBall(RectangleSprite):
                     self._y = 13
                 elif self._vel_y < 0:
                     self._y = 2
-                self._bounce()
-
-    def _bounce(self):
-        self._vel_x, self._vel_y = -self._vel_x, -self._vel_y
+                # TODO bounce based on angle of incidence and/or where on the bat?
+                self._vel_x, self._vel_y = -self._vel_x, -self._vel_y
 
 
 class Pong(Mode):
