@@ -33,6 +33,9 @@ class PixelGrid(Widget):
         self.register_event_type("on_pixel_down")
         self.register_event_type("on_pixel_move")
         self.register_event_type("on_pixel_up")
+        self.register_event_type("on_pixel_held")
+
+        self._pixel_held = None
 
     @property
     def pixels(self):
@@ -70,14 +73,19 @@ class PixelGrid(Widget):
 
     def on_touch_down(self, touch):
         if self.collide_point(*touch.pos):
-            self.dispatch("on_pixel_down", self.pixel_at(touch.pos))
+            pixel = self.pixel_at(touch.pos)
+            self._pixel_held = pixel
+            self.dispatch("on_pixel_down", pixel)
 
     def on_touch_move(self, touch):
         if self.collide_point(*touch.pos):
-            self.dispatch("on_pixel_move", self.pixel_at(touch.pos))
+            pixel = self.pixel_at(touch.pos)
+            self._pixel_held = pixel
+            self.dispatch("on_pixel_move", pixel)
 
     def on_touch_up(self, touch):
         if self.collide_point(*touch.pos):
+            self._pixel_held = None
             self.dispatch("on_pixel_up", self.pixel_at(touch.pos))
 
     def on_pixel_down(self, pixel):
@@ -87,6 +95,9 @@ class PixelGrid(Widget):
         pass
 
     def on_pixel_up(self, pixel):
+        pass
+
+    def on_pixel_held(self, pixel, dt):
         pass
 
     def get_color(self, x, y):
@@ -100,5 +111,8 @@ class PixelGrid(Widget):
             r, g, b = pixel.color
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
 
-    def update(self):
+    def update(self, dt):
+        if self._pixel_held is not None:
+            self.dispatch("on_pixel_held", self._pixel_held, dt)
+
         self._pixel_controller.write_pixels(self.data)

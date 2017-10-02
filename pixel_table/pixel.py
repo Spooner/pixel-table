@@ -5,6 +5,18 @@ class Pixel:
         self.color_on_canvas = None
 
     @property
+    def x(self):
+        return self._x
+
+    @property
+    def y(self):
+        return self._y
+
+    @property
+    def position(self):
+        return self._x, self._y
+
+    @property
     def color(self):
         return self._pixel_grid.get_color(self._x, self._y)
 

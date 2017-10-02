@@ -1,7 +1,7 @@
 import random
 import math
 
-from kivy.properties import BoundedNumericProperty, ObjectProperty
+from kivy.properties import ObjectProperty
 
 from .mode import Mode
 
@@ -46,7 +46,7 @@ class MatrixRain(Mode):
     _drops = []
 
     def on_activated(self):
-        self.pixel_grid.clear()
+        self._pixel_grid.clear()
         for i in range(self.num_drops.value):
             self.add_drop()
 
@@ -66,12 +66,12 @@ class MatrixRain(Mode):
             return
 
         # Fade all.
-        self.pixel_grid.fade(0.2 * dt)
+        self._pixel_grid.fade(0.2 * dt)
 
         # Move drops down a bit & restart any that have fallen off..
         for drop in self._drops:
             drop.update(dt)
 
             for x, y, color in drop.tail():
-                pixel = self.pixel_grid.pixel(x, y)
+                pixel = self._pixel_grid.pixel(x, y)
                 pixel.color = color

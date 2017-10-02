@@ -1,52 +1,93 @@
+import random
+
 from .mode import Mode
-
-
-class Sprite:
-    def __init__(self, x, y):
-        self._x = x
-        self._y = y
-
-
-class RectangleSprite(Sprite):
-    WIDTH, HEIGHT = 1, 1
-    COLOR = 1, 1, 1
-
-    def render(self, pixels):
-        for x in range(self._x, self._x + self.WIDTH):
-            for y in range(self._y, self._y + self.HEIGHT):
-                pixels.pixel(x, y).color = self.COLOR
-
-
-class Button(RectangleSprite):
-    WIDTH, HEIGHT = 1, 2
-    COLOR = (0.5, 0.5, 0.5)
+from ..sprites.rectangle_sprite import RectangleSprite
+from ..sprites.button import Button
 
 
 class PongPlayer(RectangleSprite):
-    WIDTH, HEIGHT = 1, 4
-    COLOR = 1, 1, 1
+    SPEED = 10
 
-    def __init__(self, x, up, down):
-        super().__init__(x, 6)
-        self._up, self._down = up, down
+    def __init__(self, y, left, right):
+        super().__init__(x=6, y=y, width=4, height=1)
+        self._left, self._right = left, right
 
     def update(self, dt):
         pass
 
     def render(self, pixels):
         super().render(pixels)
-        self._up.render(pixels)
-        self._down.render(pixels)
+        self._left.render(pixels)
+        self._right.render(pixels)
+
+    @property
+    def left(self):
+        return self._left
+
+    @property
+    def right(self):
+        return self._right
+
+    def move_left(self, dt):
+        if self._x > 0:
+            self._x -= self.SPEED * dt
+
+    def move_right(self, dt):
+        if self._x < 16 - self._width:
+            self._x += self.SPEED * dt
 
 
 class PongBall(RectangleSprite):
-    WIDTH, HEIGHT = 1, 1
+    INITIAL_SPEED = 10
 
-    def __init__(self):
-        super().__init__(7, 7)
+    def __init__(self, pixel_grid, players):
+        super().__init__(x=7, y=7, width=1, height=1)
+
+        self._pixel_grid = pixel_grid
+        self._players = players
+        self._vel_x = self._vel_y = 0
+        self._reset(random.randrange(0, len(self._players)))
+
+    def _reset(self, server_number):
+        self._vel_x = 0
+        if server_number == 0:
+            self._vel_y = self.INITIAL_SPEED
+            self._x, self._y = 7, 3
+        else:
+            self._vel_y = -self.INITIAL_SPEED
+            self._x, self._y = 8, 12
 
     def update(self, dt):
-        pass
+        self._x += self._vel_x * dt
+        self._y += self._vel_y * dt
+
+        x, y = self.int_position
+
+        # Hit ends.
+        if y < 0:
+            self._reset(0)
+        elif y > 15:
+            self._reset(1)
+
+        # Hit sides.
+        if x > 15:
+            self._x = 15
+            self._bounce()
+        elif x < 0:
+            self._x = 0
+            self._bounce()
+
+        # Hit a paddle.
+        for player in self._players:
+            if player.collide_point(x, y):
+                if self._vel_y > 0:
+                    self._y = 13
+                elif self._vel_y < 0:
+                    self._y = 2
+                self._bounce()
+
+    def _bounce(self):
+        self._vel_x, self._vel_y = -self._vel_x, -self._vel_y
 
 
 class Pong(Mode):
@@ -58,23 +99,31 @@ class Pong(Mode):
         self._ball = None
 
     def on_activated(self):
-        self._players.append(PongPlayer(1, Button(0, 5), Button(0, 9)))
-        self._players.append(PongPlayer(14, Button(15, 5), Button(15, 9)))
-        self._ball = PongBall()
+        self._players.append(PongPlayer(14, Button("bottom", 0), Button("bottom", 2)))
+        self._players.append(PongPlayer(1, Button("top", 0), Button("top", 2)))
+        self._ball = PongBall(self._pixel_grid, self._players)
 
     def on_deactivated(self):
         self._players.clear()
         self._ball = None
 
-    def on_button_held(self, button):
-        pass
+    def on_pixel_held(self, pixel, dt):
+        x, y = pixel.position
+        if self._players[0].left.collide_point(x, y):
+            self._players[0].move_left(dt)
+        elif self._players[0].right.collide_point(x, y):
+            self._players[0].move_right(dt)
+        elif self._players[1].left.collide_point(x, y):
+            self._players[1].move_right(dt)
+        elif self._players[1].right.collide_point(x, y):
+            self._players[1].move_left(dt)
 
     def update(self, dt):
         self._ball.update(dt)
         for player in self._players:
             player.update(dt)
 
-        self.pixel_grid.clear()
-        self._ball.render(self.pixel_grid)
+        self._pixel_grid.clear()
+        self._ball.render(self._pixel_grid)
         for player in self._players:
-            player.render(self.pixel_grid)
+            player.render(self._pixel_grid)

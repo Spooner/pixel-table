@@ -10,6 +10,8 @@ from .modes.pong import Pong
 
 
 class PixelTable(Widget):
+    MODES = [Paint, MatrixRain, Pong]
+
     pixel_grid = ObjectProperty(None)
     mode = ObjectProperty(None)
     mode_container = ObjectProperty(None)
@@ -22,15 +24,11 @@ class PixelTable(Widget):
         self.pixel_grid.bind(on_pixel_down=self.on_pixel_down)
         self.pixel_grid.bind(on_pixel_move=self.on_pixel_move)
         self.pixel_grid.bind(on_pixel_up=self.on_pixel_up)
+        self.pixel_grid.bind(on_pixel_held=self.on_pixel_held)
 
     def setup(self):
-        self._modes = [
-            Paint(),
-            MatrixRain(),
-            Pong(),
-        ]
+        self._modes = [m(pixel_grid=self.pixel_grid) for m in self.MODES]
         self._mode_dropdown = ModeDropDown(self._modes, self.change_mode)
-
         self.change_mode(self._modes[0])
 
     def change_mode(self, mode):
@@ -41,12 +39,11 @@ class PixelTable(Widget):
         self.mode_button.text = self.mode.NAME
         self.mode_container.clear_widgets()
         self.mode_container.add_widget(self.mode)
-        self.mode.pixel_grid = self.pixel_grid
         self.mode.on_activated()
 
     def update(self, dt):
         self.mode.update(dt)
-        self.pixel_grid.update()
+        self.pixel_grid.update(dt)
 
     def on_pixel_down(self, sender, pixel):
         self.mode.on_pixel_down(pixel)
@@ -56,6 +53,9 @@ class PixelTable(Widget):
 
     def on_pixel_up(self, sender, pixel):
         self.mode.on_pixel_up(pixel)
+
+    def on_pixel_held(self, sender, pixel, dt):
+        self.mode.on_pixel_held(pixel, dt)
 
     def open_dropdown(self):
         self._mode_dropdown.open(self.mode_button)
