@@ -9,7 +9,7 @@ Automat==0.6.0            # via twisted
 constantly==15.1.0        # via twisted
 hyperlink==17.3.1         # via twisted
 incremental==17.5.0       # via twisted
-numpy==1.13.3
+numpy==1.12.1
 pyserial==3.4
 six==1.11.0               # via automat
 twisted==17.9.0
