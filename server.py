@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import time
+from collections import OrderedDict
 
 from twisted.internet import reactor, task
 from twisted.internet.protocol import Factory
@@ -24,10 +25,10 @@ class PixelTableServer(object):
 
         self._pixel_grid = []
 
-        self._modes = {
-            'paint': Paint(self._pixel_grid),
-            'matrix_rain': MatrixRain(self._pixel_grid),
-        }
+        self._modes = OrderedDict((
+            ('paint', Paint(self._pixel_grid)),
+            ('matrix_rain', MatrixRain(self._pixel_grid)),
+        ))
         self._mode = None
         self._pixel_data = np.zeros((16, 16, 3), np.uint8)
 
