@@ -5,7 +5,7 @@
 #define HEIGHT 16
 #define NUM_LEDS (WIDTH * HEIGHT)
 #define PIN 6
-#define BAUD 115200
+#define UART_RATE 460800
 #define BRIGHTNESS 8
 
 CRGB leds[NUM_LEDS];
@@ -15,7 +15,7 @@ int x, y, yy;
 void setup() {
   FastLED.addLeds<WS2812B, PIN>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
   FastLED.setBrightness(BRIGHTNESS);
-  Serial.begin(BAUD);
+  Serial.begin(UART_RATE);
   FastLED.show();
 }
 
