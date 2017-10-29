@@ -1,4 +1,4 @@
-class Sprite:
+class Sprite(object):
     def __init__(self, x, y, width=1, height=1, color=(1, 1, 1)):
         self._x, self._y = x, y
         self._width, self._height = width, height

@@ -4,21 +4,21 @@
 #
 #    pip-compile --output-file requirements.txt requirements.in
 #
+attrs==17.2.0             # via automat
+automat==0.6.0            # via twisted
 buildozer==0.33
-certifi==2017.7.27.1      # via requests
-chardet==3.0.4            # via requests
+constantly==15.1.0        # via twisted
 cython==0.25.2
-docutils==0.14            # via kivy
-idna==2.6                 # via requests
-kivy-garden==0.1.4        # via kivy
-kivy==1.10.0
+hyperlink==17.3.1         # via twisted
+incremental==17.5.0       # via twisted
+kivy==1.10.1.dev0
 numpy==1.13.1
 olefile==0.44             # via pillow
 pexpect==4.2.1            # via buildozer
 pillow==4.2.1
 ptyprocess==0.5.2         # via pexpect
-pygments==2.2.0           # via kivy
 pyserial==3.4
-requests==2.18.4          # via kivy-garden
-urllib3==1.22             # via requests
+six==1.11.0               # via automat
+twisted==17.9.0
 virtualenv==15.1.0        # via buildozer
+zope.interface==4.4.3     # via twisted

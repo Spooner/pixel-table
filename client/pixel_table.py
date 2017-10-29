@@ -18,7 +18,7 @@ class PixelTable(Widget):
     mode_button = ObjectProperty(None)
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(PixelTable, self).__init__(**kwargs)
         self._modes = self._mode_dropdown = None
 
         self.pixel_grid.bind(on_pixel_down=self.on_pixel_down)
@@ -63,7 +63,7 @@ class PixelTable(Widget):
 
 class ModeDropDown(DropDown):
     def __init__(self, modes, change_mode, **kwargs):
-        super().__init__(**kwargs)
+        super(ModeDropDown, self).__init__(**kwargs)
 
         self._change_mode = change_mode
         for mode in modes:

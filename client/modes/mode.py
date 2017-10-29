@@ -6,7 +6,7 @@ class Mode(BoxLayout):
 
     def __init__(self, pixel_grid, **kwargs):
         self._pixel_grid = pixel_grid
-        super().__init__(**kwargs)
+        super(Mode, self).__init__(**kwargs)
 
     def on_activated(self):
         pass
@@ -24,7 +24,4 @@ class Mode(BoxLayout):
         pass
 
     def on_pixel_held(self, pixel, dt):
-        pass
-
-    def update(self, dt):
         pass

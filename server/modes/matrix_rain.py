@@ -1,12 +1,12 @@
-import random
-import math
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-from kivy.properties import ObjectProperty
+import math
+import random
 
 from .mode import Mode
 
 
-class Drop:
+class Drop(object):
     def __init__(self):
         self._x = self._y = self._length = self._speed = 0
         self.reset()
@@ -40,31 +40,30 @@ class Drop:
 
 
 class MatrixRain(Mode):
-    NAME = "Matrix Rain"
+    VALUES = ['number_of_drops']
 
-    num_drops = ObjectProperty(None)
-    _drops = []
+    def __init__(self, pixel_grid):
+        super(MatrixRain, self).__init__(pixel_grid)
+        self._drops = []
 
-    def on_activated(self):
-        self._pixel_grid.clear()
-        for i in range(self.num_drops.value):
-            self.add_drop()
+    @property
+    def number_of_drops(self):
+        return len(self._drops)
 
-    def add_drop(self):
-        self._drops.append(Drop())
+    @number_of_drops.setter
+    def number_of_drops(self, value):
+        while self.number_of_drops < value:
+            self._drops.append(Drop())
 
-    def on_deactivated(self):
-        self._drops.clear()
-
-    def update_num_drops(self, value):
-        for i in range(len(self._drops), value):
-            self.add_drop()
         self._drops = self._drops[:value]
 
-    def update(self, dt):
-        if dt > 0.2:  # Ignore long initial dt.
-            return
+    def on_activate(self):
+        self.number_of_drops = 12
 
+    def on_deactivate(self):
+        self._drops = []
+
+    def on_update(self, dt):
         # Fade all.
         self._pixel_grid.fade(0.2 * dt)
 

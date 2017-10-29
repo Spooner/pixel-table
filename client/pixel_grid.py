@@ -1,12 +1,12 @@
-from collections import OrderedDict
 import math
+from collections import OrderedDict
 
-from kivy.uix.widget import Widget
-from kivy.properties import ObjectProperty
-from kivy.graphics import Color, Rectangle
 import numpy as np
+from kivy.graphics import Color, Rectangle
+from kivy.properties import ObjectProperty
+from kivy.uix.widget import Widget
 
-from .pixel_controller import PixelController
+from server.pixel_controller import PixelController
 from .pixel import Pixel
 
 
@@ -16,7 +16,7 @@ class PixelGrid(Widget):
     data = ObjectProperty(np.zeros([WIDTH, HEIGHT, 3]), force_dispatch=True)
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(PixelGrid, self).__init__(**kwargs)
 
         self._cell_width = None
 

@@ -9,14 +9,14 @@ class PongPlayer(RectangleSprite):
     SPEED = 10
 
     def __init__(self, y, left, right):
-        super().__init__(x=6, y=y, width=4, height=1)
+        super(PongPlayer, self).__init__(x=6, y=y, width=4, height=1)
         self._left, self._right = left, right
 
     def update(self, dt):
         pass
 
     def render(self, pixels):
-        super().render(pixels)
+        super(PongPlayer, self).render(pixels)
         self._left.render(pixels)
         self._right.render(pixels)
 
@@ -41,7 +41,7 @@ class PongBall(RectangleSprite):
     INITIAL_SPEED = 10
 
     def __init__(self, pixel_grid, players):
-        super().__init__(x=7, y=7, width=1, height=1)
+        super(PongBall, self).__init__(x=7, y=7, width=1, height=1)
 
         self._pixel_grid = pixel_grid
         self._players = players
@@ -92,7 +92,7 @@ class Pong(Mode):
     NAME = "Pong"
 
     def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+        super(Pong, self).__init__(**kwargs)
         self._players = []
         self._ball = None
 
@@ -102,7 +102,7 @@ class Pong(Mode):
         self._ball = PongBall(self._pixel_grid, self._players)
 
     def on_deactivated(self):
-        self._players.clear()
+        self._players = []
         self._ball = None
 
     def on_pixel_held(self, pixel, dt):

@@ -35,4 +35,4 @@ class Button(RectangleSprite):
         x, y = config["positions"][index]
         color = self.COLORS[index]
         width, height = config["size"]
-        super().__init__(x=x, y=y, width=width, height=height, color=color)
+        super(Button, self).__init__(x=x, y=y, width=width, height=height, color=color)
