@@ -2,6 +2,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import time
 from collections import OrderedDict
+from traceback import print_exc
 
 from twisted.internet import reactor, task
 from twisted.internet.protocol import Factory
@@ -47,10 +48,14 @@ class PixelTableServer(object):
         self._mode.on_activate()
 
     def update(self):
-        now = time.time()
-        dt = now - self._now
-        self._now = now
-        self._mode.on_update(dt)
+        try:
+            now = time.time()
+            dt = now - self._now
+            self._now = now
+            self._mode.on_update(dt)
+        except Exception:
+            print_exc()
+            raise
 
 
 if __name__ == '__main__':
