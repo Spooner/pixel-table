@@ -33,7 +33,7 @@ class PixelTableServer(object):
         self._pixel_data = np.zeros((16, 16, 3), np.uint8)
 
         self._now = time.time()
-        self.set_mode("paint")
+        self.set_mode("matrix_rain")
 
         task.LoopingCall(self.update).start(1 / 60.0)
 
