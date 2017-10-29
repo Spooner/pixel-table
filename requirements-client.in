@@ -4,5 +4,4 @@ kivy==1.10.1.dev0
 pillow
 kivy
 numpy
-pyserial
 twisted
