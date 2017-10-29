@@ -10,18 +10,6 @@ from server.messages import PixelTableProtocol
 from server.modes.matrix_rain import MatrixRain
 from server.modes.paint import Paint
 
-import math
-from collections import OrderedDict
-
-import numpy as np
-from kivy.properties import ObjectProperty
-from kivy.uix.widget import Widget
-
-from server.pixel_controller import PixelController
-from .pixel import Pixel
-
-
-
 
 class PixelTableServerFactory(Factory):
     protocol = PixelTableProtocol
