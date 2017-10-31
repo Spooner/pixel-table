@@ -40,25 +40,27 @@ class Drop(object):
 
 
 class MatrixRain(Mode):
-    VALUES = ['number_of_drops']
+    STATE_NAME = 'num_drops'
+    VALID_NUMBER_OF_DROPS = [1, 2, 4, 8, 16, 32, 64]
+    DEFAULT_NUMBER_OF_DROPS = 16
 
     def __init__(self, pixel_grid):
         super(MatrixRain, self).__init__(pixel_grid)
         self._drops = []
 
     @property
-    def number_of_drops(self):
+    def num_drops(self):
         return len(self._drops)
 
-    @number_of_drops.setter
-    def number_of_drops(self, value):
-        while self.number_of_drops < value:
+    @num_drops.setter
+    def num_drops(self, value):
+        while self.num_drops < value:
             self._drops.append(Drop())
 
         self._drops = self._drops[:value]
 
     def on_activate(self):
-        self.number_of_drops = 12
+        self.num_drops = self.DEFAULT_NUMBER_OF_DROPS
 
     def on_deactivate(self):
         self._drops = []
@@ -74,3 +76,7 @@ class MatrixRain(Mode):
             for x, y, color in drop.tail():
                 pixel = self._pixel_grid.pixel(x, y)
                 pixel.color = color
+
+    def on_state_button(self):
+        index = self.VALID_NUMBER_OF_DROPS.index(self.num_drops) % len(self.VALID_NUMBER_OF_DROPS)
+        self.num_drops = self.VALID_NUMBER_OF_DROPS[index]

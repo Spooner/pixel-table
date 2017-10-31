@@ -2,7 +2,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from collections import OrderedDict
 import math
+import sys
 
+from termcolor import cprint
 import numpy as np
 
 from .pixel import Pixel
@@ -62,3 +64,36 @@ class PixelGrid(object):
 
     def update(self, dt):
         self._pixel_controller.write_pixels(self.data)
+        self.dump()
+
+    def dump(self):
+        print("\033[0;0H")  # Cursor to 0, 0
+
+        print("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))
+        print("+" + "-" * (self.data.shape[0] * 2) + "+", file=sys.stderr)
+
+        for y in range(self.data.shape[1]):
+            print("|", end="")
+
+            for x in range(self.data.shape[0]):
+                r, g, b = self.data[x][y]
+                if r >= 0.5 and g <= 0.2 and b <= 0.2:
+                    color = "red"
+                elif r <= 0.2 and g >= 0.5 and b <= 0.2:
+                    color = "green"
+                elif r <= 0.2 and g <= 0.2 and b >= 0.5:
+                    color = "blue"
+                elif r >= 0.5 and g >= 0.5 and b >= 0.5:
+                    color = "white"
+                elif r >= 0.25 and g >= 0.25 and b >= 0.25:
+                    color = "grey"
+                else:
+                    color = None
+
+                cprint("  ", on_color="on_" + color if color else None, attrs=[], end="")
+
+            print("|")
+        print("+" + "-" * (self.data.shape[0] * 2) + "+", file=sys.stderr)
+
+
+

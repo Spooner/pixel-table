@@ -9,8 +9,10 @@ from twisted.internet.protocol import Factory
 import numpy as np
 
 from server.messages import PixelTableProtocol
+from server.pixel_grid import PixelGrid
 from server.modes.matrix_rain import MatrixRain
 from server.modes.paint import Paint
+from server.modes.pong import Pong
 
 
 class PixelTableServerFactory(Factory):
@@ -24,20 +26,20 @@ class PixelTableServer(object):
     def __init__(self):
         reactor.listenTCP(8000, PixelTableServerFactory(self))
 
-        self._pixel_grid = []
+        self._pixel_grid = PixelGrid()
 
         self._modes = OrderedDict((
             ('paint', Paint(self._pixel_grid)),
             ('matrix_rain', MatrixRain(self._pixel_grid)),
+            ('pong', Pong(self._pixel_grid)),
         ))
-        self._mode = None
-        self._pixel_data = np.zeros((16, 16, 3), np.uint8)
 
         self._now = time.time()
+        self._mode = None
         self.set_mode("matrix_rain")
+        print("\033c")  # Clear terminal
 
         task.LoopingCall(self.update).start(1 / 60.0)
-
         reactor.run()
 
     def set_mode(self, name):
@@ -53,6 +55,11 @@ class PixelTableServer(object):
             dt = now - self._now
             self._now = now
             self._mode.on_update(dt)
+            self._pixel_grid.update(dt)
+
+            self._pixel_grid.dump()
+            self._mode.dump()
+
         except Exception:
             print_exc()
             raise

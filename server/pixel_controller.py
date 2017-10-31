@@ -7,19 +7,20 @@ import numpy as np
 from serial import Serial
 from serial.serialutil import SerialException
 
+READY_CHAR = b'R'
 
-class DummySerial:
+
+class FakeSerial(object):
     def write(self, data):
-        sleep(0.02)
+        sleep(0.01)
 
     def read(self):
-        sleep(0.02)
-        return b'R'
+        sleep(0.01)
+        return READY_CHAR
 
 
-class PixelController:
-    BAUD = 115200
-    READY_CHAR = b'R'
+class PixelController(object):
+    BAUD = 460800
 
     def __init__(self):
         self._serial = None
@@ -34,10 +35,10 @@ class PixelController:
             except SerialException:
                 pass
 
-        self._serial = DummySerial()
+        self._serial = FakeSerial()
         print("Failed to connect to a serial port.")
 
     def write_pixels(self, data):
-        assert self._serial.read() == self.READY_CHAR
+        assert self._serial.read() == READY_CHAR
         pixel_bytes = (data * 255).astype(np.uint8).tobytes()
         self._serial.write(pixel_bytes)
