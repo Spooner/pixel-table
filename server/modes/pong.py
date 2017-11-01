@@ -4,7 +4,7 @@ from .mode import Mode
 
 
 class Pong(Mode):
-    STATE_NAME = "num_players"
+    VALUE_NAMES = ["num_players"]
     VALID_NUM_PLAYERS = [2, 4]
     DEFAULT_NUM_PLAYERS = 2
 

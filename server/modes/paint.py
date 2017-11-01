@@ -4,7 +4,7 @@ from .mode import Mode
 
 
 class Paint(Mode):
-    VALUES = ["color"]
+    VALUE_NAMES = ["color"]
 
     def __init__(self, pixel_grid):
         super(Paint, self).__init__(pixel_grid)

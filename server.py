@@ -6,7 +6,6 @@ from traceback import print_exc
 
 from twisted.internet import reactor, task
 from twisted.internet.protocol import Factory
-import numpy as np
 
 from server.messages import PixelTableProtocol
 from server.pixel_grid import PixelGrid
@@ -57,12 +56,16 @@ class PixelTableServer(object):
             self._mode.on_update(dt)
             self._pixel_grid.update(dt)
 
-            self._pixel_grid.dump()
-            self._mode.dump()
-
-        except Exception:
+            self._dump(1 / dt)
+        except:
             print_exc()
             raise
+
+    def _dump(self, fps):
+        print("\033[0;0H", end="")  # Cursor to 0, 0
+        self._pixel_grid.dump()
+        self._mode.dump()
+        print("FPS: %.1f    " % fps)
 
 
 if __name__ == '__main__':

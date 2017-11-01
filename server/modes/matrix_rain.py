@@ -40,7 +40,7 @@ class Drop(object):
 
 
 class MatrixRain(Mode):
-    STATE_NAME = 'num_drops'
+    VALUE_NAMES = ['num_drops']
     VALID_NUMBER_OF_DROPS = [1, 2, 4, 8, 16, 32, 64]
     DEFAULT_NUMBER_OF_DROPS = 16
 

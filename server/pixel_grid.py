@@ -64,11 +64,8 @@ class PixelGrid(object):
 
     def update(self, dt):
         self._pixel_controller.write_pixels(self.data)
-        self.dump()
 
     def dump(self):
-        print("\033[0;0H")  # Cursor to 0, 0
-
         print("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))
         print("+" + "-" * (self.data.shape[0] * 2) + "+", file=sys.stderr)
 

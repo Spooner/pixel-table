@@ -28,12 +28,15 @@ void loop() {
       r = Serial.read();
       g = Serial.read();
       b = Serial.read();
+
+      // Render alternate columns in zig-zag.
       if (x % 2 == 0) {
         yy = HEIGHT - y - 1;
       } else {
         yy = y;
       }
-      leds[yy + x * HEIGHT] = CRGB(g, r, b);  // Seems to be running as GRB, not RGB
+
+      leds[yy + x * HEIGHT] = CRGB(g, r, b);  // Seems to be running as GRB, not RGB...?
     }
   }
   FastLED.show();

@@ -4,18 +4,18 @@ import glob
 from time import sleep
 
 import numpy as np
-from serial import Serial
-from serial.serialutil import SerialException
+#from serial import Serial
+#from serial.serialutil import SerialException
 
 READY_CHAR = b'R'
 
 
 class FakeSerial(object):
     def write(self, data):
-        sleep(0.01)
+        sleep(0.001)
 
     def read(self):
-        sleep(0.01)
+        sleep(0.001)
         return READY_CHAR
 
 

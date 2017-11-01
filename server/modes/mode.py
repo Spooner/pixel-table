@@ -4,7 +4,7 @@ import re
 
 
 class Mode(object):
-    STATE_NAME = None
+    VALUE_NAMES = []
 
     def __init__(self, pixel_grid):
         self._pixel_grid = pixel_grid
@@ -18,14 +18,18 @@ class Mode(object):
     def on_deactivate(self):
         pass
 
-    def on_pixel_press(self, x, y):
+    def on_button_press(self, x, y):
         pass
 
     def on_state_button(self):
         pass
 
     def dump(self):
-        print()
-        print("Mode: %s" % re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip())
-        print("%s: %s" % (self.STATE_NAME.replace("_", " ").capitalize(), getattr(self, self.STATE_NAME)))
-        print()
+        line1 = "12 " + re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()
+
+        names = (n.replace("num_", "#").replace("_", " ") for n in self.VALUE_NAMES)
+        values = (getattr(self, n) for n in self.VALUE_NAMES)
+        line2 = "; ".join("%s=%s" % nv for nv in zip(names, values))
+
+        print("|%-16s|" % line1[:16])
+        print("|%-16s|" % line2[:16])
