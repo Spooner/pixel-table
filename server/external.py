@@ -76,6 +76,9 @@ class External(object):
 
     def write_pixels(self, data):
         pixel_bytes = (data * 255).astype(np.uint8)
-        for row in pixel_bytes:
-            for pixel in row:
-                self._bus.write_i2c_block_data(self.ARDUINO_ADDRESS, self.ARDUINO_REGISTER, pixel)
+        try:
+            for row in pixel_bytes:
+                for pixel in row:
+                    self._bus.write_i2c_block_data(self.ARDUINO_ADDRESS, self.ARDUINO_REGISTER, pixel)
+        except IOError:
+            pass
