@@ -14,7 +14,7 @@ _logger = logging.getLogger(__name__)
 READY_CHAR = b'R'
 
 
-class FakeSerial(object):
+class MockSerial(object):
     def write(self, data):
         sleep(0.05)
 
@@ -26,8 +26,8 @@ class FakeSerial(object):
         pass
 
 
-class FakeBus(object):
-    def write_byte_data(self, address, offset, byte):
+class MockBus(object):
+    def write_byte_data(self, i2c_addr, register, value):
         sleep(0.00001)
 
 
@@ -53,14 +53,14 @@ class External(object):
                 pass
 
         _logger.warning("Failed to connect to a serial port.")
-        return FakeSerial()
+        return MockSerial()
 
     def _open_bus(self):
         try:
             bus = smbus2.SMBus(self.DEVICE_BUS)
             _logger.info("Connected to i2c %s" % self.DEVICE_BUS)
         except OSError:
-            bus = FakeBus()
+            bus = MockBus()
             _logger.warning("Failed to connect to i2c bus: %s" % self.DEVICE_BUS)
 
         return bus
@@ -74,4 +74,4 @@ class External(object):
     def write_pixels(self, data):
         pixel_bytes = (data * 255).astype(np.uint8).tobytes()
         for byte in pixel_bytes:
-            self._bus.write_byte_data(self.ARDUINO_ADDRESS, self.ARDUINO_REGISTER, byte=byte)
+            self._bus.write_byte_data(self.ARDUINO_ADDRESS, self.ARDUINO_REGISTER, byte)
