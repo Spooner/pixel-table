@@ -30,6 +30,9 @@ class MockBus(object):
     def write_byte_data(self, i2c_addr, register, value):
         sleep(0.00001)
 
+    def write_i2c_block_data(self, i2c_addr, register, value):
+        sleep(0.00001)
+
 
 class External(object):
     SERIAL_SPEED = 115200
@@ -72,6 +75,7 @@ class External(object):
         self._serial.setDTR(True)
 
     def write_pixels(self, data):
-        pixel_bytes = (data * 255).astype(np.uint8).tobytes()
-        for byte in pixel_bytes:
-            self._bus.write_byte_data(self.ARDUINO_ADDRESS, self.ARDUINO_REGISTER, byte)
+        pixel_bytes = (data * 255).astype(np.uint8)
+        for row in pixel_bytes:
+            for pixel in row:
+                self._bus.write_i2c_block_data(self.ARDUINO_ADDRESS, self.ARDUINO_REGISTER, pixel)
