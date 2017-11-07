@@ -44,8 +44,8 @@ class MatrixRain(Mode):
     VALID_NUMBER_OF_DROPS = [1, 2, 4, 8, 16, 32, 64]
     DEFAULT_NUMBER_OF_DROPS = 16
 
-    def __init__(self, pixel_grid):
-        super(MatrixRain, self).__init__(pixel_grid)
+    def __init__(self, pixel_grid, index):
+        super(MatrixRain, self).__init__(pixel_grid, index)
         self._drops = []
 
     @property
@@ -77,6 +77,6 @@ class MatrixRain(Mode):
                 pixel = self._pixel_grid.pixel(x, y)
                 pixel.color = color
 
-    def on_state_button(self):
-        index = self.VALID_NUMBER_OF_DROPS.index(self.num_drops) % len(self.VALID_NUMBER_OF_DROPS)
+    def on_state_button_press(self):
+        index = (self.VALID_NUMBER_OF_DROPS.index(self.num_drops) + 1) % len(self.VALID_NUMBER_OF_DROPS)
         self.num_drops = self.VALID_NUMBER_OF_DROPS[index]

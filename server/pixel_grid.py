@@ -8,7 +8,7 @@ from termcolor import cprint
 import numpy as np
 
 from .pixel import Pixel
-from .pixel_controller import PixelController
+from .micro_controller import MicroController
 
 
 class PixelGrid(object):
@@ -24,8 +24,8 @@ class PixelGrid(object):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        self._pixel_controller = PixelController()
-        self._pixel_controller.open()
+        self._micro_controller = MicroController()
+        self._micro_controller.open()
 
         self._pixel_held = None
 
@@ -63,7 +63,7 @@ class PixelGrid(object):
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
 
     def update(self, dt):
-        self._pixel_controller.write_pixels(self.data)
+        self._micro_controller.write_pixels(self.data)
 
     def dump(self):
         print("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))

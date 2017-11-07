@@ -6,8 +6,8 @@ from .mode import Mode
 class Paint(Mode):
     VALUE_NAMES = ["color"]
 
-    def __init__(self, pixel_grid):
-        super(Paint, self).__init__(pixel_grid)
+    def __init__(self, pixel_grid, index):
+        super(Paint, self).__init__(pixel_grid, index)
 
         self._data = None
         self._color = (255, 255, 255)

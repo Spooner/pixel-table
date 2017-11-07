@@ -6,8 +6,13 @@ import re
 class Mode(object):
     VALUE_NAMES = []
 
-    def __init__(self, pixel_grid):
+    def __init__(self, pixel_grid, index):
         self._pixel_grid = pixel_grid
+        self._index = index
+
+    @property
+    def index(self):
+        return self._index
 
     def on_update(self, dt):
         pass
@@ -18,18 +23,19 @@ class Mode(object):
     def on_deactivate(self):
         pass
 
-    def on_button_press(self, x, y):
+    def on_button_press(self, n):
         pass
 
-    def on_state_button(self):
+    def on_state_button_press(self):
         pass
 
     def dump(self):
-        line1 = "12 " + re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()
+        mode = re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()
+        line1 = "%02d) %s" % (self._index + 1, mode)
 
-        names = (n.replace("num_", "#").replace("_", " ") for n in self.VALUE_NAMES)
+        names = (n.replace("num_", "").replace("_", " ") for n in self.VALUE_NAMES)
         values = (getattr(self, n) for n in self.VALUE_NAMES)
         line2 = "; ".join("%s=%s" % nv for nv in zip(names, values))
 
-        print("|%-16s|" % line1[:16])
-        print("|%-16s|" % line2[:16])
+        print("    |%-16s| /1\\ /2\\" % line1[:16])
+        print("    |%-16s| \\_/ \\_/" % line2[:16])

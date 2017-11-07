@@ -5,13 +5,17 @@
 #    pip-compile --output-file requirements-server.txt requirements-server.in
 #
 attrs==17.2.0             # via automat
-Automat==0.6.0            # via twisted
+automat==0.6.0            # via twisted
 constantly==15.1.0        # via twisted
+gpiozero==1.4.0
 hyperlink==17.3.1         # via twisted
 incremental==17.5.0       # via twisted
 numpy==1.12.1
 pyserial==3.4
+rpi.gpio==0.6.3
 six==1.11.0               # via automat
+smbus2==0.2.0
+termcolor==1.1.0
 twisted==17.9.0
 zope.interface==4.4.3     # via twisted
 

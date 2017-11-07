@@ -8,8 +8,8 @@ class Pong(Mode):
     VALID_NUM_PLAYERS = [2, 4]
     DEFAULT_NUM_PLAYERS = 2
 
-    def __init__(self, pixel_grid):
-        super(Pong, self).__init__(pixel_grid)
+    def __init__(self, pixel_grid, index):
+        super(Pong, self).__init__(pixel_grid, index)
 
         self._num_players = self.DEFAULT_NUM_PLAYERS
 
@@ -28,6 +28,6 @@ class Pong(Mode):
     def on_deactivate(self):
         pass
 
-    def on_state_button(self):
-        index = self.VALID_NUM_PLAYERS.index(self.num_players) % len(self.VALID_NUM_PLAYERS)
+    def on_state_button_press(self):
+        index = (self.VALID_NUM_PLAYERS.index(self.num_players) + 1) % len(self.VALID_NUM_PLAYERS)
         self.num_players = self.VALID_NUM_PLAYERS[index]

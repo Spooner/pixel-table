@@ -5,7 +5,7 @@
 #define HEIGHT 16
 #define NUM_LEDS (WIDTH * HEIGHT)
 #define PIN 6
-#define UART_RATE 460800
+#define UART_RATE 115200
 #define BRIGHTNESS 8
 
 CRGB leds[NUM_LEDS];

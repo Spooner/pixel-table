@@ -16,7 +16,7 @@ Kivy app (can be run via VNC or potentially as an app).
     
 ### Server
     
-    sudo apt install python-numpy
+    sudo apt install python-numpy python-smbus
     sudo apt install arduino-core arduino-mk
 
 
@@ -25,3 +25,9 @@ Kivy app (can be run via VNC or potentially as an app).
     make
     make upload
     
+    
+## Run
+    
+Test on PC:
+
+    GPIOZERO_PIN_FACTORY=mock ./server.py
