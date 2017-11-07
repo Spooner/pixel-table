@@ -65,13 +65,12 @@ class PixelGrid(object):
     def update(self, dt):
         self._micro_controller.write_pixels(self.data)
 
-    def dump(self):
-        sys.stdout.write("===       Apotable %2dx%2d       ===\n" % (self.data.shape[0], self.data.shape[1]))
-        sys.stdout.write("+" + "-" * (self.data.shape[0] * 2) + "+\n")
+    def dump(self, lines):
+        lines.append("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))
+        lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
 
         for y in range(self.data.shape[1]):
-            sys.stdout.write("|")
-
+            cells = []
             for x in range(self.data.shape[0]):
                 r, g, b = self.data[x][y]
                 if r >= 0.5 and g <= 0.2 and b <= 0.2:
@@ -87,10 +86,10 @@ class PixelGrid(object):
                 else:
                     color = None
 
-                sys.stdout.write(colored("  ", on_color="on_" + color if color else None, attrs=[]))
+                cells.append(colored("  ", on_color="on_" + color if color else None, attrs=[]))
 
-            sys.stdout.write("|\n")
-        sys.stdout.write("+" + "-" * (self.data.shape[0] * 2) + "+\n")
+            lines.append("|" + "".join(cells) + "|")
+        lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
 
 
 

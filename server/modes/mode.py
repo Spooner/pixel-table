@@ -30,7 +30,7 @@ class Mode(object):
     def on_state_button_press(self):
         pass
 
-    def dump(self):
+    def dump(self, lines):
         mode = re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()
         line1 = "%02d) %s" % (self._index + 1, mode)
 
@@ -38,5 +38,5 @@ class Mode(object):
         values = (getattr(self, n) for n in self.VALUE_NAMES)
         line2 = "; ".join("%s=%s" % nv for nv in zip(names, values))
 
-        sys.stdout.write("    |%-16s| /1\\ /2\\\n" % line1[:16])
-        sys.stdout.write("    |%-16s| \\_/ \\_/\n" % line2[:16])
+        lines.append("    |%-16s| /1\\ /2\\" % line1[:16])
+        lines.append("    |%-16s| \\_/ \\_/" % line2[:16])

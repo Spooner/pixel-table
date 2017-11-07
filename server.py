@@ -144,11 +144,11 @@ class PixelTableServer(object):
             raise
 
     def _dump(self, fps):
-        sys.stdout.write("\033[0;0H")  # Cursor to 0, 0
-        self._pixel_grid.dump()
-        self._mode.dump()
-        sys.stdout.write("FPS: %.1f    " % fps)
-        sys.stdout.flush()
+        lines = ["\033[0;0H"]  # Cursor to 0, 0
+        self._pixel_grid.dump(lines)
+        self._mode.dump(lines)
+        lines.append("FPS: %.1f    " % fps)
+        print("\n".join(lines))
 
 
 if __name__ == '__main__':
