@@ -2,13 +2,12 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from collections import OrderedDict
 import math
-import sys
 
 from termcolor import colored
 import numpy as np
 
 from .pixel import Pixel
-from .micro_controller import MicroController
+from .external import External
 
 
 class PixelGrid(object):
@@ -24,9 +23,7 @@ class PixelGrid(object):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        self._micro_controller = MicroController()
-        self._micro_controller.open()
-
+        self._external = External()
         self._pixel_held = None
 
     @property
@@ -63,7 +60,7 @@ class PixelGrid(object):
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
 
     def update(self, dt):
-        self._micro_controller.write_pixels(self.data)
+        self._external.write_pixels(self.data)
 
     def dump(self, lines):
         lines.append("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))
