@@ -83,6 +83,7 @@ class PixelTableServer(object):
         self._mode = None
         self.set_mode(0)
         print("\033c")  # Clear terminal
+        os.system('setterm -cursor off')
 
         self._init_state_buttons()
 
@@ -100,6 +101,7 @@ class PixelTableServer(object):
         try:
             reactor.run()
         finally:
+            os.system('setterm -cursor on')
             try:
                 term_state.return_to_original_state()
             except AttributeError:
@@ -142,10 +144,11 @@ class PixelTableServer(object):
             raise
 
     def _dump(self, fps):
-        print("\033[0;0H", end="")  # Cursor to 0, 0
+        sys.stdout.write("\033[0;0H")  # Cursor to 0, 0
         self._pixel_grid.dump()
         self._mode.dump()
-        print("FPS: %.1f    " % fps)
+        sys.stdout.write("FPS: %.1f    " % fps)
+        sys.stdout.flush()
 
 
 if __name__ == '__main__':

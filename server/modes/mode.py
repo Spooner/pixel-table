@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import re
+import sys
 
 
 class Mode(object):
@@ -37,5 +38,5 @@ class Mode(object):
         values = (getattr(self, n) for n in self.VALUE_NAMES)
         line2 = "; ".join("%s=%s" % nv for nv in zip(names, values))
 
-        print("    |%-16s| /1\\ /2\\" % line1[:16])
-        print("    |%-16s| \\_/ \\_/" % line2[:16])
+        sys.stdout.write("    |%-16s| /1\\ /2\\\n" % line1[:16])
+        sys.stdout.write("    |%-16s| \\_/ \\_/\n" % line2[:16])

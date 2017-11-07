@@ -4,7 +4,7 @@ from collections import OrderedDict
 import math
 import sys
 
-from termcolor import cprint
+from termcolor import colored
 import numpy as np
 
 from .pixel import Pixel
@@ -66,11 +66,11 @@ class PixelGrid(object):
         self._micro_controller.write_pixels(self.data)
 
     def dump(self):
-        print("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))
-        print("+" + "-" * (self.data.shape[0] * 2) + "+", file=sys.stderr)
+        sys.stdout.write("===       Apotable %2dx%2d       ===\n" % (self.data.shape[0], self.data.shape[1]))
+        sys.stdout.write("+" + "-" * (self.data.shape[0] * 2) + "+\n")
 
         for y in range(self.data.shape[1]):
-            print("|", end="")
+            sys.stdout.write("|")
 
             for x in range(self.data.shape[0]):
                 r, g, b = self.data[x][y]
@@ -87,10 +87,10 @@ class PixelGrid(object):
                 else:
                     color = None
 
-                cprint("  ", on_color="on_" + color if color else None, attrs=[], end="")
+                sys.stdout.write(colored("  ", on_color="on_" + color if color else None, attrs=[]))
 
-            print("|")
-        print("+" + "-" * (self.data.shape[0] * 2) + "+", file=sys.stderr)
+            sys.stdout.write("|\n")
+        sys.stdout.write("+" + "-" * (self.data.shape[0] * 2) + "+\n")
 
 
 
