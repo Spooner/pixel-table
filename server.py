@@ -12,15 +12,12 @@ from twisted.internet import reactor, task
 from twisted.internet.protocol import Factory
 from twisted.protocols import basic
 from twisted.internet import stdio
-from gpiozero import Button, Device
+from gpiozero import Button
 
 from server.messages import PixelTableProtocol
 from server.pixel_grid import PixelGrid
 from server.modes.matrix_rain import MatrixRain
 from server.modes.pong import Pong
-
-GPIO_MODE = 16
-GPIO_STATE = 20
 
 
 class PixelTableServerFactory(Factory):
@@ -43,18 +40,12 @@ class KeyHandler(basic.LineReceiver):
     def rawDataReceived(self, data):
         key = str(data).lower()[0]
         if key == self.Key.MODE:
-            self._button_press(GPIO_MODE)
+            self._app.on_mode_button_press()
         elif key == self.Key.STATE:
-            self._button_press(GPIO_STATE)
+            self._app.on_state_button_press()
 
     def lineReceived(self, line):
-        pass
-
-    def _button_press(self, pin_number):
-        pin = Device.pin_factory.pin(pin_number)
-        pin.drive_low()
-        time.sleep(0.1)
-        pin.drive_high()
+        print("LINE:", line)
 
 
 # # https://stackoverflow.com/questions/23714006/twisted-queue-a-function-interactively
@@ -76,8 +67,11 @@ class Cbreaktty(object):
 
 
 class PixelTableServer(object):
+    GPIO_MODE = 16
+    GPIO_STATE = 20
+
     def __init__(self):
-        reactor.listenTCP(8008, PixelTableServerFactory(self))
+        reactor.listenTCP(8000, PixelTableServerFactory(self))
 
         self._pixel_grid = PixelGrid()
 
@@ -117,9 +111,9 @@ class PixelTableServer(object):
         self._modes.append(mode_class(pixel_grid=self._pixel_grid, index=len(self._modes)))
 
     def _init_state_buttons(self):
-        self._mode_button = Button(GPIO_MODE)
+        self._mode_button = Button(self.GPIO_MODE)
         self._mode_button.when_pressed = self.on_mode_button_press
-        self._state_button = Button(GPIO_STATE)
+        self._state_button = Button(self.GPIO_STATE)
         self._state_button.when_pressed = self.on_state_button_press
 
     def on_mode_button_press(self):
