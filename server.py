@@ -71,7 +71,7 @@ class PixelTableServer(object):
     GPIO_STATE = 20
 
     def __init__(self):
-        reactor.listenTCP(8000, PixelTableServerFactory(self))
+        reactor.listenTCP(8008, PixelTableServerFactory(self))
 
         self._pixel_grid = PixelGrid()
 
