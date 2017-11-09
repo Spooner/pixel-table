@@ -30,7 +30,7 @@ class PixelGrid(object):
 
     def rgb_to_terminal(self, rgb):
         if rgb not in self._color_lookup:
-            self._color_lookup[rgb] = rgb2short("%02x%02x%02x" % rgb) 
+            self._color_lookup[rgb] = int(rgb2short("%02x%02x%02x" % rgb)[0])
         return self._color_lookup[rgb]
     
     @property
@@ -76,10 +76,10 @@ class PixelGrid(object):
         for y in range(self.data.shape[1]):
             cells = []
             for x in range(self.data.shape[0]):
-                color = self.rgb_to_terminal(tuple(self.data[x][y].astype("int8")))
-                cells.append("\e[48;5;%sm  " % color)
+                color = self.rgb_to_terminal(tuple((self.data[x][y] * 255).astype("int8")))
+                cells.append("\033[48;5;%dm  " % color)
 
-            lines.append("|" + "".join(cells) + "\e[48;5;0m|")
+            lines.append("|" + "".join(cells) + "\033[48;5;16m|")
         lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
 
 
