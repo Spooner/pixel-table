@@ -77,7 +77,7 @@ class PixelGrid(object):
             cells = []
             for x in range(self.data.shape[0]):
                 color = self.rgb_to_terminal(tuple(self.data[x][y].astype("int8")))
-                cells.append("\e[48;5;%dm  " % color)
+                cells.append("\e[48;5;%sm  " % color)
 
             lines.append("|" + "".join(cells) + "\e[48;5;0m|")
         lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
