@@ -28,7 +28,7 @@ class PixelGrid(object):
         
         self._color_lookup = {}
 
-    def rgb_to_terminal(self, rgb)
+    def rgb_to_terminal(self, rgb):
         if rgb not in self._color_lookup:
             self._color_lookup[rgb] = rgb2short("%02h%02h%02h" % rgb) 
         return self._color_lookup[rgb]
