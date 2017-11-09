@@ -7,6 +7,7 @@ from traceback import print_exc
 import sys
 import termios
 import tty
+from contextlib import contextmanager
 
 from twisted.internet import reactor, task
 from twisted.internet.protocol import Factory
@@ -82,8 +83,6 @@ class PixelTableServer(object):
         self._now = time.time()
         self._mode = None
         self.set_mode(0)
-        os.system("clear")  # Clear terminal
-        os.system('setterm -cursor off')
 
         self._init_state_buttons()
 
@@ -92,6 +91,13 @@ class PixelTableServer(object):
 
         task.LoopingCall(self.update).start(1 / 60.0)
 
+        with self.setup_terminal():
+            reactor.run()
+
+    @contextmanager
+    def setup_terminal(self):
+        os.system("clear")  # Clear terminal
+        os.system('setterm -cursor off')
         try:
             term_state = Cbreaktty(sys.stdin.fileno())
         except IOError:
@@ -99,13 +105,10 @@ class PixelTableServer(object):
             sys.exit(1)
 
         try:
-            reactor.run()
+            yield
         finally:
             os.system('setterm -cursor on')
-            try:
-                term_state.return_to_original_state()
-            except AttributeError:
-                pass
+            term_state.return_to_original_state()
 
     def _add_mode(self, mode_class):
         self._modes.append(mode_class(pixel_grid=self._pixel_grid, index=len(self._modes)))
