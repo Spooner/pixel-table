@@ -8,7 +8,7 @@ import numpy as np
 
 from .pixel import Pixel
 from .external import External
-
+from .colortrans import rgb2short
 
 class PixelGrid(object):
     WIDTH, HEIGHT = 16, 16
@@ -25,7 +25,14 @@ class PixelGrid(object):
 
         self._external = External()
         self._pixel_held = None
+        
+        self._color_lookup = {}
 
+    def rgb_to_terminal(self, rgb)
+        if rgb not in self._color_lookup:
+            self._color_lookup[rgb] = rgb2short("%02h%02h%02h" % rgb) 
+        return self._color_lookup[rgb]
+    
     @property
     def pixels(self):
         return self._pixels.values()
@@ -69,23 +76,10 @@ class PixelGrid(object):
         for y in range(self.data.shape[1]):
             cells = []
             for x in range(self.data.shape[0]):
-                r, g, b = self.data[x][y]
-                if r >= 0.5 and g <= 0.2 and b <= 0.2:
-                    color = "red"
-                elif r <= 0.2 and g >= 0.5 and b <= 0.2:
-                    color = "green"
-                elif r <= 0.2 and g <= 0.2 and b >= 0.5:
-                    color = "blue"
-                elif r >= 0.5 and g >= 0.5 and b >= 0.5:
-                    color = "white"
-                elif r >= 0.25 and g >= 0.25 and b >= 0.25:
-                    color = "grey"
-                else:
-                    color = None
+                color = self.rgb_to_terminal(self.data[x][y])
+                cells.append("\e[48;5;%dm  " % color)
 
-                cells.append(colored("  ", on_color="on_" + color if color else None, attrs=[]))
-
-            lines.append("|" + "".join(cells) + "|")
+            lines.append("|" + "".join(cells) + "\e[48;5;0m|")
         lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
 
 
