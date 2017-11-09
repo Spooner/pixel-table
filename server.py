@@ -82,7 +82,7 @@ class PixelTableServer(object):
         self._now = time.time()
         self._mode = None
         self.set_mode(0)
-        print("\033c")  # Clear terminal
+        os.system("clear")  # Clear terminal
         os.system('setterm -cursor off')
 
         self._init_state_buttons()
