@@ -147,7 +147,7 @@ class PixelTableServer(object):
         lines = ["\033[0;0H"]  # Cursor to 0, 0
         self._pixel_grid.dump(lines)
         self._mode.dump(lines)
-        lines.append("FPS: %.1f    " % fps)
+        lines.append("%34s" % ("FPS: %2.1f " % fps))
         print("\n".join(lines))
 
 

@@ -30,7 +30,7 @@ class PixelGrid(object):
 
     def rgb_to_terminal(self, rgb):
         if rgb not in self._color_lookup:
-            self._color_lookup[rgb] = int(rgb2short("%02x%02x%02x" % rgb)[0])
+            self._color_lookup[rgb] = rgb2short(rgb)
         return self._color_lookup[rgb]
     
     @property
