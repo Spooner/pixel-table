@@ -4,7 +4,7 @@ from server.mixins.handles_events import HandlesEvents
 
 
 class Sprite(HandlesEvents):
-    def __init__(self, x, y, width=1, height=1, color=(1, 1, 1)):
+    def __init__(self, x, y, width=1, height=1, color=(1.0, 1.0, 1.0)):
         self._x, self._y = x, y
         self._width, self._height = width, height
         self._color = color
@@ -47,7 +47,7 @@ class Sprite(HandlesEvents):
 
     def _constrain(self):
         self._x = min(max(self._x, 0), 16 - self._width)
-        self._y = min(max(self._x, 0), 16 - self._height)
+        self._y = min(max(self._y, 0), 16 - self._height)
 
     def _render(self, pixel_grid):
         pass

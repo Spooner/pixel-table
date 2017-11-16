@@ -5,11 +5,9 @@ from .sprites.touch_button import TouchButton
 
 
 class BasePlayer(HandlesEvents):
-    def __init__(self, player_index, buttons=None):
+    def __init__(self, index, buttons=None):
         super(BasePlayer, self).__init__()
-        self._buttons = [TouchButton(player_index, b) for b in (buttons or [])]
+        self._index = index
+        self._buttons = [TouchButton(index, b) for b in (buttons or [])]
         self.initialize_event_handlers()
 
-    def render(self, pixels):
-        for button in self._buttons:
-            button.render(pixels)

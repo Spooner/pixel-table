@@ -10,11 +10,11 @@ class Cbreaktty(object):
     original_termio = None
     my_termio = None
 
-    def __init__(self, ttyfd):
-        if os.isatty(ttyfd):
-            self.original_termio = (ttyfd, termios.tcgetattr(ttyfd))
-            tty.setcbreak(ttyfd)
-            self.my_termio = (ttyfd, termios.tcgetattr(ttyfd))
+    def __init__(self, tty_fd):
+        if os.isatty(tty_fd):
+            self.original_termio = (tty_fd, termios.tcgetattr(tty_fd))
+            tty.setcbreak(tty_fd)
+            self.my_termio = (tty_fd, termios.tcgetattr(tty_fd))
         else:
             raise IOError
 

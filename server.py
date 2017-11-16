@@ -50,7 +50,7 @@ class PixelTableServer(object):
         keyboard = KeyHandler(self)
         stdio.StandardIO(keyboard, sys.stdin.fileno())
 
-        self.set_mode(0)
+        self.set_mode(MatrixRain)
 
         task.LoopingCall(self.update).start(1 / 30.0)
 
@@ -78,18 +78,21 @@ class PixelTableServer(object):
 
     def _init_panel_buttons(self):
         self._mode_button = Button(self.GPIO_MODE)
-        self._mode_button.when_pressed = lambda: self.add_to_event_queue("mode_button_press")
+        self._mode_button.when_pressed = lambda: self.add_to_event_queue("panel_button_press", "mode")
         self._state_button = Button(self.GPIO_STATE)
-        self._state_button.when_pressed = lambda: self.add_to_event_queue("state_button_press")
+        self._state_button.when_pressed = lambda: self.add_to_event_queue("panel_button_press", "state")
 
     def on_mode_button_press(self):
         index = (self._mode.index + 1) % len(self._modes)
-        self.set_mode(index)
+        self.set_mode(self._modes[index])
 
-    def set_mode(self, index):
+    def on_state_button_press(self):
+        self.set_mode(type(self._mode), self._mode.state_index + 1)
+
+    def set_mode(self, mode, state_index=None):
         self._pixel_grid.clear()
         smokesignal.clear_all()  # Clear all events in ephemeral objects.
-        self._mode = self._modes[index](index=index)
+        self._mode = mode(index=self._modes.index(mode), state_index=state_index)
 
     def add_to_event_queue(self, event, *args):
         """Store real-time events and pass them out once per frame"""
@@ -102,10 +105,10 @@ class PixelTableServer(object):
             self._now = now
 
             for event, args in self._event_queue:
-                if event == "mode_button_press":
-                    self.on_mode_button_press()
+                if event == "panel_button_press":
+                    getattr(self, "on_%s_button_press" % args[0])()
                 else:
-                    smokesignal.emit(event, *args)
+                    smokesignal.emit(event, *args, dt=dt)
             self._event_queue = []
 
             for index in self._buttons_held:

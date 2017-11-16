@@ -40,11 +40,11 @@ class KeyHandler(basic.LineReceiver):
     def rawDataReceived(self, data):
         key = str(data).upper()[0]
         if key == self.MODE_BUTTON:
-            self._app.add_to_event_queue("mode_button_press")
+            self._app.add_to_event_queue("panel_button_press", "mode")
         elif key == self.STATE_BUTTON:
-            self._app.add_to_event_queue("state_button_press")
+            self._app.add_to_event_queue("panel_button_press", "state")
         elif key in self.TOUCH_BUTTONS:
-            self._app.add_to_event_queue("touch_button_press", *self.TOUCH_BUTTONS[key])
+            self._app.add_to_event_queue("touch_button_held", *self.TOUCH_BUTTONS[key])
 
     def lineReceived(self, line):
         pass

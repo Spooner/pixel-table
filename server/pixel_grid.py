@@ -37,7 +37,6 @@ class PixelGrid(object):
     def clear(self, color=(0, 0, 0)):
         for pixel in self.pixels:
             pixel.color = color
-            pixel.character = " "
 
     def pixel(self, x, y):
         return self._pixels[x, y]
@@ -69,9 +68,8 @@ class PixelGrid(object):
         for y in range(self.data.shape[1]):
             cells = []
             for x in range(self.data.shape[0]):
-                pixel = self._pixels[x, y]
-                color = self.rgb_to_terminal(tuple((pixel.color * 255).astype("int8")))
-                cells.append("\033[48;5;{color}m{char}{char}".format(color=color, char=pixel.character))
+                color = self.rgb_to_terminal(tuple((self.pixel(x, y).color * 255).astype("int8")))
+                cells.append("\033[48;5;%sm  " % color)
 
             lines.append("|" + "".join(cells) + "\033[48;5;16m|")
         lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
