@@ -39,9 +39,9 @@
      inkscape:window-height="1026"
      id="namedview4321"
      showgrid="false"
-     inkscape:zoom="5.2064355"
-     inkscape:cx="1670.6793"
-     inkscape:cy="101.95367"
+     inkscape:zoom="0.92037647"
+     inkscape:cx="1719.4194"
+     inkscape:cy="254.17114"
      inkscape:window-x="65"
      inkscape:window-y="24"
      inkscape:window-maximized="1"
@@ -195,16 +195,20 @@
      d="m 579.9203,10209.691 -76.26668,0 0,26.133 76.26668,0 z"
      id="rect4508-6"
      inkscape:connector-curvature="0" />
-  <path
-     style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 473.11154,10236.388 a 8.249998,8.2496366 0 0 0 8.25001,8.25 8.249998,8.2496366 0 0 0 8.24999,-8.25 8.249998,8.2496366 0 0 0 -8.24999,-8.25 8.249998,8.2496366 0 0 0 -8.25001,8.25 z"
-     id="path4538-2"
-     inkscape:connector-curvature="0" />
-  <path
-     style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     d="m 473.11154,10210.228 a 8.249998,8.2496366 0 0 0 8.25,8.25 8.249998,8.2496366 0 0 0 8.25,-8.25 8.249998,8.2496366 0 0 0 -8.25,-8.25 8.249998,8.2496366 0 0 0 -8.25,8.25 z"
-     id="path4538-8-9"
-     inkscape:connector-curvature="0" />
+  <g
+     id="g5461"
+     transform="translate(2.1284948,0)">
+    <path
+       inkscape:connector-curvature="0"
+       id="path4538-2"
+       d="m 473.11154,10236.388 a 8.249998,8.2496366 0 0 0 8.25001,8.25 8.249998,8.2496366 0 0 0 8.24999,-8.25 8.249998,8.2496366 0 0 0 -8.24999,-8.25 8.249998,8.2496366 0 0 0 -8.25001,8.25 z"
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4538-8-9"
+       d="m 473.11154,10210.228 a 8.249998,8.2496366 0 0 0 8.25,8.25 8.249998,8.2496366 0 0 0 8.25,-8.25 8.249998,8.2496366 0 0 0 -8.25,-8.25 8.249998,8.2496366 0 0 0 -8.25,8.25 z"
+       style="fill:#ff0000;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+  </g>
   <path
      style="fill:#0000ff;fill-rule:evenodd;stroke:none;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
      d="m 586.66634,10145.407 -83.01272,0 0,26.133 83.01272,0 z"
