@@ -1,24 +1,24 @@
 #!/usr/bin/env python
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import time
 import os
-from traceback import print_exc
 import sys
-import termios
-import tty
+import time
 from contextlib import contextmanager
+from traceback import print_exc
 
+import smokesignal
+from gpiozero import Button as Button
 from twisted.internet import reactor, task
-from twisted.internet.protocol import Factory
-from twisted.protocols import basic
 from twisted.internet import stdio
-from gpiozero import Button
+from twisted.internet.protocol import Factory
 
+from server.c_break_tty import Cbreaktty
+from server.key_handler import KeyHandler
 from server.messages import PixelTableProtocol
+from server.modes.matrix_rain.matrix_rain import MatrixRain
+from server.modes.pong.pong import Pong
 from server.pixel_grid import PixelGrid
-from server.modes.matrix_rain import MatrixRain
-from server.modes.pong import Pong
 
 
 class PixelTableServerFactory(Factory):
@@ -26,45 +26,6 @@ class PixelTableServerFactory(Factory):
 
     def __init__(self, app):
         self.app = app
-
-
-# https://stackoverflow.com/questions/23714006/twisted-queue-a-function-interactively
-class KeyHandler(basic.LineReceiver):
-    class Key(object):
-        MODE = '1'
-        STATE = '2'
-
-    def __init__(self, app):
-        self.setRawMode()  # Switch from line mode to "however much I got" mode
-        self._app = app
-
-    def rawDataReceived(self, data):
-        key = str(data).lower()[0]
-        if key == self.Key.MODE:
-            self._app.on_mode_button_press()
-        elif key == self.Key.STATE:
-            self._app.on_state_button_press()
-
-    def lineReceived(self, line):
-        print("LINE:", line)
-
-
-# # https://stackoverflow.com/questions/23714006/twisted-queue-a-function-interactively
-class Cbreaktty(object):
-    original_termio = None
-    my_termio = None
-
-    def __init__(self, ttyfd):
-        if os.isatty(ttyfd):
-            self.original_termio = (ttyfd, termios.tcgetattr(ttyfd))
-            tty.setcbreak(ttyfd)
-            self.my_termio = (ttyfd, termios.tcgetattr(ttyfd))
-        else:
-            raise IOError
-
-    def return_to_original_state(self):
-        tty_, org = self.original_termio
-        termios.tcsetattr(tty_, termios.TCSANOW, org)
 
 
 class PixelTableServer(object):
@@ -76,24 +37,29 @@ class PixelTableServer(object):
 
         self._pixel_grid = PixelGrid()
 
-        self._modes = []
-        self._add_mode(MatrixRain)
-        self._add_mode(Pong)
-
+        self._buttons = {}
+        self._buttons_held = set()
+        self._modes = [MatrixRain, Pong]
         self._now = time.time()
         self._mode = None
-        self.set_mode(0)
+        self._event_queue = []
 
-        self._init_state_buttons()
+        self._init_panel_buttons()
+        self._init_touch_buttons()
 
         keyboard = KeyHandler(self)
         stdio.StandardIO(keyboard, sys.stdin.fileno())
 
-        task.LoopingCall(self.update).start(1 / 60.0)
+        self.set_mode(0)
+
+        task.LoopingCall(self.update).start(1 / 30.0)
 
         with self.setup_terminal():
             reactor.run()
 
+    def _init_touch_buttons(self):
+        pass
+    
     @contextmanager
     def setup_terminal(self):
         os.system("clear")  # Clear terminal
@@ -110,36 +76,47 @@ class PixelTableServer(object):
             os.system('setterm -cursor on')
             term_state.return_to_original_state()
 
-    def _add_mode(self, mode_class):
-        self._modes.append(mode_class(pixel_grid=self._pixel_grid, index=len(self._modes)))
-
-    def _init_state_buttons(self):
+    def _init_panel_buttons(self):
         self._mode_button = Button(self.GPIO_MODE)
-        self._mode_button.when_pressed = self.on_mode_button_press
+        self._mode_button.when_pressed = lambda: self.add_to_event_queue("mode_button_press")
         self._state_button = Button(self.GPIO_STATE)
-        self._state_button.when_pressed = self.on_state_button_press
+        self._state_button.when_pressed = lambda: self.add_to_event_queue("state_button_press")
 
     def on_mode_button_press(self):
         index = (self._mode.index + 1) % len(self._modes)
         self.set_mode(index)
 
-    def on_state_button_press(self):
-        self._mode.on_state_button_press()
-
     def set_mode(self, index):
-        if self._mode is not None:
-            self._mode.on_deactivate()
+        self._pixel_grid.clear()
+        smokesignal.clear_all()  # Clear all events in ephemeral objects.
+        self._mode = self._modes[index](index=index)
 
-        self._mode = self._modes[index]
-        self._mode.on_activate()
+    def add_to_event_queue(self, event, *args):
+        """Store real-time events and pass them out once per frame"""
+        self._event_queue.append((event, args))
 
     def update(self):
         try:
             now = time.time()
             dt = now - self._now
             self._now = now
-            self._mode.on_update(dt)
-            self._pixel_grid.update(dt)
+
+            for event, args in self._event_queue:
+                if event == "mode_button_press":
+                    self.on_mode_button_press()
+                else:
+                    smokesignal.emit(event, *args)
+            self._event_queue = []
+
+            for index in self._buttons_held:
+                self._mode.on_button_held(index, dt)
+
+            smokesignal.emit("update", self._pixel_grid, dt)
+            smokesignal.emit("pre_render", self._pixel_grid)  # e.g. clearing or fading previous frame
+            smokesignal.emit("render", self._pixel_grid)
+            smokesignal.emit("post_render", self._pixel_grid)  # e.g. offsetting current frame
+
+            self._pixel_grid.write()
 
             self._dump(1 / dt)
         except:

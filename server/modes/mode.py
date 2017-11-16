@@ -2,32 +2,20 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import re
 
+from server.mixins.handles_events import HandlesEvents
 
-class Mode(object):
+
+class Mode(HandlesEvents):
     VALUE_NAMES = []
 
-    def __init__(self, pixel_grid, index):
-        self._pixel_grid = pixel_grid
+    def __init__(self, index):
+        super(Mode, self).__init__()
         self._index = index
+        self.initialize_event_handlers()
 
     @property
     def index(self):
         return self._index
-
-    def on_update(self, dt):
-        pass
-
-    def on_activate(self):
-        pass
-
-    def on_deactivate(self):
-        pass
-
-    def on_button_press(self, n):
-        pass
-
-    def on_state_button_press(self):
-        pass
 
     def dump(self, lines):
         mode = re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()

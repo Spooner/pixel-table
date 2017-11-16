@@ -5,6 +5,7 @@ class Pixel(object):
     def __init__(self, x, y, pixel_grid):
         self._x, self._y = x, y
         self._pixel_grid = pixel_grid
+        self._character = " "
 
     @property
     def x(self):
@@ -26,5 +27,16 @@ class Pixel(object):
     def color(self, color):
         self._pixel_grid.set_color(self._x, self._y, color)
 
+    @property
+    def character(self):
+        return self._character
+
+    @character.setter
+    def character(self, value):
+        assert isinstance(value, (str, unicode)) and len(value) == 1
+        self._character = value
+
     def __str__(self):
-        return "<Pixel ({}, {}) {}>".format(self._x, self._y, self.color)
+        return "<Pixel ({x}, {y}) {color} '{char}'>".format(x=self._x, y=self._y,
+                                                            color=self.color,
+                                                            char=self._character)
