@@ -77,7 +77,7 @@ class PixelTableServer(object):
         finally:
             os.system("clear")
             os.system('setterm -cursor on')
-            os.system("xset r rate 250 30")
+            os.system("xset r rate 350 15")
             term_state.return_to_original_state()
 
     def _init_panel_buttons(self):

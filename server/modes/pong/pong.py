@@ -13,7 +13,7 @@ class Pong(Mode):
     def __init__(self, index, state_index=None):
         super(Pong, self).__init__(index=index, state_index=state_index)
         self._players = list(Player(i) for i in range(self._get_state_value("players")))
-        self._ball = Ball(list(p.paddle for p in self._players))
+        self._ball = Ball(self._players)
 
     def on_pre_render(self, pixel_grid):
         pixel_grid.clear()

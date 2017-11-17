@@ -3,6 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from server.sprites.touch_button import TouchButton
 from server.base_player import BasePlayer
 from .paddle import Paddle
+from ...sprites.score import Score
 
 
 class Player(BasePlayer):
@@ -18,11 +19,10 @@ class Player(BasePlayer):
         else:
             raise ValueError
 
-        self._paddle = Paddle(x=x, y=y, width=width, height=height)
-
         super(Player, self).__init__(index, [TouchButton.LEFT, TouchButton.RIGHT])
 
-        self.initialize_event_handlers()
+        self._paddle = Paddle(x=x, y=y, width=width, height=height)
+        self._score = Score(self._index, score=3)
 
     def on_touch_button_held(self, player_index, button_index, dt):
         if player_index != self._index:
@@ -40,3 +40,6 @@ class Player(BasePlayer):
     @property
     def paddle(self):
         return self._paddle
+
+    def lose_point(self):
+        self._score.score -= 1
