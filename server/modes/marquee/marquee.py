@@ -6,9 +6,9 @@ from ...sprites.text import Text
 
 class Marquee(Mode):
     STATE_NAMES = ["txt"]
-    STATE_VALUES = [("0123456789", ), ("ABCDEFGHIJ", ), ("abcdefghij", ), ("A1B2C3D4E5", )]
+    STATE_VALUES = [("0123456789", ), ("ABC,DEF,GHI.J", ), ("abcdefghij", ), ("A1B2C3D4E5", )]
     DEFAULT_STATE_INDEX = 0
-    SPEED = 5
+    SPEED = 8
 
     def __init__(self, index, state_index=None):
         super(Marquee, self).__init__(index=index, state_index=state_index)
@@ -19,3 +19,5 @@ class Marquee(Mode):
 
     def on_update(self, pixel_grid, dt):
         self._text.move_by(dt * -self.SPEED, 0)
+        if self._text.x + self._text.width < 0:
+            self._text.move_to(15, 5)
