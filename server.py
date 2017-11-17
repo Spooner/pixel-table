@@ -53,7 +53,7 @@ class PixelTableServer(object):
 
         self.set_mode(MatrixRain)
 
-        task.LoopingCall(self.update).start(1 / 30.0)
+        task.LoopingCall(self.update).start(1 / 25)
 
         with self.setup_terminal():
             reactor.run()
@@ -65,7 +65,7 @@ class PixelTableServer(object):
     def setup_terminal(self):
         os.system("clear")  # Clear terminal
         os.system('setterm -cursor off')
-        os.system("xset r rate 100 40")
+        os.system("xset r rate 100 30")
         try:
             term_state = Cbreaktty(sys.stdin.fileno())
         except IOError:
@@ -75,8 +75,9 @@ class PixelTableServer(object):
         try:
             yield
         finally:
+            os.system("clear")
             os.system('setterm -cursor on')
-            os.system("xset r rate 660 25")
+            os.system("xset r rate 250 30")
             term_state.return_to_original_state()
 
     def _init_panel_buttons(self):

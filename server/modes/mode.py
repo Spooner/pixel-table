@@ -28,7 +28,7 @@ class Mode(HandlesEvents):
         mode = re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()
         lines.append(" /1\\                       WER  ")
 
-        line1 = "%02d) %s" % (self._indexxxxxxxxxxxxxxxxxxx, mode)
+        line1 = "%02d) %s" % (self._index, mode)
         lines.append(" \\_/  |%-16s|  Q   T " % line1[:16])
 
         line2 = "; ".join("%s=%s" % nv for nv in zip(self.STATE_NAMES, self.STATE_VALUES[self._state_index]))
