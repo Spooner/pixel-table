@@ -28,7 +28,7 @@ class Drop(Sprite):
         self._x = random.randrange(0, 16)
         self._y = random.randrange(-20 if initial else -10, 0)
         self._length = random.randrange(5, 12)
-        self._speed = random.randrange(4, 7)
+        self._speed = random.randrange(2, 4)
 
     def tail(self):
         head_y = math.floor(self._y)

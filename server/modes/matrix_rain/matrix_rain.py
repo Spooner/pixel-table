@@ -9,6 +9,8 @@ class MatrixRain(Mode):
     STATE_VALUES = [(1, ), (2, ), (4, ), (8, ), (16, ), (32, ), (64, )]
     DEFAULT_STATE_INDEX = 3
 
+    FADE = 0.2
+
     def __init__(self, index, state_index=None):
         super(MatrixRain, self).__init__(index=index, state_index=state_index)
         self._drops = list(Drop() for _ in range(self._get_state_value("drops")))
@@ -19,7 +21,7 @@ class MatrixRain(Mode):
         return len(self._drops)
 
     def on_update(self, pixel_grid, dt):
-        self._next_fade = 0.2 * dt
+        self._next_fade = self.FADE * dt
 
     def on_pre_render(self, pixel_grid):
         pixel_grid.fade(self._next_fade)
