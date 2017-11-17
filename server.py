@@ -18,6 +18,7 @@ from server.key_handler import KeyHandler
 from server.messages import PixelTableProtocol
 from server.modes.matrix_rain.matrix_rain import MatrixRain
 from server.modes.pong.pong import Pong
+from server.modes.blank.blank import Blank
 from server.pixel_grid import PixelGrid
 
 
@@ -39,7 +40,7 @@ class PixelTableServer(object):
 
         self._buttons = {}
         self._buttons_held = set()
-        self._modes = [MatrixRain, Pong]
+        self._modes = [Blank, MatrixRain, Pong]
         self._now = time.time()
         self._mode = None
         self._event_queue = []
@@ -64,6 +65,7 @@ class PixelTableServer(object):
     def setup_terminal(self):
         os.system("clear")  # Clear terminal
         os.system('setterm -cursor off')
+        os.system("xset r rate 100 40")
         try:
             term_state = Cbreaktty(sys.stdin.fileno())
         except IOError:
@@ -74,6 +76,7 @@ class PixelTableServer(object):
             yield
         finally:
             os.system('setterm -cursor on')
+            os.system("xset r rate 660 25")
             term_state.return_to_original_state()
 
     def _init_panel_buttons(self):

@@ -26,16 +26,16 @@ class Mode(HandlesEvents):
 
     def dump(self, lines):
         mode = re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()
-        lines.append(" /1\\                       W E R  ")
+        lines.append(" /1\\                       WER  ")
 
-        line1 = "%02d) %s" % (self._index + 1, mode)
-        lines.append(" \\_/  |%-16s|  Q     T " % line1[:16])
+        line1 = "%02d) %s" % (self._indexxxxxxxxxxxxxxxxxxx, mode)
+        lines.append(" \\_/  |%-16s|  Q   T " % line1[:16])
 
         line2 = "; ".join("%s=%s" % nv for nv in zip(self.STATE_NAMES, self.STATE_VALUES[self._state_index]))
-        lines.append(" /2\\  |%-16s|  A     G " % line2[:16])
+        lines.append(" /2\\  |%-16s|  A   G " % line2[:16])
 
-        lines.append(" \\_/                      Z     B ")
-        lines.append("                           X C V  ")
+        lines.append(" \\_/                      Z   B ")
+        lines.append("                           XCV  ")
 
     def _get_state_value(self, name):
         return self.STATE_VALUES[self._state_index][self.STATE_NAMES.index(name)]

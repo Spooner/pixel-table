@@ -6,8 +6,6 @@ from .paddle import Paddle
 
 
 class Player(BasePlayer):
-    PADDLE_SPEED = 10
-
     def __init__(self, index):
         if index == 0:
             x, y, width, height, self._move_left = 6, 14, 4, 1, (-1, 0)
@@ -30,7 +28,7 @@ class Player(BasePlayer):
         if player_index != self._index:
             return
 
-        distance = self.PADDLE_SPEED * dt
+        distance = Paddle.SPEED * dt
 
         if button_index == TouchButton.LEFT:
             self._paddle.move_by(distance * self._move_left[0], distance * self._move_left[1], constrain=True)

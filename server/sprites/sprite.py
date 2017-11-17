@@ -51,3 +51,7 @@ class Sprite(HandlesEvents):
 
     def _render(self, pixel_grid):
         pass
+
+    @property
+    def color(self):
+        return self._color
