@@ -4,16 +4,15 @@ from server.modes.mode import Mode
 from .drop import Drop
 
 
-class MatrixRain(Mode):
-    STATE_NAMES = ['drops']
-    STATE_VALUES = [(1, ), (2, ), (4, ), (8, ), (16, ), (32, ), (64, )]
+class Rain(Mode):
+    STATES = [1, 2, 4, 8, 16, 32, 64]
     DEFAULT_STATE_INDEX = 3
 
     FADE = 0.2
 
     def __init__(self, index, state_index=None):
-        super(MatrixRain, self).__init__(index=index, state_index=state_index)
-        self._drops = list(Drop() for _ in range(self._get_state_value("drops")))
+        super(Rain, self).__init__(index=index, state_index=state_index)
+        self._drops = list(Drop() for _ in range(self.state))
         self._next_fade = None
 
     @property
@@ -24,4 +23,5 @@ class MatrixRain(Mode):
         self._next_fade = self.FADE * dt
 
     def on_pre_render(self, pixel_grid):
-        pixel_grid.fade(self._next_fade)
+        if self._next_fade is not None:
+            pixel_grid.fade(self._next_fade)

@@ -6,14 +6,13 @@ from server.mixins.handles_events import HandlesEvents
 
 
 class Mode(HandlesEvents):
-    STATE_NAMES = None
-    STATE_VALUES = None
-    DEFAULT_STATE_INDEX = None
+    STATES = None
+    DEFAULT_STATE_INDEX = 0
 
-    def __init__(self, index, state_index=None):
+    def __init__(self, index, state_index=DEFAULT_STATE_INDEX):
         super(Mode, self).__init__()
         self._index = index
-        self._state_index = self.DEFAULT_STATE_INDEX if state_index is None else state_index % len(self.STATE_VALUES)
+        self._state_index = self.DEFAULT_STATE_INDEX if state_index is None else state_index % len(self.STATES)
         self.initialize_event_handlers()
 
     @property
@@ -24,18 +23,38 @@ class Mode(HandlesEvents):
     def state_index(self):
         return self._state_index
 
+    @property
+    def state(self):
+        return self.STATES[self._state_index]
+
+    @staticmethod
+    def state_text(state):
+        return str(state)[:4]
+
+    @classmethod
+    def state_line(cls, state):
+        state_text = cls.state_text(state)
+        if len(state_text) in [1, 2]:
+            state_text += " "
+        return state_text
+
+    @classmethod
+    def title_page(cls, index, state_index):
+        state_index = (state_index or cls.DEFAULT_STATE_INDEX) % len(cls.STATES)
+        return [
+            " %02d " % index,
+            "%-4s" % cls.__name__.upper(),
+            "%4s" % cls.state_line(cls.STATES[state_index]),
+        ]
+
     def dump(self, lines):
-        mode = re.sub(r"([A-Z])", lambda m: " " + m.group(1), type(self).__name__).strip()
-        lines.append(" /1\\                       WER  ")
+        title_page = self.title_page(self.index, self.state_index)
+        lines.append(" /1\\    |%s|     WER   " % title_page[0])
+        lines.append(" \\_/    |%s|    Q   T  " % title_page[1])
+        lines.append(" /2\\    |%s|    A   G  " % title_page[2])
+        lines.append(" \\_/              Z   B ")
+        lines.append("                   XCV ")
 
-        line1 = "%02d) %s" % (self._index, mode)
-        lines.append(" \\_/  |%-16s|  Q   T " % line1[:16])
-
-        line2 = "; ".join("%s=%s" % nv for nv in zip(self.STATE_NAMES, self.STATE_VALUES[self._state_index]))
-        lines.append(" /2\\  |%-16s|  A   G " % line2[:16])
-
-        lines.append(" \\_/                      Z   B ")
-        lines.append("                           XCV  ")
-
-    def _get_state_value(self, name):
-        return self.STATE_VALUES[self._state_index][self.STATE_NAMES.index(name)]
+    @property
+    def mode(self):
+        return type(self)

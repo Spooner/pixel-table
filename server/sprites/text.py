@@ -10,7 +10,7 @@ from .sprite import Sprite
 
 class Text(Sprite):
     CHARACTERS = {
-        (3, 5): "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,""''"'?!@_',
+        (3, 5): "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789.,""''"'?!@_                                 ',
     }
 
     _all_coords = {}

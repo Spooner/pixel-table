@@ -16,10 +16,11 @@ from twisted.internet.protocol import Factory
 from server.c_break_tty import Cbreaktty
 from server.key_handler import KeyHandler
 from server.messages import PixelTableProtocol
-from server.modes.matrix_rain.matrix_rain import MatrixRain
+from server.modes.rain.rain import Rain
 from server.modes.pong.pong import Pong
-from server.modes.marquee.marquee import Marquee
-from server.modes.blank.blank import Blank
+from server.modes.msg.msg import Msg
+from server.modes.off.off import Off
+from server.modes.title_page.title_page import TitlePage
 from server.pixel_grid import PixelGrid
 
 
@@ -41,7 +42,7 @@ class PixelTableServer(object):
 
         self._buttons = {}
         self._buttons_held = set()
-        self._modes = [Blank, MatrixRain, Pong, Marquee]
+        self._modes = [Off, Rain, Pong, Msg]
         self._now = time.time()
         self._mode = None
         self._event_queue = []
@@ -52,7 +53,7 @@ class PixelTableServer(object):
         keyboard = KeyHandler(self)
         stdio.StandardIO(keyboard, sys.stdin.fileno())
 
-        self.set_mode(MatrixRain)
+        self.set_mode(Rain)
 
         task.LoopingCall(self.update).start(1 / 25)
 
@@ -92,12 +93,17 @@ class PixelTableServer(object):
         self.set_mode(self._modes[index])
 
     def on_state_button_press(self):
-        self.set_mode(type(self._mode), self._mode.state_index + 1)
+        self.set_mode(self._mode.mode, self._mode.state_index + 1)
 
-    def set_mode(self, mode, state_index=None):
+    def set_mode(self, mode, state_index=None, transition=True):
         self._pixel_grid.clear()
+        index = self._modes.index(mode)
         smokesignal.clear_all()  # Clear all events in ephemeral objects.
-        self._mode = mode(index=self._modes.index(mode), state_index=state_index)
+
+        if transition:
+            self._mode = TitlePage(self, mode, index, state_index or mode.DEFAULT_STATE_INDEX)
+        else:
+            self._mode = mode(index, state_index or mode.DEFAULT_STATE_INDEX)
 
     def add_to_event_queue(self, event, *args):
         """Store real-time events and pass them out once per frame"""

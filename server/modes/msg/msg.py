@@ -4,15 +4,15 @@ from ..mode import Mode
 from ...sprites.text import Text
 
 
-class Marquee(Mode):
-    STATE_NAMES = ["txt"]
-    STATE_VALUES = [("0123456789", ), ("ABC,DEF,GHI.J", ), ("abcdefghij", ), ("A1B2C3D4E5", )]
+class Msg(Mode):
+    STATES = [1, 2, 3, 4]
     DEFAULT_STATE_INDEX = 0
     SPEED = 8
+    MESSAGES = "0123456789", "ABC,DEF,GHI.J", "abcdefghij", "A1B2C3D4E5"
 
     def __init__(self, index, state_index=None):
-        super(Marquee, self).__init__(index=index, state_index=state_index)
-        self._text = Text(x=15, y=5, text=self._get_state_value("txt"))
+        super(Msg, self).__init__(index=index, state_index=state_index)
+        self._text = Text(x=15, y=5, text=self.MESSAGES[self.state - 1])
 
     def on_pre_render(self, pixel_grid):
         pixel_grid.clear()
