@@ -25,3 +25,7 @@ class Rain(Mode):
     def on_pre_render(self, pixel_grid):
         if self._next_fade is not None:
             pixel_grid.fade(self._next_fade)
+
+    @staticmethod
+    def state_text(state):
+        return "x" + str(state)
