@@ -1,7 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from server.mixins.handles_events import HandlesEvents
-
 from .rectangle_sprite import RectangleSprite
 
 
@@ -9,8 +7,8 @@ class Score(RectangleSprite):
     CONFIG = {
         0: {"kwargs": {"x": 0, "y": 0, "width": 0, "height": 1}, "is_vertical": False, "is_inverted": False},
         1: {"kwargs": {"x": 15, "y": 15, "width": 0, "height": 1}, "is_vertical": False, "is_inverted": True},
-        2: {"kwargs": {"x": 0, "y": 15, "width": 1, "height": 0}, "is_vertical": True, "is_inverted": False},
-        3: {"kwargs": {"x": 15, "y": 0, "width": 1, "height": 0}, "is_vertical": True, "is_inverted": True},
+        2: {"kwargs": {"x": 0, "y": 15, "width": 1, "height": 0}, "is_vertical": True, "is_inverted": True},
+        3: {"kwargs": {"x": 15, "y": 0, "width": 1, "height": 0}, "is_vertical": True, "is_inverted": False},
     }
 
     def __init__(self, player_index, score=0):

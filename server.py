@@ -18,6 +18,7 @@ from server.key_handler import KeyHandler
 from server.messages import PixelTableProtocol
 from server.modes.matrix_rain.matrix_rain import MatrixRain
 from server.modes.pong.pong import Pong
+from server.modes.marquee.marquee import Marquee
 from server.modes.blank.blank import Blank
 from server.pixel_grid import PixelGrid
 
@@ -40,7 +41,7 @@ class PixelTableServer(object):
 
         self._buttons = {}
         self._buttons_held = set()
-        self._modes = [Blank, MatrixRain, Pong]
+        self._modes = [Blank, MatrixRain, Pong, Marquee]
         self._now = time.time()
         self._mode = None
         self._event_queue = []

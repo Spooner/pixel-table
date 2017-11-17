@@ -7,3 +7,5 @@ twisted
 gpiozero
 rpi.GPIO
 termcolor
+pillow
+smokesignal
