@@ -1,6 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import random
+import time
 
 from server.sprites.rectangle_sprite import RectangleSprite
 
@@ -14,6 +15,7 @@ class Ball(RectangleSprite):
         self._paddles = paddles
         self._vel_x = self._vel_y = 0
         self._reset(random.randrange(0, len(self._paddles)))
+        self._wait_until = None
 
     def _reset(self, server_number):
         self._vel_x = 0
@@ -25,12 +27,20 @@ class Ball(RectangleSprite):
             self._x, self._y = 8, 12
         elif server_number == 2:
             self._vel_x, self._vel_y = self.INITIAL_SPEED, 0
-            self._x, self._y = 3, 7
+            self._x, self._y = 3, 8
         elif server_number == 3:
             self._vel_x, self._vel_y = -self.INITIAL_SPEED, 0
-            self._x, self._y = 12, 8
+            self._x, self._y = 12, 7
+
+        self._wait_until = time.clock() + 0.5
 
     def on_update(self, pixel_grid, dt):
+        if self._wait_until:
+            if time.clock() < self._wait_until:
+                return
+            else:
+                self._wait_until = None
+
         self._x += self._vel_x * dt
         self._y += self._vel_y * dt
 

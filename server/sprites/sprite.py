@@ -15,7 +15,8 @@ class Sprite(HandlesEvents):
         return int(round(self._x)), int(round(self._y))
 
     def collide_point(self, x, y):
-        return (self._x <= x < self._x + self._width) and (self._y <= y < self._y + self._height)
+        display_x, display_y = self.int_position
+        return (display_x <= x < display_x + self._width) and (display_y <= y < display_y + self._height)
 
     @property
     def x(self):

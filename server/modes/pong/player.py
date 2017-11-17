@@ -8,13 +8,13 @@ from .paddle import Paddle
 class Player(BasePlayer):
     def __init__(self, index):
         if index == 0:
-            x, y, width, height, self._move_left = 6, 14, 4, 1, (-1, 0)
+            x, y, width, height, self._move_left = 7, 14, 3, 1, (-1, 0)
         elif index == 1:
-            x, y, width, height, self._move_left = 6, 1, 4, 1, (1, 0)
+            x, y, width, height, self._move_left = 6, 1, 3, 1, (1, 0)
         elif index == 2:
-            x, y, width, height, self._move_left = 1, 6, 1, 4, (0, -1)
+            x, y, width, height, self._move_left = 1, 7, 1, 3, (0, -1)
         elif index == 3:
-            x, y, width, height, self._move_left = 14, 6, 1, 4, (0, 1)
+            x, y, width, height, self._move_left = 14, 6, 1, 3, (0, 1)
         else:
             raise ValueError
 
