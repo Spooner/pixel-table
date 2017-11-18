@@ -24,12 +24,18 @@ class TitlePage(Mode):
         type(self)._title_page = title_page = mode.title_page(index, state_index)
         self._switch_at = time.time() + self.SHOW_TIME
 
-        self._mode_indicator = RectangleSprite(x=0, y=1, height=2, width=self.index, color=(0.25, 0.25, 0.50))
-        self._texts = [Text(x=0, y=i * 6 + 4, text=t) for i, t in enumerate(title_page[1:])]
+        self._mode_indicator = RectangleSprite(x=0, y=0, height=2, width=self.index, color=(0.5, 0.5, 0.5))
+        self._texts = [Text(x=0, y=i * 6 + 3, text=t) for i, t in enumerate(title_page[1:])]
 
-    def on_update(self, pixel_grid, dt):
+    def update(self, pixel_grid, dt):
         if time.time() >= self._switch_at:
             self._app.set_mode(self.mode, self.state_index, transition=False)
+            return
+
+    def render(self, pixel_grid):
+        self._mode_indicator.render(pixel_grid)
+        for text in self._texts:
+            text.render(pixel_grid)
 
     @property
     def mode(self):

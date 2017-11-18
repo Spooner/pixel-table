@@ -34,21 +34,26 @@ class Sprite(HandlesEvents):
     def height(self):
         return self._height
 
-    def move_by(self, dx, dy, constrain=False):
+    def move_by(self, dx, dy, constrain=None):
         self._x += dx
         self._y += dy
-        if constrain:
-            self._constrain()
 
-    def move_to(self, dx, dy, constrain=False):
+        if constrain is not None:
+            self._constrain(constrain)
+
+    def move_to(self, dx, dy, constrain=None):
         self._x = dx
         self._y = dy
-        if constrain:
-            self._constrain()
 
-    def _constrain(self):
-        self._x = min(max(self._x, 0), 16 - self._width)
-        self._y = min(max(self._y, 0), 16 - self._height)
+        if constrain is not None:
+            self._constrain(constrain)
+
+    def _constrain(self, rect):
+        """Constrain the position of the sprite within a rectangular area
+        @param rect tuple (x, y, width, height)
+        """
+        self._x = min(max(self._x, rect[0]), rect[2] - self._width)
+        self._y = min(max(self._y, rect[1]), rect[3] - self._height)
 
     def _render(self, pixel_grid):
         pass
@@ -56,3 +61,8 @@ class Sprite(HandlesEvents):
     @property
     def color(self):
         return self._color
+
+    @property
+    def rect(self):
+        x, y = self.int_position
+        return x, y, self._width, self._height

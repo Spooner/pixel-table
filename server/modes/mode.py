@@ -6,6 +6,7 @@ from server.mixins.handles_events import HandlesEvents
 
 
 class Mode(HandlesEvents):
+    NAME = None
     STATES = None
     DEFAULT_STATE_INDEX = 0
 
@@ -43,7 +44,7 @@ class Mode(HandlesEvents):
         state_index = (state_index or cls.DEFAULT_STATE_INDEX) % len(cls.STATES)
         return [
             " %02d " % index,
-            "%-4s" % cls.__name__.upper(),
+            "%-4s" % cls.NAME,
             "%4s" % cls.state_line(cls.STATES[state_index]),
         ]
 
@@ -58,3 +59,9 @@ class Mode(HandlesEvents):
     @property
     def mode(self):
         return type(self)
+
+    def update(self, pixel_grid, dt):
+        pass
+
+    def render(self, pixel_grid):
+        pass

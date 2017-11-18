@@ -15,7 +15,7 @@ class Text(Sprite):
 
     _all_coords = {}
 
-    def __init__(self, x, y, text, size=(3, 5), color=(0.50, 0.25, 0.25), spacing=1):
+    def __init__(self, x, y, text, size=(3, 5), color=(1, 1, 1), spacing=1):
         self._coords = []
         char_width = size[0] + spacing
         self._calculate_coords(size, text, char_width)
@@ -48,7 +48,7 @@ class Text(Sprite):
 
         return coords
 
-    def on_render(self, pixel_grid):
+    def render(self, pixel_grid):
         base_x, base_y = self.int_position
         for offset_x, offset_y in self._coords:
             screen_x, screen_y = base_x + offset_x, base_y + offset_y

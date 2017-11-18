@@ -13,13 +13,13 @@ class Drop(Sprite):
         self.reset()
         self.initialize_event_handlers()
 
-    def on_update(self, pixel_grid, dt):
+    def update(self, pixel_grid, dt):
         self._y += self._speed * dt
 
         if self._y > 16 + self._length:
             self.reset()
 
-    def on_render(self, pixel_grid):
+    def render(self, pixel_grid):
         for x, y, color in self.tail():
             pixel = pixel_grid.pixel(x, y)
             pixel.color = color

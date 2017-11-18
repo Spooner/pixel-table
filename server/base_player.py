@@ -11,3 +11,6 @@ class BasePlayer(HandlesEvents):
         self._buttons = [TouchButton(index, b) for b in (buttons or [])]
         self.initialize_event_handlers()
 
+    def render(self, pixel_grid):
+        for button in self._buttons:
+            button.render(pixel_grid)

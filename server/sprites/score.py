@@ -15,7 +15,7 @@ class Score(RectangleSprite):
         config = self.CONFIG[player_index]
         self._is_vertical = config["is_vertical"]
         self._is_inverted = config["is_inverted"]
-        super(Score, self).__init__(color=(0.25, 0.50, 0.25), **config["kwargs"])
+        super(Score, self).__init__(color=(0.5, 0.5, 0.5), **config["kwargs"])
         self.score = score
 
     @property

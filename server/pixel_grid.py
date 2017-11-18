@@ -25,10 +25,11 @@ class PixelGrid(object):
         self._external = External()
         self._color_lookup = {}
 
-    def rgb_to_terminal(self, rgb):
-        if rgb not in self._color_lookup:
-            self._color_lookup[rgb] = rgb2short(rgb)
-        return self._color_lookup[rgb]
+    def rgb_to_terminal(self, r, g, b):
+        r, g, b = round(r, 2), round(g, 2), round(b, 2)
+        if (r, g, b) not in self._color_lookup:
+            self._color_lookup[r, g, b] = rgb2short(r, g, b)
+        return self._color_lookup[r, g, b]
     
     @property
     def pixels(self):
@@ -68,7 +69,7 @@ class PixelGrid(object):
         for y in range(self.data.shape[1]):
             cells = []
             for x in range(self.data.shape[0]):
-                color = self.rgb_to_terminal(tuple((self.pixel(x, y).color * 255).astype("int8")))
+                color = self.rgb_to_terminal(*self.pixel(x, y).color)
                 cells.append("\033[48;5;%sm  " % color)
 
             lines.append("|" + "".join(cells) + "\033[48;5;16m|")

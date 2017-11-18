@@ -16,11 +16,12 @@ from twisted.internet.protocol import Factory
 from server.c_break_tty import Cbreaktty
 from server.key_handler import KeyHandler
 from server.messages import PixelTableProtocol
-from server.modes.rain.rain import Rain
-from server.modes.pong.pong import Pong
-from server.modes.msg.msg import Msg
-from server.modes.off.off import Off
-from server.modes.title_page.title_page import TitlePage
+from server.modes.rain import Rain
+from server.modes.pong import Pong
+from server.modes.message import Message
+from server.modes.off import Off
+from server.modes.tetris import Tetris
+from server.modes.title_page import TitlePage
 from server.pixel_grid import PixelGrid
 
 
@@ -42,7 +43,7 @@ class PixelTableServer(object):
 
         self._buttons = {}
         self._buttons_held = set()
-        self._modes = [Off, Rain, Pong, Msg]
+        self._modes = [Off, Rain, Pong, Tetris, Message]
         self._now = time.time()
         self._mode = None
         self._event_queue = []
@@ -79,7 +80,7 @@ class PixelTableServer(object):
         finally:
             os.system("clear")
             os.system('setterm -cursor on')
-            os.system("xset r rate 350 15")
+            os.system("xset r rate 400 20")
             term_state.return_to_original_state()
 
     def _init_panel_buttons(self):
@@ -125,10 +126,8 @@ class PixelTableServer(object):
             for index in self._buttons_held:
                 self._mode.on_button_held(index, dt)
 
-            smokesignal.emit("update", self._pixel_grid, dt)
-            smokesignal.emit("pre_render", self._pixel_grid)  # e.g. clearing or fading previous frame
-            smokesignal.emit("render", self._pixel_grid)
-            smokesignal.emit("post_render", self._pixel_grid)  # e.g. offsetting current frame
+            self._mode.update(self._pixel_grid, dt)
+            self._mode.render(self._pixel_grid)
 
             self._pixel_grid.write()
 

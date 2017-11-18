@@ -10,7 +10,7 @@ class Ball(RectangleSprite):
     INITIAL_SPEED = 10
 
     def __init__(self, players):
-        super(Ball, self).__init__(x=7, y=7, width=1, height=1, color=(0.5, 1.0, 0.5))
+        super(Ball, self).__init__(x=7, y=7, width=1, height=1, color=(1.0, 1.0, 1.0))
 
         self._players = players
         self._vel_x = self._vel_y = 0
@@ -37,7 +37,7 @@ class Ball(RectangleSprite):
 
         self._wait_until = time.clock() + 0.5
 
-    def on_update(self, pixel_grid, dt):
+    def update(self, pixel_grid, dt):
         if self._wait_until:
             if time.clock() < self._wait_until:
                 return
@@ -75,4 +75,7 @@ class Ball(RectangleSprite):
                     self._y = 2
                 # TODO bounce based on angle of incidence and/or where on the bat?
                 self._vel_x, self._vel_y = -self._vel_x, -self._vel_y
+                self._vel_x += player.velocity_x
+                self._vel_y += player.velocity_y
+                break
 

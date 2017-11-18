@@ -3,7 +3,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from server.modes.mode import Mode
 
 
-class Paint(Mode):
+class Draw(Mode):
+    NAME = "DRAW"
     VALUE_NAMES = ["color"]
 
     def __init__(self, index):

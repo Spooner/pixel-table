@@ -5,6 +5,7 @@ from .drop import Drop
 
 
 class Rain(Mode):
+    NAME = "RAIN"
     STATES = [1, 2, 4, 8, 16, 32, 64]
     DEFAULT_STATE_INDEX = 3
 
@@ -19,12 +20,18 @@ class Rain(Mode):
     def num_drops(self):
         return len(self._drops)
 
-    def on_update(self, pixel_grid, dt):
+    def update(self, pixel_grid, dt):
         self._next_fade = self.FADE * dt
 
-    def on_pre_render(self, pixel_grid):
+        for drop in self._drops:
+            drop.update(pixel_grid, dt)
+
+    def render(self, pixel_grid):
         if self._next_fade is not None:
             pixel_grid.fade(self._next_fade)
+
+        for drop in self._drops:
+            drop.render(pixel_grid)
 
     @staticmethod
     def state_text(state):

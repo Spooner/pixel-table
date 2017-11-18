@@ -4,5 +4,6 @@ from ..mode import Mode
 
 
 class Off(Mode):
+    NAME = "OFF"
     STATES = [""]
     DEFAULT_STATE_INDEX = 0
