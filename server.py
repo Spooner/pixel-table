@@ -19,6 +19,7 @@ from server.messages import PixelTableProtocol
 from server.modes.rain import Rain
 from server.modes.pong import Pong
 from server.modes.message import Message
+from server.modes.game_of_life import GameOfLife
 from server.modes.off import Off
 from server.modes.tetris import Tetris
 from server.modes.title_page import TitlePage
@@ -43,7 +44,7 @@ class PixelTableServer(object):
 
         self._buttons = {}
         self._buttons_held = set()
-        self._modes = [Off, Rain, Pong, Tetris, Message]
+        self._modes = [Off, Rain, Pong, Tetris, GameOfLife, Message]
         self._now = time.time()
         self._mode = None
         self._event_queue = []
