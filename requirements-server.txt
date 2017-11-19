@@ -13,7 +13,7 @@ incremental==17.5.0       # via twisted
 noise==1.2.2
 numpy==1.12.1
 olefile==0.44             # via pillow
-pillow==4.3.0
+pillow==4.0.0-4
 pyserial==3.4
 rpi.gpio==0.6.3
 six==1.11.0               # via automat

@@ -7,6 +7,6 @@ twisted
 gpiozero
 rpi.GPIO
 termcolor
-pillow
+pillow==4.0.0-4
 smokesignal
 noise
