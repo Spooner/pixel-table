@@ -1,4 +1,4 @@
-# sudo apt install python-numpy
+# sudo apt install python-numpy python-pillow
 
 numpy==1.12.1
 smbus2
