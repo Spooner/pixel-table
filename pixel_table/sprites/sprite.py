@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from server.mixins.handles_events import HandlesEvents
+from ..mixins.handles_events import HandlesEvents
 
 
 class Sprite(HandlesEvents):

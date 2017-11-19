@@ -11,27 +11,18 @@ import smokesignal
 from gpiozero import Button as Button
 from twisted.internet import reactor, task
 from twisted.internet import stdio
-from twisted.internet.protocol import Factory
 
-from server.c_break_tty import Cbreaktty
-from server.key_handler import KeyHandler
-from server.messages import PixelTableProtocol
-from server.modes.rain import Rain
-from server.modes.pong import Pong
-from server.modes.message import Message
-from server.modes.game_of_life import GameOfLife
-from server.modes.off import Off
-from server.modes.tetris import Tetris
-from server.modes.noise import Noise
-from server.modes.title_page import TitlePage
-from server.pixel_grid import PixelGrid
-
-
-class PixelTableServerFactory(Factory):
-    protocol = PixelTableProtocol
-
-    def __init__(self, app):
-        self.app = app
+from pixel_table.c_break_tty import Cbreaktty
+from pixel_table.key_handler import KeyHandler
+from pixel_table.modes.rain import Rain
+from pixel_table.modes.pong import Pong
+from pixel_table.modes.message import Message
+from pixel_table.modes.game_of_life import GameOfLife
+from pixel_table.modes.off import Off
+from pixel_table.modes.tetris import Tetris
+from pixel_table.modes.noise import Noise
+from pixel_table.modes.title_page import TitlePage
+from pixel_table.pixel_grid import PixelGrid
 
 
 class PixelTableServer(object):
@@ -40,8 +31,6 @@ class PixelTableServer(object):
     FPS = 20
 
     def __init__(self):
-        reactor.listenTCP(8008, PixelTableServerFactory(self))
-
         self._pixel_grid = PixelGrid()
 
         self._buttons = {}

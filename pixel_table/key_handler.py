@@ -1,9 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from twisted.protocols import basic
-import smokesignal
 
-from server.sprites.touch_button import TouchButton
+from .sprites.touch_button import TouchButton
 
 
 # https://stackoverflow.com/questions/23714006/twisted-queue-a-function-interactively

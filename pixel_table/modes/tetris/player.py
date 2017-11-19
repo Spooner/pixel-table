@@ -2,8 +2,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import random
 
-from server.sprites.touch_button import TouchButton
-from server.base_player import BasePlayer
+from ...sprites.touch_button import TouchButton
+from ...base_player import BasePlayer
 from ...sprites.sprite_sheet import SpriteSheet
 from ...sprites.rectangle_sprite import RectangleSprite
 

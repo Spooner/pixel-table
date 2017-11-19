@@ -5,8 +5,7 @@ Pixel table development
 
 ## Simulator/monitor/controller
 
-Kivy app (can be run via VNC or potentially as an app).
-
+Console app.
 
 ## Requirements
 
@@ -18,7 +17,7 @@ Kivy app (can be run via VNC or potentially as an app).
     
     sudo apt install python-numpy python-smbus
     sudo apt install arduino-core arduino-mk
-
+    sudo apt install x11-xserver-utils # For "xset"
 
 ## Flashing the microcontroller
 
@@ -30,4 +29,4 @@ Kivy app (can be run via VNC or potentially as an app).
     
 Test on PC:
 
-    GPIOZERO_PIN_FACTORY=mock ./server.py
+    GPIOZERO_PIN_FACTORY=mock ./pixel-table.py

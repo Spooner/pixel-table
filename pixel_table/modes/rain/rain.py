@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from server.modes.mode import Mode
+from ..mode import Mode
 from .drop import Drop
 
 
