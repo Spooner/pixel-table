@@ -22,6 +22,7 @@ from server.modes.message import Message
 from server.modes.game_of_life import GameOfLife
 from server.modes.off import Off
 from server.modes.tetris import Tetris
+from server.modes.noise import Noise
 from server.modes.title_page import TitlePage
 from server.pixel_grid import PixelGrid
 
@@ -36,6 +37,7 @@ class PixelTableServerFactory(Factory):
 class PixelTableServer(object):
     GPIO_MODE = 16
     GPIO_STATE = 20
+    FPS = 20
 
     def __init__(self):
         reactor.listenTCP(8008, PixelTableServerFactory(self))
@@ -44,7 +46,7 @@ class PixelTableServer(object):
 
         self._buttons = {}
         self._buttons_held = set()
-        self._modes = [Off, Rain, Pong, Tetris, GameOfLife, Message]
+        self._modes = [Off, Rain, Pong, Tetris, GameOfLife, Noise, Message]
         self._now = time.time()
         self._mode = None
         self._event_queue = []
@@ -57,7 +59,7 @@ class PixelTableServer(object):
 
         self.set_mode(Rain)
 
-        task.LoopingCall(self.update).start(1 / 25)
+        task.LoopingCall(self.update).start(1 / self.FPS)
 
         with self.setup_terminal():
             reactor.run()
@@ -81,7 +83,7 @@ class PixelTableServer(object):
         finally:
             os.system("clear")
             os.system('setterm -cursor on')
-            os.system("xset r rate 400 20")
+            os.system("xset r rate 500 33")
             term_state.return_to_original_state()
 
     def _init_panel_buttons(self):

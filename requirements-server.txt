@@ -10,6 +10,7 @@ constantly==15.1.0        # via twisted
 gpiozero==1.4.0
 hyperlink==17.3.1         # via twisted
 incremental==17.5.0       # via twisted
+noise==1.2.2
 numpy==1.12.1
 olefile==0.44             # via pillow
 pillow==4.3.0
