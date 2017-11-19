@@ -19,6 +19,7 @@ from pixel_table.modes.pong import Pong
 from pixel_table.modes.message import Message
 from pixel_table.modes.game_of_life import GameOfLife
 from pixel_table.modes.off import Off
+from pixel_table.modes.invaders import Invaders
 from pixel_table.modes.tetris import Tetris
 from pixel_table.modes.noise import Noise
 from pixel_table.modes.title_page import TitlePage
@@ -35,7 +36,7 @@ class PixelTableServer(object):
 
         self._buttons = {}
         self._buttons_held = set()
-        self._modes = [Off, Rain, Pong, Tetris, GameOfLife, Noise, Message]
+        self._modes = [Off, Rain, Pong, Tetris, Invaders, GameOfLife, Noise, Message]
         self._now = time.time()
         self._mode = None
         self._event_queue = []
@@ -46,7 +47,7 @@ class PixelTableServer(object):
         keyboard = KeyHandler(self)
         stdio.StandardIO(keyboard, sys.stdin.fileno())
 
-        self.set_mode(Rain)
+        self.set_mode(Invaders)
 
         task.LoopingCall(self.update).start(1 / self.FPS)
 
