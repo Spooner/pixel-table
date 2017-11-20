@@ -48,7 +48,7 @@ class Player(BasePlayer):
                 self._velocity_x = self.PUSH_SPEED * -self._move_left[0]
                 self._velocity_y = self.PUSH_SPEED * -self._move_left[1]
         else:
-            pass  # Ignore center button
+            pass  # Ignore ACTION button
 
     @property
     def velocity_x(self):

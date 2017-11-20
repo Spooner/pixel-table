@@ -13,6 +13,7 @@ class Mode(HandlesEvents):
         self._index = index
         self._state_index = self.DEFAULT_STATE_INDEX if state_index is None else state_index % len(self.STATES)
         self.initialize_event_handlers()
+        self._objects = []
 
     @property
     def index(self):
@@ -59,7 +60,20 @@ class Mode(HandlesEvents):
         return type(self)
 
     def update(self, pixel_grid, dt):
-        pass
+        for obj in self._objects:
+            obj.update(pixel_grid, dt)
 
     def render(self, pixel_grid):
-        pass
+        for obj in self._objects:
+            obj.render(pixel_grid)
+
+    @property
+    def objects(self):
+        return self._objects
+
+    def on_create_object(self, obj):
+        self._objects.append(obj)
+
+    def on_destroy_object(self, obj):
+        self._objects.remove(obj)
+

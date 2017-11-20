@@ -13,23 +13,23 @@ class KeyHandler(basic.LineReceiver):
     TOUCH_BUTTONS = {
         # Bottom side, player 0
         b'X': (0, TouchButton.LEFT),
-        b'C': (0, TouchButton.CENTER),
-        b'V': (0, TouchButton.RIGHT),
+        b'C': (0, TouchButton.RIGHT),
+        b'V': (0, TouchButton.ACTION),
 
         # Top side, player 1
         b'R': (1, TouchButton.LEFT),
-        b'E': (1, TouchButton.CENTER),
-        b'W': (1, TouchButton.RIGHT),
+        b'E': (1, TouchButton.RIGHT),
+        b'W': (1, TouchButton.ACTION),
 
         # Left side, player 2
         b'Q': (2, TouchButton.LEFT),
-        b'A': (2, TouchButton.CENTER),
-        b'Z': (2, TouchButton.RIGHT),
+        b'A': (2, TouchButton.RIGHT),
+        b'Z': (2, TouchButton.ACTION),
 
         # Right side, player 3
         b'B': (3, TouchButton.LEFT),
-        b'G': (3, TouchButton.CENTER),
-        b'T': (3, TouchButton.RIGHT),
+        b'G': (3, TouchButton.RIGHT),
+        b'T': (3, TouchButton.ACTION),
     }
 
     def __init__(self, app):

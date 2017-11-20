@@ -1,5 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import smokesignal
+
 from ..mixins.handles_events import HandlesEvents
 
 
@@ -8,6 +10,7 @@ class Sprite(HandlesEvents):
         self._x, self._y = x, y
         self._width, self._height = width, height
         self._color = color
+        self._is_destroyed = False
         self.initialize_event_handlers()
 
     @property
@@ -55,9 +58,6 @@ class Sprite(HandlesEvents):
         self._x = min(max(self._x, rect[0]), rect[2] - self._width)
         self._y = min(max(self._y, rect[1]), rect[3] - self._height)
 
-    def _render(self, pixel_grid):
-        pass
-
     @property
     def color(self):
         return self._color
@@ -66,3 +66,20 @@ class Sprite(HandlesEvents):
     def rect(self):
         x, y = self.int_position
         return x, y, self._width, self._height
+
+    def render(self, pixel_grid):
+        pass
+
+    def update(self, pixel_grid, dt):
+        pass
+
+    @classmethod
+    def create(cls, *args, **kwargs):
+        obj = cls(*args, **kwargs)
+        smokesignal.emit("create_object", obj)
+        return obj
+
+    def destroy(self):
+        if not self._is_destroyed:
+            self._is_destroyed = True
+            smokesignal.emit("destroy_object", self)

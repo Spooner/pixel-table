@@ -14,7 +14,7 @@ class Player(BasePlayer):
     DROP_SPEED = 2
 
     def __init__(self, index, num_players):
-        super(Player, self).__init__(index, [TouchButton.LEFT, TouchButton.CENTER, TouchButton.RIGHT])
+        super(Player, self).__init__(index, [TouchButton.LEFT, TouchButton.RIGHT, TouchButton.ACTION])
 
         if index == 0:
             color = (0, 0, 0)
@@ -54,10 +54,10 @@ class Player(BasePlayer):
         distance = self.HORIZONTAL_SPEED * dt
         if button_index == TouchButton.LEFT:
             self._shape.move_by(-distance if self._index == 0 else distance, 0, constrain=self._channel.rect)
-        elif button_index == TouchButton.CENTER:
-            pass  # TODO: Rotate.
         elif button_index == TouchButton.RIGHT:
             self._shape.move_by(distance if self._index == 0 else -distance, 0, constrain=self._channel.rect)
+        elif button_index == TouchButton.ACTION:
+            pass  # TODO: Rotate.
 
     def render(self, pixel_grid):
         super(Player, self).render(pixel_grid)

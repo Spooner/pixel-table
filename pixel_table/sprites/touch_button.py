@@ -5,8 +5,8 @@ from .rectangle_sprite import RectangleSprite
 
 class TouchButton(RectangleSprite):
     LEFT = 0
-    CENTER = 1
-    RIGHT = 2
+    RIGHT = 1
+    ACTION = 2
     POSITIONS = {
         1: {  # TOP
             "size": (2, 1),

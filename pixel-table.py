@@ -109,12 +109,7 @@ class PixelTableServer(object):
             dt = now - self._now
             self._now = now
 
-            for event, args in self._event_queue:
-                if event == "panel_button_press":
-                    getattr(self, "on_%s_button_press" % args[0])()
-                else:
-                    smokesignal.emit(event, *args, dt=dt)
-            self._event_queue = []
+            self._emit_pending_events(dt)
 
             for index in self._buttons_held:
                 self._mode.on_button_held(index, dt)
@@ -128,6 +123,14 @@ class PixelTableServer(object):
         except:
             print_exc()
             raise
+
+    def _emit_pending_events(self, dt):
+        for event, args in self._event_queue:
+            if event == "panel_button_press":
+                getattr(self, "on_%s_button_press" % args[0])()
+            else:
+                smokesignal.emit(event, *args, dt=dt)
+        self._event_queue = []
 
     def _dump(self, fps):
         lines = ["\033[0;0H"]  # Cursor to 0, 0

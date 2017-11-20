@@ -14,3 +14,6 @@ class BasePlayer(HandlesEvents):
     def render(self, pixel_grid):
         for button in self._buttons:
             button.render(pixel_grid)
+
+    def update(self, pixel_grid, dt):
+        pass
