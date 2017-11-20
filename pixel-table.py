@@ -110,6 +110,7 @@ class PixelTableServer(object):
             self._now = now
 
             self._emit_pending_events(dt)
+            self._pixel_grid.emit_touch_events(dt)
 
             for index in self._buttons_held:
                 self._mode.on_button_held(index, dt)
@@ -128,8 +129,11 @@ class PixelTableServer(object):
         for event, args in self._event_queue:
             if event == "panel_button_press":
                 getattr(self, "on_%s_button_press" % args[0])()
-            else:
+            elif event.endswith("held"):
                 smokesignal.emit(event, *args, dt=dt)
+            else:
+                smokesignal.emit(event, *args)
+
         self._event_queue = []
 
     def _dump(self, fps):

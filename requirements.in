@@ -10,3 +10,6 @@ termcolor
 pillow==4.0.0
 smokesignal
 noise
+Adafruit_MPR121
+bitarray
+rpi_ws281x

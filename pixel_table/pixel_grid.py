@@ -75,5 +75,5 @@ class PixelGrid(object):
             lines.append("|" + "".join(cells) + "\033[48;5;16m|")
         lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
 
-
-
+    def emit_touch_events(self, dt):
+        self._external.emit_touch_events(dt)

@@ -43,6 +43,7 @@ class KeyHandler(basic.LineReceiver):
         elif key == self.STATE_BUTTON:
             self._app.add_to_event_queue("panel_button_press", "state")
         elif key in self.TOUCH_BUTTONS:
+            self._app.add_to_event_queue("touch_button_press", *self.TOUCH_BUTTONS[key])
             self._app.add_to_event_queue("touch_button_held", *self.TOUCH_BUTTONS[key])
 
     def lineReceived(self, line):
