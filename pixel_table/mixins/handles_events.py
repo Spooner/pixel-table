@@ -15,3 +15,7 @@ class HandlesEvents(object):
             return
 
         getattr(self, handler_name)(*args, **kwargs)
+
+    @staticmethod
+    def emit(event, *args, **kwargs):
+        smokesignal.emit(event, *args, **kwargs)

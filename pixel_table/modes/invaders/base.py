@@ -1,7 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import smokesignal
-
 from ...sprites.rectangle_sprite import RectangleSprite
 
 

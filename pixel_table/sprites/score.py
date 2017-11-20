@@ -4,29 +4,26 @@ from .rectangle_sprite import RectangleSprite
 
 
 class Score(RectangleSprite):
-    CONFIG = {
-        0: {"kwargs": {"x": 0, "y": 0, "width": 0, "height": 1}, "is_vertical": False, "is_inverted": False},
-        1: {"kwargs": {"x": 15, "y": 15, "width": 0, "height": 1}, "is_vertical": False, "is_inverted": True},
-        2: {"kwargs": {"x": 0, "y": 15, "width": 1, "height": 0}, "is_vertical": True, "is_inverted": True},
-        3: {"kwargs": {"x": 15, "y": 0, "width": 1, "height": 0}, "is_vertical": True, "is_inverted": False},
-    }
+    def __init__(self, x, y, is_vertical=False, is_inverted=False, value=0):
+        self._is_vertical = is_vertical
+        self._is_inverted = is_inverted
 
-    def __init__(self, player_index, score=0):
-        config = self.CONFIG[player_index]
-        self._is_vertical = config["is_vertical"]
-        self._is_inverted = config["is_inverted"]
-        super(Score, self).__init__(color=(0.5, 0.5, 0.5), **config["kwargs"])
-        self.score = score
+        if self._is_vertical:
+            width, height = 1, value
+        else:
+            width, height = value, 1
+
+        super(Score, self).__init__(x=x, y=y, width=width, height=height, color=(0.5, 0.5, 0.5))
 
     @property
-    def score(self):
+    def value(self):
         if self._is_vertical:
             return self.height
         else:
             return self.width
 
-    @score.setter
-    def score(self, value):
+    @value.setter
+    def value(self, value):
         if self._is_vertical:
             self._height = value
             if self._is_inverted:
