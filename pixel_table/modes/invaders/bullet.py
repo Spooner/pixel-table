@@ -13,7 +13,7 @@ class Bullet(RectangleSprite):
     def update(self, pixel_grid, dt):
         self.move_by(0, dt * self.SPEED * self._direction)
 
-        if not 1 <= self.int_position[1] <= 14:
+        if not 0 <= self.int_position[1] <= 14:
             self.destroy()
 
     def hit_by(self, other):
