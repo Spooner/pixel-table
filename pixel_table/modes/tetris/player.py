@@ -45,7 +45,7 @@ class Player(BasePlayer):
             self._next_shape = self._random_shape(11, 4)
 
     def _random_shape(self, x, y):
-        return SpriteSheet(x=x, y=y, name="tetris/%s" % random.choice(self.SHAPES))
+        return SpriteSheet(x=x, y=y, name="tetris/%s" % random.choice(self.SHAPES), num_frames=4)
 
     def on_touch_button_held(self, player_index, button_index, dt):
         if player_index != self._index:
@@ -57,7 +57,7 @@ class Player(BasePlayer):
         elif button_index == TouchButton.RIGHT:
             self._shape.move_by(distance if self._index == 0 else -distance, 0, constrain=self._channel.rect)
         elif button_index == TouchButton.ACTION:
-            pass  # TODO: Rotate.
+            self._shape.frame += 1
 
     def render(self, pixel_grid):
         super(Player, self).render(pixel_grid)

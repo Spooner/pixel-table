@@ -45,7 +45,7 @@ class SpriteSheet(Sprite):
                 for y in range(0, image.size[1]):
                     r, g, b, a = image.getpixel((x, y))
                     if a >= 128:
-                        frames[frame][x, y] = (r / 255, g / 255, b / 255)
+                        frames[frame][x - width * frame, y] = (r / 255, g / 255, b / 255)
 
         return [frames, width, height]
 
