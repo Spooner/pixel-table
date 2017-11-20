@@ -5,6 +5,7 @@ import os
 from PIL import Image
 
 from .sprite import Sprite
+from ..utils import root
 
 
 class SpriteSheet(Sprite):
@@ -34,7 +35,7 @@ class SpriteSheet(Sprite):
         self._points = frames[self._frame]
 
     def _load_data_from_image(self):
-        image = Image.open(os.path.join(os.path.dirname(__file__), "images", "%s.png" % self._name))
+        image = Image.open(root("images", "%s.png" % self._name))
 
         width, height = image.size[0] // self._num_frames, image.size[1]
 

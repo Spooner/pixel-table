@@ -1,11 +1,10 @@
 # https://fontstruct.com/fontstructions/show/716744/3_by_5_pixel_font
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import os
-
 from PIL import Image
 
 from .sprite import Sprite
+from ..utils import root
 
 
 class Text(Sprite):
@@ -34,7 +33,7 @@ class Text(Sprite):
 
     def _load_coords_from_image(self, size):
         coords = {}
-        image = Image.open(os.path.join(os.path.dirname(__file__), "fonts", "%dx%d.png" % size))
+        image = Image.open(root("fonts", "%dx%d.png" % size))
         for i, char in enumerate(self.CHARACTERS[size]):
             x_offset = i * (size[0] + 1)
             char_coords = []
