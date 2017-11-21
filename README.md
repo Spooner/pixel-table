@@ -14,10 +14,13 @@ Console app.
     sudo apt install x11-xserver-utils # For "xset"
     sudo apt install scons
     
+    sudo modprobe i2c_bcm2708
+
     git clone https://github.com/jgarff/rpi_ws281x.git
     cd rpi_ws281x
     scons
     
+ 
 ## Flashing the microcontroller
 
     make

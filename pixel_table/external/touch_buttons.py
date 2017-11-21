@@ -42,8 +42,8 @@ class TouchButtons(object):
                 print("Capacitive touch system engaged")
             else:
                 raise RuntimeError
-        except RuntimeError:
-            print("Capacitive touch system failed")
+        except (RuntimeError, IOError):
+            print("Capacitive touch system failed; using mock")
             self._cap_touch = MockCapTouch()
 
     def emit_events(self, dt):
