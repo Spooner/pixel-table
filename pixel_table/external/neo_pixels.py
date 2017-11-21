@@ -4,25 +4,28 @@ import logging
 
 import numpy as np
 
+
+class MockNeoPixel(object):
+    def __init__(self, num, pin, freq_hz=800000, dma=5, invert=False,
+                 brightness=255, channel=0, strip_type=0):
+        self._num = num
+
+    def begin(self):
+        pass
+
+    def setPixelColorRGB(self, index, r, g, b):
+        assert 0 <= index < self._num
+        assert 0 <= r <= 255, r
+        assert 0 <= g <= 255, g
+        assert 0 <= b <= 255, b
+
+    def show(self):
+        pass
+
 try:
-    from neopixel import Adafruit_NeoPixel as NeoPixel, Color
+    from neopixel import Adafruit_NeoPixel as NeoPixel
 except ImportError:
-    class NeoPixel(object):
-        def __init__(self, num, pin, freq_hz=800000, dma=5, invert=False,
-                     brightness=255, channel=0, strip_type=0):
-            self._num = num
-
-        def begin(self):
-            pass
-
-        def setPixelColorRGB(self, index, r, g, b):
-            assert 0 <= index < self._num
-            assert 0 <= r <= 255, r
-            assert 0 <= g <= 255, g
-            assert 0 <= b <= 255, b
-
-        def show(self):
-            pass
+    NeoPixel = MockNeoPixel
 
 _logger = logging.getLogger(__name__)
 
@@ -42,7 +45,11 @@ class NeoPixels(object):
     def _open(self):
         pixels = NeoPixel(num=LED_COUNT, pin=LED_PIN, freq_hz=LED_FREQ_HZ, dma=LED_DMA, invert=LED_INVERT,
                           brightness=LED_BRIGHTNESS)
-        pixels.begin()
+        try:
+            pixels.begin()
+        except RuntimeError:
+            print("Failed to initialize to NeoPixel")
+            pixels = MockNeoPixel(num=LED_COUNT, pin=LED_PIN)
 
         for i in range(LED_COUNT):
             pixels.setPixelColorRGB(i, 0, 0, 0)
