@@ -1,14 +1,13 @@
-# https://github.com/kosme/arduinoFFT/blob/master/Examples/FFT_03/FFT_03.ino
+// https://github.com/kosme/arduinoFFT/blob/master/Examples/FFT_03/FFT_03.ino
 
 #include <arduinoFFT.h>
+arduinoFFT FFT = arduinoFFT(); // Create FFT object
 
-const uint16_t num_samples = 64; // This value MUST ALWAYS be a power of 2
-const double samplingFrequency = 1000.0;  // 1000 samples per second.
-const int delayTime = 1000 / samplingFrequency;
+const uint16_t num_samples = 256; // This value MUST ALWAYS be a power of 2
+const double samplingFrequency = 20000.0;  // samples per second.
+const int delayTime = 1000000 / samplingFrequency;
 
-uint8_t exponent;
-
-// These are the input and output vectors
+// These are the input/output vectors
 // Input vectors receive computed results from FFT
 double vReal[num_samples];
 double vImag[num_samples];
@@ -18,7 +17,7 @@ double vImag[num_samples];
 void setup()
 {
     Serial.begin(115200);
-    exponent = FFT.Exponent(num_samples);
+    Serial.write("R");
 }
 
 void loop()
@@ -27,10 +26,10 @@ void loop()
 
     for (uint16_t i = 0; i < num_samples; i++)
     {
-        vReal[i] = double(analogRead(MICROPHONE);
-        delay(delayTime);
+        vReal[i] = double(analogRead(MICROPHONE));
+        delayMicroseconds(delayTime);
     }
-    memset(vImag[i], 0, num_samples);
+    memset(vImag, 0, num_samples);
 
     FFT.Windowing(vReal, num_samples, FFT_WIN_TYP_HAMMING, FFT_FORWARD);	// Weigh data
     FFT.Compute(vReal, vImag, num_samples, FFT_FORWARD); // Compute FFT
@@ -39,7 +38,7 @@ void loop()
     for (uint16_t i = 0; i < (num_samples >> 1); i++)
     {
         Serial.print(vReal[i]);
-        Serial.print(',');
+        Serial.print(';');
     }
-    Serial.printLn();
+    Serial.println();
 }

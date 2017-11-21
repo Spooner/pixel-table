@@ -2,7 +2,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from time import sleep
 import logging
-from struct import unpack
 
 from serial import Serial
 from serial.serialutil import SerialException
@@ -10,14 +9,18 @@ from serial.serialutil import SerialException
 
 _logger = logging.getLogger(__name__)
 
+READY = b"R"
+
 
 class MockSerial(object):
     def write(self, data):
         sleep(0.01)
 
-    def read(self):
-        sleep(0.05)
-        return b"14fsSffZtAZaz190"
+    def read(self, size=1):
+        return READY
+
+    def readline(self):
+        return b"100.9;1234.72;12.99;40.12;12.99;0.0;200.20;100.0;12.99;12.0;24.99;122.2;90.0;12.9;1.0;981.0;"
 
     def setDTR(self, value):
         pass
@@ -26,7 +29,7 @@ class MockSerial(object):
 class Arduino(object):
     DEVICE = "/dev/ttyAMA0"
     AUDIO_BUCKETS_COMMAND = "F"
-    SERIAL_SPEED = 9600
+    SERIAL_SPEED = 115200
     NUM_AUDIO_BUCKETS = 16
     AUDIO_BUCKETS_FORMAT = "B" * NUM_AUDIO_BUCKETS
 
@@ -39,6 +42,8 @@ class Arduino(object):
         try:
             serial = Serial(self.DEVICE, self.SERIAL_SPEED)
             _logger.info("Connected to serial port.")
+            assert self._serial.read() == READY
+            _logger.info("Received ready response on Serial port.")
             return serial
         except SerialException:
             pass
@@ -54,4 +59,5 @@ class Arduino(object):
 
     def read_fft_buckets(self):
         self._serial.write(self.AUDIO_BUCKETS_COMMAND)
-        return unpack(self.AUDIO_BUCKETS_FORMAT, self._serial.read(self.NUM_AUDIO_BUCKETS))
+        buckets = [float(n) for n in ";".split(self._serial.readline(self.NUM_AUDIO_BUCKETS))[:-1]]
+        return buckets

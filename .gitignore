@@ -1,4 +1,5 @@
 rpi_ws281x
+sketchbook/arduino/build-nano328/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
