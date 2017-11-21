@@ -5,7 +5,7 @@ from collections import OrderedDict
 import numpy as np
 
 from .colortrans import rgb2short
-from .external import External
+from .external.neo_pixels import NeoPixels
 from .pixel import Pixel
 
 
@@ -22,7 +22,7 @@ class PixelGrid(object):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        self._external = External()
+        self._neo_pixels = NeoPixels()
         self._color_lookup = {}
 
     def rgb_to_terminal(self, r, g, b):
@@ -60,7 +60,7 @@ class PixelGrid(object):
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
 
     def write(self):
-        self._external.write_pixels(self.data)
+        self._neo_pixels.write_pixels(self.data)
 
     def dump(self, lines):
         lines.append("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))
@@ -74,6 +74,3 @@ class PixelGrid(object):
 
             lines.append("|" + "".join(cells) + "\033[48;5;16m|")
         lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
-
-    def emit_touch_events(self, dt):
-        self._external.emit_touch_events(dt)

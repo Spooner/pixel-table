@@ -24,11 +24,12 @@ from pixel_table.modes.tetris import Tetris
 from pixel_table.modes.noise import Noise
 from pixel_table.modes.title_page import TitlePage
 from pixel_table.pixel_grid import PixelGrid
+from pixel_table.external.touch_buttons import TouchButtons
 
 
 class PixelTableServer(object):
-    GPIO_MODE = 16
-    GPIO_STATE = 20
+    GPIO_MODE = 23
+    GPIO_STATE = 24
     FPS = 20
 
     def __init__(self):
@@ -42,7 +43,7 @@ class PixelTableServer(object):
         self._event_queue = []
 
         self._init_panel_buttons()
-        self._init_touch_buttons()
+        self._touch_buttons = TouchButtons()
 
         keyboard = KeyHandler(self)
         stdio.StandardIO(keyboard, sys.stdin.fileno())
@@ -53,15 +54,12 @@ class PixelTableServer(object):
 
         with self.setup_terminal():
             reactor.run()
-
-    def _init_touch_buttons(self):
-        pass
     
     @contextmanager
     def setup_terminal(self):
         os.system("clear")  # Clear terminal
         os.system('setterm -cursor off')
-        os.system("xset r rate 100 30")
+        # os.system("xset r rate 100 30")
         try:
             term_state = Cbreaktty(sys.stdin.fileno())
         except IOError:
@@ -73,12 +71,13 @@ class PixelTableServer(object):
         finally:
             os.system("clear")
             os.system('setterm -cursor on')
-            os.system("xset r rate 500 33")
+            # os.system("xset r rate 500 33")
             term_state.return_to_original_state()
 
     def _init_panel_buttons(self):
         self._mode_button = Button(self.GPIO_MODE)
         self._mode_button.when_pressed = lambda: self.add_to_event_queue("panel_button_press", "mode")
+
         self._state_button = Button(self.GPIO_STATE)
         self._state_button.when_pressed = lambda: self.add_to_event_queue("panel_button_press", "state")
 
@@ -110,7 +109,7 @@ class PixelTableServer(object):
             self._now = now
 
             self._emit_pending_events(dt)
-            self._pixel_grid.emit_touch_events(dt)
+            self._touch_buttons.emit_events(dt)
 
             for index in self._buttons_held:
                 self._mode.on_button_held(index, dt)
