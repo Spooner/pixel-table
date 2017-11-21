@@ -139,6 +139,8 @@ class PixelTableServer(object):
         self._mode.dump(lines)
         lines.append("%34s" % ("FPS: %2.1f " % fps))
         print("\n".join(lines), file=sys.stderr)
+
+        print()
         print(self._arduino.get_fft_buckets())
 
 

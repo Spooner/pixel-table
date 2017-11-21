@@ -59,5 +59,5 @@ class Arduino(object):
 
     def get_fft_buckets(self):
         self._serial.write(self.AUDIO_BUCKETS_COMMAND)
-        buckets = [float(n) for n in ";".split(self._serial.readline(self.NUM_AUDIO_BUCKETS))[:-1]]
+        buckets = [float(n) for n in self._serial.readline().split(";")[:-1]]
         return buckets
