@@ -36,7 +36,6 @@ class PixelTableServer(object):
         self._pixel_grid = PixelGrid()
 
         self._buttons = {}
-        self._buttons_held = set()
         self._modes = [Off, Rain, Pong, Tetris, Invaders, GameOfLife, Noise, Message]
         self._now = time.time()
         self._mode = None
@@ -110,9 +109,6 @@ class PixelTableServer(object):
 
             self._emit_pending_events(dt)
             self._touch_buttons.emit_events(dt)
-
-            for index in self._buttons_held:
-                self._mode.on_button_held(index, dt)
 
             self._mode.update(self._pixel_grid, dt)
             self._mode.render(self._pixel_grid)
