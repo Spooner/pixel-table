@@ -1,6 +1,6 @@
 # https://github.com/kosme/arduinoFFT/blob/master/Examples/FFT_03/FFT_03.ino
 
-#include <arduinoFTT.h>
+#include <arduinoFFT.h>
 
 const uint16_t num_samples = 64; // This value MUST ALWAYS be a power of 2
 const double samplingFrequency = 1000.0;  // 1000 samples per second.
