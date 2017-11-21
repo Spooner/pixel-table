@@ -57,7 +57,7 @@ class Arduino(object):
         sleep(0.022)
         self._serial.setDTR(True)
 
-    def read_fft_buckets(self):
+    def get_fft_buckets(self):
         self._serial.write(self.AUDIO_BUCKETS_COMMAND)
         buckets = [float(n) for n in ";".split(self._serial.readline(self.NUM_AUDIO_BUCKETS))[:-1]]
         return buckets

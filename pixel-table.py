@@ -24,6 +24,7 @@ from pixel_table.modes.tetris import Tetris
 from pixel_table.modes.noise import Noise
 from pixel_table.modes.title_page import TitlePage
 from pixel_table.pixel_grid import PixelGrid
+from pixel_table.external.arduino import Arduino
 from pixel_table.external.touch_buttons import TouchButtons
 
 
@@ -43,6 +44,7 @@ class PixelTableServer(object):
 
         self._init_panel_buttons()
         self._touch_buttons = TouchButtons()
+        self._arduino = Arduino()
 
         keyboard = KeyHandler(self)
         stdio.StandardIO(keyboard, sys.stdin.fileno())
@@ -137,6 +139,7 @@ class PixelTableServer(object):
         self._mode.dump(lines)
         lines.append("%34s" % ("FPS: %2.1f " % fps))
         print("\n".join(lines), file=sys.stderr)
+        print(self._arduino.get_fft_buckets())
 
 
 if __name__ == '__main__':
