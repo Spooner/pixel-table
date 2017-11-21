@@ -5,7 +5,8 @@ import os
 import sys
 import time
 from contextlib import contextmanager
-from traceback import print_exc
+from traceback import format_exc
+import logging
 
 import smokesignal
 from gpiozero import Button as Button
@@ -26,6 +27,12 @@ from pixel_table.modes.title_page import TitlePage
 from pixel_table.pixel_grid import PixelGrid
 from pixel_table.external.arduino import Arduino
 from pixel_table.external.touch_buttons import TouchButtons
+
+logging.basicConfig(filename='pixel-table.log',
+                    filemode='w',
+                    format='%(asctime)s %(name)s %(levelname)s: %(message)s',
+                    level=logging.DEBUG)
+_logger = logging.getLogger("pixel_table")
 
 
 class PixelTableServer(object):
@@ -117,9 +124,11 @@ class PixelTableServer(object):
 
             self._pixel_grid.write()
 
+            _logger.debug(self._arduino.get_fft_buckets())
+
             self._dump(1 / dt)
         except:
-            print_exc()
+            _logger.error(format_exc())
             raise
 
     def _emit_pending_events(self, dt):
@@ -139,9 +148,6 @@ class PixelTableServer(object):
         self._mode.dump(lines)
         lines.append("%34s" % ("FPS: %2.1f " % fps))
         print("\n".join(lines), file=sys.stderr)
-
-        print()
-        print(self._arduino.get_fft_buckets())
 
 
 if __name__ == '__main__':
