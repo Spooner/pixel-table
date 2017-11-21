@@ -10,9 +10,6 @@ from serial.serialutil import SerialException
 
 _logger = logging.getLogger(__name__)
 
-READY_CHAR = b'R'
-NUM_BUCKETS = 16
-
 
 class MockSerial(object):
     def write(self, data):
@@ -28,7 +25,9 @@ class MockSerial(object):
 
 class Arduino(object):
     DEVICE = "/dev/ttyAMA0"
+    FFT_BUCKETS_COMMAND = "F"
     SERIAL_SPEED = 9600
+    NUM_BUCKETS = 16
 
     def __init__(self):
         self._serial = self._open()
@@ -53,5 +52,5 @@ class Arduino(object):
         self._serial.setDTR(True)
 
     def read_fft_buckets(self):
-        self._serial.write("F")
-        return unpack("B16", self._serial.read(NUM_BUCKETS))
+        self._serial.write(self.FFT_BUCKETS_COMMAND)
+        return unpack("B*", self._serial.read(self.NUM_BUCKETS))
