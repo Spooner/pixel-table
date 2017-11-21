@@ -11,15 +11,16 @@ from serial.serialutil import SerialException
 _logger = logging.getLogger(__name__)
 
 READY_CHAR = b'R'
+NUM_BUCKETS = 16
 
 
 class MockSerial(object):
     def write(self, data):
-        sleep(0.05)
+        sleep(0.01)
 
     def read(self):
         sleep(0.05)
-        return READY_CHAR
+        return b"14fsSffZtAZaz190"
 
     def setDTR(self, value):
         pass
@@ -50,3 +51,7 @@ class Arduino(object):
         self._serial.setDTR(False)
         sleep(0.022)
         self._serial.setDTR(True)
+
+    def read_fft_buckets(self):
+        self._serial.write("F")
+        return [ord(c) for c in self._serial.read(NUM_BUCKETS)]
