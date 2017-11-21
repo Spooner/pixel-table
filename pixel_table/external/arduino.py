@@ -25,9 +25,10 @@ class MockSerial(object):
 
 class Arduino(object):
     DEVICE = "/dev/ttyAMA0"
-    FFT_BUCKETS_COMMAND = "F"
+    AUDIO_BUCKETS_COMMAND = "F"
     SERIAL_SPEED = 9600
-    NUM_BUCKETS = 16
+    NUM_AUDIO_BUCKETS = 16
+    AUDIO_BUCKETS_FORMAT = "B" * NUM_AUDIO_BUCKETS
 
     def __init__(self):
         self._serial = self._open()
@@ -52,5 +53,5 @@ class Arduino(object):
         self._serial.setDTR(True)
 
     def read_fft_buckets(self):
-        self._serial.write(self.FFT_BUCKETS_COMMAND)
-        return unpack("B*", self._serial.read(self.NUM_BUCKETS))
+        self._serial.write(self.AUDIO_BUCKETS_COMMAND)
+        return unpack(self.AUDIO_BUCKETS_FORMAT, self._serial.read(self.NUM_AUDIO_BUCKETS))
