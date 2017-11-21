@@ -36,17 +36,6 @@ LED_BRIGHTNESS = 255  # Set to 0 for darkest and 255 for brightest
 LED_INVERT = False  # True to invert the signal (when using NPN transistor level shift)
 
 
-class MockSerial(object):
-    def write(self, data):
-        sleep(0.05)
-
-    def read(self):
-        sleep(0.05)
-
-    def setDTR(self, value):
-        pass
-
-
 class NeoPixels(object):
     def __init__(self):
         self._pixels = self._open()
