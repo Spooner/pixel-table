@@ -1,8 +1,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import glob
 from time import sleep
 import logging
+from struct import unpack
 
 from serial import Serial
 from serial.serialutil import SerialException
@@ -54,4 +54,4 @@ class Arduino(object):
 
     def read_fft_buckets(self):
         self._serial.write("F")
-        return [ord(c) for c in self._serial.read(NUM_BUCKETS)]
+        return unpack("B16", self._serial.read(NUM_BUCKETS))
