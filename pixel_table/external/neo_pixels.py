@@ -47,8 +47,10 @@ class NeoPixels(object):
                           brightness=LED_BRIGHTNESS)
         try:
             pixels.begin()
+            _logger.info("Initialized NeoPixel OK")
+
         except RuntimeError:
-            print("Failed to initialize to NeoPixel")
+            _logger.warning("Failed to initialize NeoPixel")
             pixels = MockNeoPixel(num=LED_COUNT, pin=LED_PIN)
 
         for i in range(LED_COUNT):

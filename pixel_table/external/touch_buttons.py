@@ -1,8 +1,12 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import logging
+
 from Adafruit_MPR121.MPR121 import MPR121
 from bitarray import bitarray
 import smokesignal
+
+_logger = logging.getLogger(__name__)
 
 
 class MockCapTouch(object):
@@ -39,11 +43,11 @@ class TouchButtons(object):
         try:
             if self._cap_touch.begin():
                 self._cap_touch.touched()  # Just clear out any current changes.
-                print("Capacitive touch system engaged")
+                _logger.info("Capacitive touch system engaged")
             else:
                 raise RuntimeError
         except (RuntimeError, IOError):
-            print("Capacitive touch system failed; using mock")
+            _logger.warning("Capacitive touch system failed; using mock")
             self._cap_touch = MockCapTouch()
 
     def emit_events(self, dt):
