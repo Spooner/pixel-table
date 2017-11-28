@@ -40,7 +40,7 @@ _logger = logging.getLogger("pixel_table")
 class PixelTable(object):
     GPIO_MODE = 23
     GPIO_STATE = 24
-    FPS = 20
+    FPS = 30
 
     def __init__(self, output):
         self._pixel_grid = PixelGrid(output)
