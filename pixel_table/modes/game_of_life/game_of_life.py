@@ -7,7 +7,7 @@ from ..mode import Mode
 
 class GameOfLife(Mode):
     NAME = "LIFE"
-    STATES = [24, 48]
+    STATES = [""]
     DEFAULT_STATE_INDEX = 0
     PERIOD = 0.5
     ADJACENT_CELLS = [
@@ -15,6 +15,8 @@ class GameOfLife(Mode):
         (-1, +0),           (+1, +0),
         (-1, -1), (+0, -1), (+1, -1),
     ]
+    INITIAL = 50
+    FADE = 1
 
     class State(object):
         DEAD = 0
@@ -29,12 +31,10 @@ class GameOfLife(Mode):
     def _reset(self):
         self._cells = [[self.State.DEAD for _ in range(16)] for _ in range(16)]
 
-        for _ in range(self.state):
+        for _ in range(self.INITIAL):
             self._set_value(random.randrange(0, 16), random.randrange(0, 16), self.State.ALIVE)
 
     def render(self, pixel_grid):
-        pixel_grid.clear()
-
         for y, row in enumerate(self._cells):
             for x, cell in enumerate(row):
                 if cell is not self.State.DEAD:
@@ -45,6 +45,8 @@ class GameOfLife(Mode):
         if self._time_to_tick <= 0:
             self._tick()
             self._time_to_tick += self.PERIOD
+
+        pixel_grid.fade(self.FADE * dt)
 
     def _tick(self):
         for y, row in enumerate(self._cells):
