@@ -12,5 +12,6 @@ smokesignal
 noise
 Adafruit_MPR121
 bitarray
-rpi_ws281x
 service_identity
+unicornhathd
+rpi_ws281x

@@ -7,6 +7,7 @@ import time
 from contextlib import contextmanager
 from traceback import format_exc
 import logging
+import argparse
 
 import smokesignal
 from gpiozero import Button as Button
@@ -27,6 +28,7 @@ from pixel_table.modes.title_page import TitlePage
 from pixel_table.pixel_grid import PixelGrid
 from pixel_table.external.arduino import Arduino
 from pixel_table.external.touch_buttons import TouchButtons
+from pixel_table.output import Output
 
 logging.basicConfig(filename='pixel-table.log',
                     filemode='w',
@@ -143,8 +145,7 @@ class PixelTable(object):
         self._event_queue = []
 
     def _dump(self, fps):
-        lines = ["\033[0;0H"]  # Cursor to 0, 0
-        self._pixel_grid.dump(lines)
+        lines = []
         self._mode.dump(lines)
         lines.append("%34s" % ("FPS: %2.1f " % fps))
         print("\n".join(lines), file=sys.stderr)
@@ -152,8 +153,11 @@ class PixelTable(object):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Pixel table controller')
-    parser.add_argument('output', metavar='OUTPUT', type=str, choices=['console', 'neo_pixels', 'unicorn'])
-                        help='output to console/neo_pixels/unicorn')
+    parser.add_argument('output',
+                        metavar='OUTPUT',
+                        type=str,
+                        choices=[bytes(s) for s in Output.ALL],
+                        help='output pixel data to %s/%s/%s' % Output.ALL)
 
     args = parser.parse_args()
     PixelTable(args.output)

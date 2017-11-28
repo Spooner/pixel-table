@@ -3,8 +3,8 @@
 #include <arduinoFFT.h>
 arduinoFFT FFT = arduinoFFT(); // Create FFT object
 
-const uint16_t num_samples = 256; // This value MUST ALWAYS be a power of 2
-const double samplingFrequency = 20000.0;  // samples per second.
+const uint16_t num_samples = 32; // This value MUST ALWAYS be a power of 2
+const double samplingFrequency = 200.0;  // samples per second.
 const int delayTime = 1000000 / samplingFrequency;
 
 // These are the input/output vectors
@@ -17,7 +17,7 @@ double vImag[num_samples];
 void setup()
 {
     Serial.begin(115200);
-    Serial.write("R");
+    Serial.println("Ready!");
 }
 
 void loop()
@@ -29,7 +29,7 @@ void loop()
         vReal[i] = double(analogRead(MICROPHONE));
         delayMicroseconds(delayTime);
     }
-    memset(vImag, 0, num_samples);
+    memset(vImag, 0, sizeof(vImag));
 
     FFT.Windowing(vReal, num_samples, FFT_WIN_TYP_HAMMING, FFT_FORWARD);	// Weigh data
     FFT.Compute(vReal, vImag, num_samples, FFT_FORWARD); // Compute FFT
@@ -37,8 +37,10 @@ void loop()
 
     for (uint16_t i = 0; i < (num_samples >> 1); i++)
     {
-        Serial.print(vReal[i]);
-        Serial.print(';');
+        Serial.print(i * samplingFrequency / num_samples, 6);
+        Serial.print(" ");
+        Serial.print(vReal[i], 4);
+        Serial.println(";");
     }
     Serial.println();
 }

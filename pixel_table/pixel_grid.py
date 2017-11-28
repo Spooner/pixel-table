@@ -4,11 +4,11 @@ from collections import OrderedDict
 
 import numpy as np
 
-from .colortrans import rgb2short
 from .external.neo_pixels import NeoPixels
 from .external.console import Console
 from .external.unicorn import Unicorn
 from .pixel import Pixel
+from .output import Output
 
 
 class PixelGrid(object):
@@ -24,23 +24,15 @@ class PixelGrid(object):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        if output == self.Output.NEO_PIXELS:
+        if output == Output.NEO_PIXELS:
             self._output = NeoPixels()
-        elif output == self.Output.CONSOLE:
+        elif output == Output.CONSOLE:
             self._output = Console()
-        elif output == self.Output.UNICORN:
+        elif output == Output.UNICORN:
             self._output = Unicorn()
         else:
             raise ValueError(output)
-            
-        self._color_lookup = {}
 
-    def rgb_to_terminal(self, r, g, b):
-        r, g, b = round(r, 2), round(g, 2), round(b, 2)
-        if (r, g, b) not in self._color_lookup:
-            self._color_lookup[r, g, b] = rgb2short(r, g, b)
-        return self._color_lookup[r, g, b]
-    
     @property
     def pixels(self):
         return self._pixels.values()

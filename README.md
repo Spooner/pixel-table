@@ -9,7 +9,8 @@ Console app.
 
 ## Requirements
     
-    sudo apt install python-numpy python-pillow python-smbus
+    sudo apt install python-numpy python-pillow python-smbus 
+    sudo apt install libffi-dev libssl-dev
     sudo apt install arduino-core arduino-mk
     sudo apt install scons
     
@@ -36,4 +37,4 @@ Console app.
 
 Test on PC:
 
-    GPIOZERO_PIN_FACTORY=mock ./pixel-table.py
+    GPIOZERO_PIN_FACTORY=mock ./pixel-table.py console

@@ -18,7 +18,7 @@ class NeoPixels(object):
     def __init__(self):
         from neopixel import Adafruit_NeoPixel as NeoPixel
         
-        self._pixels = NeoPixel(num=self.fLED_COUNT,
+        self._pixels = NeoPixel(num=self.LED_COUNT,
                                 pin=self.LED_PIN,
                                 freq_hz=self.LED_FREQ_HZ, 
                                 dma=self.LED_DMA,
@@ -31,7 +31,7 @@ class NeoPixels(object):
             _logger.error("Failed to initialize NeoPixels")
             raise
 
-        self._write_pixels(np.zeros((16, 16, 3)))
+        self.write_pixels(np.zeros((16, 16, 3)))
 
     def write_pixels(self, data):
         for y, row in enumerate((data * 255).astype(np.uint8)):
