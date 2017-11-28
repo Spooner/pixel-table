@@ -117,7 +117,7 @@ class PixelTable(object):
 
     def update(self):
         try:
-            now = time.time()
+            now = time.clock()
             dt = now - self._now
             self._now = now
 
