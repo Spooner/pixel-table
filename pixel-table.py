@@ -52,8 +52,11 @@ class PixelTable(object):
         self._event_queue = []
 
         self._init_panel_buttons()
-        self._touch_buttons = TouchButtons()
-        self._arduino = Arduino()
+        if output == Output.NEO_PIXELS:
+            self._touch_buttons = TouchButtons()
+            self._arduino = Arduino()
+        else:
+            self._touch_buttons = self._arduino = None
 
         keyboard = KeyHandler(self)
         stdio.StandardIO(keyboard, sys.stdin.fileno())
@@ -119,14 +122,16 @@ class PixelTable(object):
             self._now = now
 
             self._emit_pending_events(dt)
-            self._touch_buttons.emit_events(dt)
+            if self._touch_buttons is not None:
+                self._touch_buttons.emit_events(dt)
 
             self._mode.update(self._pixel_grid, dt)
             self._mode.render(self._pixel_grid)
 
             self._pixel_grid.write()
 
-            _logger.debug(self._arduino.get_fft_buckets())
+            if self._arduino is not None:
+                _logger.debug(self._arduino.get_fft_buckets())
 
             self._dump(1 / dt)
         except:

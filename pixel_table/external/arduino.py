@@ -42,7 +42,7 @@ class Arduino(object):
         try:
             serial = Serial(self.DEVICE, self.SERIAL_SPEED)
             _logger.info("Connected to serial port.")
-            assert self._serial.read() == READY
+            assert serial.read() == READY
             _logger.info("Received ready response on Serial port.")
             return serial
         except SerialException:
