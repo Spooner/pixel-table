@@ -7,7 +7,7 @@ class Unicorn(object):
     def __init__(self):
         import unicornhathd as unicorn
 
-        unicorn.rotation(0)
+        unicorn.rotation(180)
         unicorn.brightness(1.0)
     
     def write_pixels(self, data):
