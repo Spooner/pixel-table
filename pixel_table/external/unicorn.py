@@ -8,7 +8,7 @@ class Unicorn(object):
         import unicornhathd as unicorn
 
         unicorn.rotation(180)
-        unicorn.brightness(1.0)
+        unicorn.brightness(0.75)
     
     def write_pixels(self, data):
         import unicornhathd as unicorn
