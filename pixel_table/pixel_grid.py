@@ -6,13 +6,15 @@ import numpy as np
 
 from .colortrans import rgb2short
 from .external.neo_pixels import NeoPixels
+from .external.console import Console
+from .external.unicorn import Unicorn
 from .pixel import Pixel
 
 
 class PixelGrid(object):
     WIDTH, HEIGHT = 16, 16
 
-    def __init__(self):
+    def __init__(self, output):
         super(PixelGrid, self).__init__()
         self.data = np.zeros([self.WIDTH, self.HEIGHT, 3])
         self._cell_width = None
@@ -22,7 +24,15 @@ class PixelGrid(object):
             for x in range(self.WIDTH):
                 self._pixels[x, y] = Pixel(x, y, pixel_grid=self)
 
-        self._neo_pixels = NeoPixels()
+        if output == self.Output.NEO_PIXELS:
+            self._output = NeoPixels()
+        elif output == self.Output.CONSOLE:
+            self._output = Console()
+        elif output == self.Output.UNICORN:
+            self._output = Unicorn()
+        else:
+            raise ValueError(output)
+            
         self._color_lookup = {}
 
     def rgb_to_terminal(self, r, g, b):
@@ -60,17 +70,4 @@ class PixelGrid(object):
             pixel.color = max(r - amount, 0), max(g - amount, 0), max(b - amount, 0)
 
     def write(self):
-        self._neo_pixels.write_pixels(self.data)
-
-    def dump(self, lines):
-        lines.append("===       Apotable %2dx%2d       ===" % (self.data.shape[0], self.data.shape[1]))
-        lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
-
-        for y in range(self.data.shape[1]):
-            cells = []
-            for x in range(self.data.shape[0]):
-                color = self.rgb_to_terminal(*self.pixel(x, y).color)
-                cells.append("\033[48;5;%sm  " % color)
-
-            lines.append("|" + "".join(cells) + "\033[48;5;16m|")
-        lines.append("+" + "-" * (self.data.shape[0] * 2) + "+")
+        self._output.write_pixels(self.data)
