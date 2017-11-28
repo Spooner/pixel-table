@@ -35,13 +35,13 @@ logging.basicConfig(filename='pixel-table.log',
 _logger = logging.getLogger("pixel_table")
 
 
-class PixelTableServer(object):
+class PixelTable(object):
     GPIO_MODE = 23
     GPIO_STATE = 24
     FPS = 20
 
-    def __init__(self):
-        self._pixel_grid = PixelGrid()
+    def __init__(self, output):
+        self._pixel_grid = PixelGrid(output)
 
         self._buttons = {}
         self._modes = [Off, Rain, Pong, Tetris, Invaders, GameOfLife, Noise, Message]
@@ -151,4 +151,9 @@ class PixelTableServer(object):
 
 
 if __name__ == '__main__':
-    table = PixelTableServer()
+    parser = argparse.ArgumentParser(description='Pixel table controller')
+    parser.add_argument('output', metavar='OUTPUT', type=str, choices=['console', 'neo_pixels', 'unicorn'])
+                        help='output to console/neo_pixels/unicorn')
+
+    args = parser.parse_args()
+    PixelTable(args.output)
