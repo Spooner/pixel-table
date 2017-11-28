@@ -19,7 +19,7 @@ class Noise(Mode):
     NAME = "NOIS"
     STATES = [State.RED, State.GREEN, State.BLUE, State.GREYSCALE, State.FULL_COLOR]
     DEFAULT_STATE_INDEX = 0
-    OCTAVES = 3
+    OCTAVES, OCTAVES_FULL_COLOR = 3, 1
     PERSISTENCE = 0.5
     SCALE = 0.05
     TIME_SCALE = 0.5
@@ -27,6 +27,7 @@ class Noise(Mode):
     def __init__(self, index, state_index=None):
         super(Noise, self).__init__(index=index, state_index=state_index)
         self._cells = np.zeros((16, 16))
+        self._octaves = self.OCTAVES_FULL_COLOR if self.state == self.State.FULL_COLOR else self.OCTAVES
 
     def render(self, pixel_grid):
         t = time.clock() * self.TIME_SCALE
@@ -37,7 +38,7 @@ class Noise(Mode):
                 pixel_grid.pixel(x, y).color = rgb
 
     def _noise(self, x, y, t):
-        noise = snoise3(x * self.SCALE, y * self.SCALE, t, octaves=self.OCTAVES)
+        noise = snoise3(x * self.SCALE, y * self.SCALE, t, octaves=self._octaves)
         return (noise + 1) / 2
 
     def _rgb(self, state, x, y, t):
